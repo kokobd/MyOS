@@ -53,5 +53,3 @@ waitForASecond:
     ; end waiting
 
 msg db "Preparing to load operating system...", 13, 10, 0
-
-greeting db "Hello!", 13, 10, 0
