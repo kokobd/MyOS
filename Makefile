@@ -1,9 +1,9 @@
 all: build/myos.img
 
-build/myos.img: build/bootloader/stage1.o build/bootloader/stage2.o
+build/myos.img: bin/empty.img build/bootloader/stage1.o build/bootloader/stage2.o
 	mkdir -p $(@D)
 	rm -f $@
-	mkfs.vfat -C $@ 1440
+	cp -f bin/empty.img $@
 	dd if=build/bootloader/stage1.o of=$@ conv=notrunc
 
 	mkdir -p build/myos
