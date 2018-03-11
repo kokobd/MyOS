@@ -4,13 +4,14 @@ org 0x0
 cli
 push cs
 pop ds
-call showInfo
 
 mov ax,0xB800
 mov es,ax
 
+call showInfo
+
 ;set background color
-xor ax, ax
+mov ax, 2
 loop1:
     cmp ax, 24
     jg exit1
@@ -97,9 +98,6 @@ waitForASecond:
     pop bx
     pop ax
     ret
-    ; end waiting
-    times 510-($-$$) db 0 ; Pad remainder of boot sector with 0s
-    dw 0xAA55 ; The standard PC boot signature
 
 showInfo:
     mov si, info
@@ -107,8 +105,30 @@ showInfo:
     mov si, split
     call print
 
+    mov ax,0xB800
+    mov es,ax
+    xor ax, ax
+    loopInfoLine: ; select row
+        cmp ax, 2
+        je endLoopInfoLine
+        xor bx, bx
+        loopChangeColor: ; select column
+            cmp bx, 79
+            je endLoopChangeColor
+            mov si, 80
+            imul si, ax
+            add si, bx
+            imul si, 2
+            mov byte [es:si + 1], 0x1C
 
+            inc bx
+            jmp loopChangeColor
+        endLoopChangeColor:
+        inc ax
+        jmp loopInfoLine
+    endLoopInfoLine:
     ret
+
 print:
     lodsb        
     or al, al
