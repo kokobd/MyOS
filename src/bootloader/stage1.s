@@ -271,9 +271,12 @@ main:
     datasector  dw 0x0000
     cluster     dw 0x0000
     ImageName   db "KRNLDR  SYS"
-    msgLoading  db 0x0D, 0x0A, "Loading Boot Image ", 0x0D, 0x0A, 0x00
-    msgCRLF     db 0x0D, 0x0A, 0x00
-    msgProgress db ".", 0x00
+    ; msgLoading  db 0x0D, 0x0A, "Loading Boot Image ", 0x0D, 0x0A, 0x00
+    msgLoading db 0
+    ; msgCRLF     db 0x0D, 0x0A, 0x00
+    msgCRLF db 0
+    ; msgProgress db ".", 0x00
+    msgProgress db 0
     msgFailure  db 0x0D, 0x0A, "ERROR : Press Any Key to Reboot", 0x0A, 0x00
 
     TIMES 510-($-$$) DB 0
