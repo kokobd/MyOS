@@ -113,7 +113,7 @@ showInfo:
         je endLoopInfoLine
         xor bx, bx
         loopChangeColor: ; select column
-            cmp bx, 79
+            cmp bx, 80
             je endLoopChangeColor
             mov si, 80
             imul si, ax
@@ -139,5 +139,5 @@ print:
 print_done:
     ret
 
-info DB "16337060 zelin, 16337063 kaifeng |", 10, 13, 0
-split DB "----------------------------------", 10, 13, 0
+info DB "                        16337060 zelin, 16337063 kaifeng", 10, 13, 0
+split DB "--------------------------------------------------------------------------------", 10, 13, 0
