@@ -31,9 +31,22 @@ toc:
 
 main:
     cli
-    push cs
-    pop ds
+    ; load GDT
     lgdt [toc]
+    ; enter protected mode
+    mov eax, cr0
+    or eax, 1
+    mov cr0, eax
+    jmp 0x08:stage3 ; fix 'cs'
 
+BITS 32 ; We make it into 32 bit!
+stage3:
+    mov ax, 0x10
+    mov ds, ax
+    mov ss, ax
+    mov es, ax
+    mov esp, 0x90000 ; stack's base address
+
+stop:
     cli
     hlt
