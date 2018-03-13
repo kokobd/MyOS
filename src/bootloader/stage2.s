@@ -1,55 +1,39 @@
 bits 16
 org 0x0
 
-jmp main
+_start:
+    jmp main
 
-print:
-    lodsb
-    or al, al
-    jz print_done
-    mov ah, 0eh
-    int 10h
-    jmp print
-print_done:
-    ret
+; define GDT
+gdt_data:
+    ; null descriptor
+    dd 0
+    dd 0
+    ; code descriptor
+    dw 0xFFFF
+    dw 0
+    db 0
+    db 10011010b
+    db 11001111b
+    db 0
+    ; data descriptor
+    dw 0xFFFF
+    dw 0
+    db 0
+    db 10010010b
+    db 11001111b
+    db 0
+end_of_gdt:
+
+toc:
+    dw end_of_gdt - gdt_data - 1
+    dd gdt_data
 
 main:
     cli
     push cs
     pop ds
-
-    mov si, msg
-    call print
-
-    call waitForASecond
-
-    mov si, msg
-    call print
-
-    mov si, greeting
-    call print
+    lgdt [toc]
 
     cli
     hlt
-
-    ; start waiting
-waitForASecond:
-    push ax
-    push bx
-    push dx
-    mov ah, 00h
-    int 1ah
-    mov bx, dx
-.waiting:
-    mov ah, 00h
-    int 1ah
-    sub dx, bx
-    cmp dx, 18 ;wait for 18 * 55ms
-    jle .waiting
-    pop dx
-    pop bx
-    pop ax
-    ret
-    ; end waiting
-
-msg db "Preparing to load operating system...", 13, 10, 0
