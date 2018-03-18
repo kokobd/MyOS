@@ -2,6 +2,7 @@
 #define MYOS_STDIO_H_
 
 #include <stdbool.h>
+#include <stdint.h>
 
 bool putchar(int row, int col, char ch);
 
@@ -16,5 +17,12 @@ bool changeAttribute(
     bool foregroundIntensity,
     enum Color foregroundColor,
     enum Color backgroundColor);
+
+typedef unsigned int size_t;
+
+/**
+  Return size of the file.
+ */
+size_t loadFile(const char *fileName, uint8_t *buffer);
 
 #endif

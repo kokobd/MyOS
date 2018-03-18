@@ -26,8 +26,8 @@ build/bootloader/%.o: src/bootloader/%.s
 	nasm -f bin -o $@ -Isrc/bootloader/ $<
 
 # Kernel
-build/kernel/KERNEL.SYS: build/kernel/main.o build/stdlib/stdio.o
-	gcc -o $(@D)/kernel -nostdlib -fno-builtin -nostartfiles -m32 $< build/stdlib/stdio.o
+build/kernel/KERNEL.SYS: build/kernel/main.o build/stdlib/stdio.o build/stdlib/floppy.o
+	gcc -o $(@D)/kernel -nostdlib -fno-builtin -nostartfiles -m32 $< build/stdlib/stdio.o build/stdlib/floppy.o
 	objcopy -O binary -j .text $(@D)/kernel $@
 
 build/kernel/%.o: src/kernel/%.c
@@ -37,7 +37,7 @@ build/kernel/%.o: src/kernel/%.c
 # My Standard Library
 build/stdlib/%.o: src/stdlib/%.c
 	mkdir -p $(@D)
-	gcc -c -Isrc/stdlib/include -fno-builtin -m32 -o $@ -nostdlib $<
+	gcc -c -Isrc/stdlib/include -fno-builtin -m32 -masm=intel -o $@ -nostdlib $<
 
 clean:
 	rm -rf build/*

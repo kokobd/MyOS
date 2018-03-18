@@ -3,8 +3,6 @@
 ;*************************************************
 ;	Gdt.inc
 ;		-GDT Routines
-;
-;	OS Development Series
 ;*************************************************
 
 %ifndef __GDT_INC_67343546FDCC56AAB872_INCLUDED__
@@ -43,7 +41,7 @@ gdt_data:
 	db 0                ; base high
 
 ; gdt data:	            ; data descriptor
-	dw 0FFFFh           ; limit low (Same as code)10:56 AM 7/8/2007
+	dw 0FFFFh           ; limit low
 	dw 0                ; base low
 	db 0                ; base middle
 	db 10010010b        ; access
