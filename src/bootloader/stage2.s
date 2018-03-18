@@ -141,10 +141,13 @@ EXECUTE:
 	; mov		eax, dword [ebx]		; add image base
 	; add		ebp, eax
 
-	mov ebp, IMAGE_PMODE_BASE
+	mov eax, IMAGE_PMODE_BASE
+	mov ebp, eax
+	add ebp, 0x40000
+	mov esp, ebp
 
 	cli
-	call ebp               	      ; Execute Kernel
+	call eax               	      ; Execute Kernel
 
     cli
 	hlt

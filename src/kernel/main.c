@@ -1,5 +1,7 @@
+#include <stdio.h>
+#include <stdbool.h>
+
 void _start() {
-    char *video = (char *) 0xb8000;
-    *video = 'H';
-    *(video + 2) = 'e';
+    putchar(12, 39, 'A');
+    changeAttribute(12, 39, false, true, WHITE, BLUE);
 }

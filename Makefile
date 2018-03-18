@@ -20,17 +20,24 @@ build: build/bootloader/stage1.o \
   build/bootloader/stage2.o \
   build/kernel/KERNEL.SYS
 	
+# Bootloader
 build/bootloader/%.o: src/bootloader/%.s
 	mkdir -p $(@D)
 	nasm -f bin -o $@ -Isrc/bootloader/ $<
 
-build/kernel/KERNEL.SYS: build/kernel/main.o
-	gcc -o $(@D)/kernel -nostdlib -nostartfiles $<
+# Kernel
+build/kernel/KERNEL.SYS: build/kernel/main.o build/stdlib/stdio.o
+	gcc -o $(@D)/kernel -nostdlib -fno-builtin -nostartfiles -m32 $< build/stdlib/stdio.o
 	objcopy -O binary -j .text $(@D)/kernel $@
 
 build/kernel/%.o: src/kernel/%.c
 	mkdir -p $(@D)
-	gcc -c -Isrc/include -nostdlib -o $@ $<
+	gcc -c -Isrc/stdlib/include -nostdlib -fno-builtin -m32 -o $@ $<
+
+# My Standard Library
+build/stdlib/%.o: src/stdlib/%.c
+	mkdir -p $(@D)
+	gcc -c -Isrc/stdlib/include -fno-builtin -m32 -o $@ -nostdlib $<
 
 clean:
 	rm -rf build/*
