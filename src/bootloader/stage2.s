@@ -4,7 +4,6 @@
 ;	Stage2.asm
 ;		Stage2 Bootloader
 ;
-;	OS Development Series
 ;*******************************************************
 
 bits	16
@@ -21,14 +20,14 @@ jmp	main				; go to start
 %include "Gdt.inc"			; Gdt routines
 %include "A20.inc"			; A20 enabling
 %include "Fat12.inc"			; FAT12 driver. Kinda :)
-%include "Common.inc"
+%include "common.inc"
 
 ;*******************************************************
 ;	Data Section
 ;*******************************************************
 
 LoadingMsg db 0x0D, 0x0A, "Searching for Operating System...", 0x00
-msgFailure db 0x0D, 0x0A, "*** FATAL: Missing or corrupt KRNL32.EXE. Press Any Key to Reboot.", 0x0D, 0x0A, 0x0A, 0x00
+msgFailure db 0x0D, 0x0A, "*** FATAL: Missing or corrupt KERNEL.SYS. Press Any Key to Reboot.", 0x0D, 0x0A, 0x0A, 0x00
 
 main:
 
@@ -74,10 +73,7 @@ EnterStage3:
 	or	eax, 1
 	mov	cr0, eax
 
-	jmp	CODE_DESC:Stage3                ; far jump to fix CS. Remember that the code selector is 0x8!
-
-	; Note: Do NOT re-enable interrupts! Doing so will triple fault!
-	; We will fix this in Stage 3.
+	jmp	CODE_DESC:Stage3
 
 ;******************************************************
 ;	ENTRY POINT FOR STAGE 3
@@ -102,30 +98,32 @@ Stage3:
 	call	ClrScr32
 
 CopyImage:
-  	 mov	eax, dword [ImageSize]
-  	 movzx	ebx, word [bpbBytesPerSector]
-  	 mul	ebx
-  	 mov	ebx, 4
-  	 div	ebx
-   	 cld
-   	 mov    esi, IMAGE_RMODE_BASE
-   	 mov	edi, IMAGE_PMODE_BASE
-   	 mov	ecx, eax
-   	 rep	movsd                   ; copy image to its protected mode address
+  	mov	eax, dword [ImageSize]
+  	movzx ebx, word [bpbBytesPerSector]
+  	mul	ebx
+  	mov	ebx, 4
+  	div	ebx
+    cld
+    mov esi, IMAGE_RMODE_BASE
+    mov	edi, IMAGE_PMODE_BASE
+    mov	ecx, eax
+    rep	movsd                   ; copy image to its protected mode address
 
-TestImage:
-  	  mov    ebx, [IMAGE_PMODE_BASE+60]
-  	  add    ebx, IMAGE_PMODE_BASE    ; ebx now points to file sig (PE00)
-  	  mov    esi, ebx
-  	  mov    edi, ImageSig
-  	  cmpsw
-  	  je     EXECUTE
-  	  mov	ebx, BadImage
-  	  call	Puts32
-  	  cli
-  	  hlt
+	jmp EXECUTE
 
-ImageSig db 'PE'
+; TestImage:
+;   	  mov    ebx, [IMAGE_PMODE_BASE+60]
+;   	  add    ebx, IMAGE_PMODE_BASE    ; ebx now points to file sig (PE00)
+;   	  mov    esi, ebx
+;   	  mov    edi, ImageSig
+;   	  cmpsw
+;   	  je     EXECUTE
+;   	  mov	ebx, BadImage
+;   	  call	Puts32
+;   	  cli
+;   	  hlt
+
+; ImageSig db 'PE'
 
 EXECUTE:
 
@@ -135,16 +133,18 @@ EXECUTE:
 
     ; parse the programs header info structures to get its entry point
 
-	add		ebx, 24
-	mov		eax, [ebx]			; _IMAGE_FILE_HEADER is 20 bytes + size of sig (4 bytes)
-	add		ebx, 20-4			; address of entry point
-	mov		ebp, dword [ebx]		; get entry point offset in code section	
-	add		ebx, 12				; image base is offset 8 bytes from entry point
-	mov		eax, dword [ebx]		; add image base
-	add		ebp, eax
-	cli
+	; add		ebx, 24
+	; mov		eax, [ebx]			; _IMAGE_FILE_HEADER is 20 bytes + size of sig (4 bytes)
+	; add		ebx, 20-4			; address of entry point
+	; mov		ebp, dword [ebx]		; get entry point offset in code section	
+	; add		ebx, 12				; image base is offset 8 bytes from entry point
+	; mov		eax, dword [ebx]		; add image base
+	; add		ebp, eax
 
-	call	ebp               	      ; Execute Kernel
+	mov ebp, IMAGE_PMODE_BASE
+
+	cli
+	call ebp               	      ; Execute Kernel
 
     cli
 	hlt

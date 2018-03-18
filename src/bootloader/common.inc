@@ -5,13 +5,11 @@
 ; where the kernel is to be loaded to in protected mode
 %define IMAGE_PMODE_BASE 0x100000
 
-
-
 ; where the kernel is to be loaded to in real mode
 %define IMAGE_RMODE_BASE 0x3000
 
 ; kernel name
-ImageName     db "KRNL32  EXE"
+ImageName     db "KERNEL  SYS"
 
 ImageSize     db 0
 

@@ -1,5 +1,5 @@
 bits 16
-org	0
+org	0x0 ; will adjust segment registers later
 
 start:
     jmp main
