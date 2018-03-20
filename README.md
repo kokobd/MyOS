@@ -8,17 +8,11 @@ To develop, you need to install:
 - `gcc`
 - `nasm`
 
-Unix-like shell environment is expected in the Makefile. So if you are
-on Windows, please install [MSYS2](http://www.msys2.org/) or CygWin if you like.
+We currently only supports to build on Linux.
 
-Inside MSYS2 MINGW 64 terminal, execute the following commands if you
-just did a fresh install.
-```sh
-pacman -Syu
-pacman -S --needed gcc nasm
-```
-This snippet will first update your package indices and installed packages.
-Then it will install gcc and nasm.
+Run `sudo make image` to execute all build steps and create a bootable
+floppy image containing the kernel and applications.
+Run `make` to build, but doesn't bundle the executables into an image.
 
 You may use any text editor you like, such as VIM, EMacs, or Atom.
 We use Visual Studio Code. A handwritten workspace setting file for VSCode
@@ -26,8 +20,6 @@ is provided in the repository to ensure everyone use the same tabsize, etc.
 If you choose to use another text editor, make sure you follow our existing
 code style.
 
-## Build
-
-To build, simply execute `make` in project root. You will find `build/bootloader.flp`.
-Load it as a floppy disk in your virtual machine, then you should be able to
-start the VM and see the OS running. Cheers!
+To run, please use the latest version of Oracle VM VirtualBox. Load the image
+as a floppy drive. Select that drive as your boot drive. Then it should work.
+Note that you **MUST** use a desktop keyboard.
