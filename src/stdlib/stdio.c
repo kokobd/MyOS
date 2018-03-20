@@ -72,8 +72,9 @@ size_t loadFile(const char *fileName, uint8_t *buffer) {
     // 我们现在文件数量很少，加载一个扇区就够用了。实际上这个代码是不严谨的。
 
     int fileCluster = findFile(temp, name); // 数据区第一个cluster的序号为2
+    if (fileCluster < 0)
+        return 0;
     loadSector(temp, 1); // 加载1号FAT表的第一个扇区
-    putchar(0, 0, 'B');
     
     size_t fileSize = 0;
     do {
@@ -142,14 +143,41 @@ static void inb(void *port, uint8_t *val) {
     );
 }
 
-char getchar() {
+static uint8_t getScanCode() {
     bool hasInput = false;
     do {
         uint8_t status;
-        inb((void *) 0x64, &status); // read keyboard status
+        inb((void *) 0x64, &status); // 读取键盘状态
         hasInput = (status & 0x01) == 0x01;
     } while (!hasInput);
-    char input = '/'; // dumb input
-    inb((void *) 0x60, &input);
-    return input;
+    uint8_t code;
+    inb((void *) 0x60, &code);
+    return code;
+}
+
+/**
+ * 获取用户输入的一个字符。目前只能识别数字1,2,3,
+ * 按键松开之后这个函数才会返回
+ */
+char getchar() {
+    uint8_t code = getScanCode();
+    char result = '*';
+    switch (code) {
+    case 0x02:
+        result = '1';
+        break;
+    case 0x03:
+        result = '2';
+        break;
+    case 0x04:
+        result = '3';
+        break;
+    case 0x05:
+        result = '4';
+        break;
+    default:
+        break;
+    }
+    getScanCode(); // 捕获按键弹起的信号
+    return result;
 }
