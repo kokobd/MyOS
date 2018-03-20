@@ -181,3 +181,17 @@ char getchar() {
     getScanCode(); // 捕获按键弹起的信号
     return result;
 }
+
+static void outb(void *port, uint8_t val) {
+    __asm__(
+        "out dx, al"
+        :
+        : "d" (port), "a" (val)
+        :
+    );
+}
+
+void disableCurser() {
+    outb((void *) 0x3D4, 0x0A);
+    outb((void *) 0x3D5, 0x20);
+}

@@ -8,7 +8,11 @@ enum App {
 
 static void runApp(enum App app, uint8_t *buffer);
 
+static void showInfo();
+
 void _start() {
+    showInfo();
+    disableCurser();
     uint8_t *buffer = (void *) 0x200000;
     while (true) {
         char ch = getchar();
@@ -33,7 +37,6 @@ void _start() {
             runApp(app, buffer);
         }
     }
-    // runApp(TOP_LEFT, buffer);
 }
 
 static void runApp(enum App app, uint8_t *buffer) {
@@ -62,5 +65,30 @@ static void runApp(enum App app, uint8_t *buffer) {
     if (size > 0) {
         void (*appFn)() = (void (*)()) buffer;
         appFn();
+        for (int i = 2; i < 25; ++i) {
+            for (int j = 0; j < 80; ++j) {
+                putchar(i, j, ' ');
+                changeAttribute(i, j, false, false, WHITE, BLACK);
+            }
+        }
+    }
+}
+
+static void showInfo() {
+    char info[] = { '1', '6', '3', '3', '7', '0', '6', '0', '_',
+        'z', 'e', 'l', 'i', 'n', ' ', ' ',
+        '1', '6', '3', '3', '7', '0', '6', '3', '_', 'k', 'a', 'i',
+        'f', 'e', 'n', 'g'};
+    const size_t infoLen = sizeof(info);
+    const size_t cols = 80;
+    const size_t paddings = (80 - infoLen) / 2;
+    int j = 0;
+    for (size_t i = 0; i < cols; ++i) {
+        if (i < paddings || (cols - i - 1) < paddings) {
+            putchar(0, i, ' ');
+        } else {
+            putchar(0, i, info[j++]);
+        }
+        putchar(1, i, '-');
     }
 }

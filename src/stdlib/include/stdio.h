@@ -31,4 +31,6 @@ char getchar();
  */
 size_t loadFile(const char *fileName, uint8_t *buffer);
 
+void disableCurser();
+
 #endif

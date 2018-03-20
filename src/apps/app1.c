@@ -1,7 +1,7 @@
 #include <stdio.h>
 #include <stdbool.h>
 #define UP_BOUND 2
-#define DOWN_BOUND 13
+#define DOWN_BOUND 12
 #define LEFT_BOUND 0
 #define RIGHT_BOUND 39
 
@@ -74,6 +74,8 @@ void _start()
             obj++;
         }
 
+        for (int i = 0; i < 20000000; ++i);
     }
     
+    putchar(0, 79, ' ');
 }
