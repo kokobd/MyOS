@@ -6,6 +6,7 @@ image: build build/myos.img
 	mkdir -p build/myos
 	mount build/myos.img build/myos
 	cp $(FILES) build/myos/
+	sync build/myos/*
 	umount build/myos
 	rm -rf build/myos
 
@@ -35,9 +36,14 @@ build/stdlib/%.o: src/stdlib/%.c
 # Kernel
 KERNEL = build/kernel/KERNEL.SYS
 
-build/kernel/KERNEL.SYS: build/kernel/main.o $(STDLIB_OBJS)
-	gcc -o $(@D)/kernel $(CCFLAGS) $< $(STDLIB_OBJS)
+KERNEL_SOURCES := $(shell find src/kernel -name '*.s' -or -name '*.c')
+# KERNEL_SOURCES := src/kernel/main.c
+KERNEL_OBJECTS := $(subst src/kernel, build/kernel, $(patsubst %.c, %.o, $(KERNEL_SOURCES)))
+
+build/kernel/KERNEL.SYS: $(KERNEL_OBJECTS) $(STDLIB_OBJS)
+	gcc -o $(@D)/kernel $(CCFLAGS) $^
 	objcopy -O binary -j .text $(@D)/kernel $@
+	rm $(@D)/kernel
 
 build/kernel/%.o: src/kernel/%.c
 	mkdir -p $(@D)
