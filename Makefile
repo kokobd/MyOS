@@ -41,9 +41,10 @@ KERNEL_SOURCES := $(shell find src/kernel -name '*.s' -or -name '*.c')
 KERNEL_OBJECTS := $(subst src/kernel, build/kernel, $(patsubst %.c, %.o, $(KERNEL_SOURCES)))
 
 build/kernel/KERNEL.SYS: $(KERNEL_OBJECTS) $(STDLIB_OBJS)
-	gcc -o $(@D)/kernel $(CCFLAGS) $^
-	objcopy -O binary -j .text $(@D)/kernel $@
-	rm $(@D)/kernel
+	# gcc -o $(@D)/kernel $(CCFLAGS) $^
+	# objcopy -O binary -j .text $(@D)/kernel $@
+	# rm $(@D)/kernel
+	gcc -o $@ $(CCFLAGS) $^
 
 build/kernel/%.o: src/kernel/%.c
 	mkdir -p $(@D)
@@ -51,25 +52,29 @@ build/kernel/%.o: src/kernel/%.c
 
 # Apps
 APPS = build/apps/app1.exe build/apps/app2.exe build/apps/app3.exe build/apps/app4.exe
-build/apps/app1.exe: src/apps/app1.c
+build/apps/app1.exe: src/apps/app1.c $(STDLIB_OBJS)
 	mkdir -p build/apps
-	gcc $(CCFLAGS) -o $(@D)/app1 $< $(STDLIB_OBJS)
-	objcopy -O binary -j .text $(@D)/app1 $@
+	gcc -o $@ $(CCFLAGS) $^
+	# gcc $(CCFLAGS) -o $(@D)/app1 $< $(STDLIB_OBJS)
+	# objcopy -O binary -j .text $(@D)/app1 $@
 
-build/apps/app2.exe: src/apps/app2.c
+build/apps/app2.exe: src/apps/app2.c $(STDLIB_OBJS)
 	mkdir -p build/apps
-	gcc $(CCFLAGS) -o $(@D)/app2 $< $(STDLIB_OBJS)
-	objcopy -O binary -j .text $(@D)/app2 $@
+	gcc -o $@ $(CCFLAGS) $^
+	# gcc $(CCFLAGS) -o $(@D)/app2 $< $(STDLIB_OBJS)
+	# objcopy -O binary -j .text $(@D)/app2 $@
 
-build/apps/app3.exe: src/apps/app3.c
+build/apps/app3.exe: src/apps/app3.c $(STDLIB_OBJS)
 	mkdir -p build/apps
-	gcc $(CCFLAGS) -o $(@D)/app3 $< $(STDLIB_OBJS)
-	objcopy -O binary -j .text $(@D)/app3 $@
+	gcc -o $@ $(CCFLAGS) $^
+	# gcc $(CCFLAGS) -o $(@D)/app3 $< $(STDLIB_OBJS)
+	# objcopy -O binary -j .text $(@D)/app3 $@
 
-build/apps/app4.exe: src/apps/app4.c
+build/apps/app4.exe: src/apps/app4.c $(STDLIB_OBJS)
 	mkdir -p build/apps
-	gcc $(CCFLAGS) -o $(@D)/app4 $< $(STDLIB_OBJS)
-	objcopy -O binary -j .text $(@D)/app4 $@
+	gcc -o $@ $(CCFLAGS) $^
+	# gcc $(CCFLAGS) -o $(@D)/app4 $< $(STDLIB_OBJS)
+	# objcopy -O binary -j .text $(@D)/app4 $@
 
 FILES = $(KRNLDR) $(KERNEL) $(APPS)
 

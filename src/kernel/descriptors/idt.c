@@ -11,3 +11,7 @@ struct Idtr {
 };
 
 #pragma pack (pop)
+
+static struct IdtDescriptor idt[256];
+
+static struct Idtr idtr;

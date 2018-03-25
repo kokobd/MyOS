@@ -63,7 +63,8 @@ static void runApp(enum App app, uint8_t *buffer) {
     }
     size_t size = loadFile(appName, buffer);
     if (size > 0) {
-        void (*appFn)() = (void (*)()) buffer;
+        uint32_t offset = *(uint32_t *) (buffer + 24) - 0x08048000;
+        void (*appFn)() = (void (*)()) (buffer + offset);
         appFn();
         for (int i = 2; i < 25; ++i) {
             for (int j = 0; j < 80; ++j) {
@@ -75,10 +76,7 @@ static void runApp(enum App app, uint8_t *buffer) {
 }
 
 static void showInfo() {
-    char info[] = { '1', '6', '3', '3', '7', '0', '6', '0', '_',
-        'z', 'e', 'l', 'i', 'n', ' ', ' ',
-        '1', '6', '3', '3', '7', '0', '6', '3', '_', 'k', 'a', 'i',
-        'f', 'e', 'n', 'g'};
+    char info[] = "16337060_zelin  16337063_kaifeng\0";
     const size_t infoLen = sizeof(info);
     const size_t cols = 80;
     const size_t paddings = (80 - infoLen) / 2;

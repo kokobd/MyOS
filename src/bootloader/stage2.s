@@ -146,6 +146,11 @@ EXECUTE:
 	add ebp, 0x1FFFF
 	mov esp, ebp
 
+	mov ecx, eax
+	add ecx, 24
+	add eax, [ecx]
+	sub eax, 0x08048000
+
 	cli
 	call eax               	      ; Execute Kernel
 
