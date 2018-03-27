@@ -19,13 +19,14 @@ static struct GdtDescriptor gdt[MAX_DESCRIPTORS] = {0};
 
 static struct Gdtr gdtr;
 
-static uint16_t gdtEntries;
+static uint16_t gdtEntries = 0;
 
 static void gdtInstall() {
     gdtr.limit = (sizeof(struct GdtDescriptor) * gdtEntries) - 1;
     gdtr.base = (uint32_t) &gdt[0];
     __asm__(
-        "lgdt [eax]"
+        "cli\n"
+        "lgdt [eax]\n"
         : : "a"(&gdtr)
     );
 }
@@ -48,7 +49,7 @@ static void gdtSetDescriptor(
 
     gdt[index].flags = flags | (dpl << 5) | type;
     if (index >= gdtEntries) {
-        gdtEntries = index;
+        gdtEntries = index + 1;
     }
 }
 
@@ -67,16 +68,17 @@ void gdtInitialize() {
             GDT_FLAG_G | GDT_FLAG_DB | GDT_FLAG_P | GDT_FLAG_S,
             0,
             0x02);
-    putchar(0, 1, '1');
+
     gdtInstall();
-    putchar(0, 2, '2');
 
     asm volatile (
+        "cli\n"
         "mov ax, 0x10\n"
         "mov ds, ax\n"
         "mov ss, ax\n"
         "mov es, ax\n"
-        "jmp 0x8:FixCS\n"
-        "FixCS:"
+        "jmp 0x08:(.FixCS - 0x08048000 + 0x100000)\n"
+        ".FixCS:\n"
+        "nop"
     );
 }

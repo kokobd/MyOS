@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <stdbool.h>
 #include <stdint.h>
+#include "descriptors/gdt.h"
 
 enum App {
     TOP_LEFT, TOP_RIGHT, BOTTOM_LEFT, BOTTOM_RIGHT
@@ -11,6 +12,7 @@ static void runApp(enum App app, uint8_t *buffer);
 static void showInfo();
 
 void _start() {
+    gdtInitialize();
     showInfo();
     disableCurser();
     uint8_t *buffer = (void *) 0x200000;

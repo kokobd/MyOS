@@ -26,6 +26,6 @@ void gdtInitialize();
 #define GDT_FLAG_G 0x8000
 #define GDT_FLAG_DB 0x4000
 #define GDT_FLAG_P 0x0080
-#define GDT_FLAG_S 0x0100
+#define GDT_FLAG_S 0x0010
 
 #endif
