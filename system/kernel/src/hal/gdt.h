@@ -1,5 +1,5 @@
-#ifndef KERNEL_DESCRIPTOR_GDT_H_
-#define KERNEL_DESCRIPTOR_GDT_H_
+#ifndef KERNEL_HAL_GDT_H_
+#define KERNEL_HAL_GDT_H_
 
 #include <stdint.h>
 

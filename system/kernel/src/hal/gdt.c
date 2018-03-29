@@ -1,5 +1,5 @@
 #include "gdt.h"
-#include <stdio.h>
+#include "asmutil.h"
 
 #pragma pack (push, 1)
 
@@ -25,7 +25,6 @@ static void gdtInstall() {
     gdtr.limit = (sizeof(struct GdtDescriptor) * gdtEntries) - 1;
     gdtr.base = (uint32_t) &gdt[0];
     __asm__(
-        "cli\n"
         "lgdt [eax]\n"
         : : "a"(&gdtr)
     );
@@ -72,12 +71,11 @@ void gdtInitialize() {
     gdtInstall();
 
     asm volatile (
-        "cli\n"
         "mov ax, 0x10\n"
         "mov ds, ax\n"
         "mov ss, ax\n"
         "mov es, ax\n"
-        "jmp 0x08:(.FixCS - 0x08048000 + 0x100000)\n"
+        "jmp 0x08:" label_(.FixCS) "\n"
         ".FixCS:\n"
         "nop"
     );

@@ -1,7 +1,7 @@
 #include <stdio.h>
 #include <stdbool.h>
 #include <stdint.h>
-#include "descriptors/gdt.h"
+#include "hal/gdt.h"
 
 enum App {
     TOP_LEFT, TOP_RIGHT, BOTTOM_LEFT, BOTTOM_RIGHT
@@ -16,6 +16,8 @@ void _start() {
     showInfo();
     disableCurser();
     uint8_t *buffer = (void *) 0x200000;
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wmissing-noreturn"
     while (true) {
         char ch = getchar();
         enum App app = -1;
@@ -39,6 +41,7 @@ void _start() {
             runApp(app, buffer);
         }
     }
+#pragma clang diagnostic pop
 }
 
 static void runApp(enum App app, uint8_t *buffer) {

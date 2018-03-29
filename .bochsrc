@@ -3,7 +3,7 @@ megs: 4
 romimage: file=/usr/local/share/bochs/BIOS-bochs-latest
 vgaromimage: file=/usr/share/vgabios/vgabios.bin
 
-floppya: 1_44=build/myos.img, status=inserted
+floppya: 1_44=cmake-build-debug/myos.img, status=inserted
 
 boot: floppy
 

@@ -1,5 +1,5 @@
-#ifndef KERNEL_DESCRIPTOR_IDT_H_
-#define KERNEL_DESCRIPTOR_IDT_H_
+#ifndef KERNEL_HAL_IDT_H_
+#define KERNEL_HAL_IDT_H_
 
 #include <stdint.h>
 
@@ -16,6 +16,7 @@ struct IdtDescriptor {
     uint8_t reserved;
 
     // bit flags
+    // should be 1__01110 (for interrupt gate), where the underlines denotes the DPL
     uint8_t flags;
 
     // higher 16 bits of IR address
