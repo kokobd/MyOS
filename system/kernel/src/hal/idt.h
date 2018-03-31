@@ -1,30 +1,32 @@
-#ifndef KERNEL_HAL_IDT_H_
-#define KERNEL_HAL_IDT_H_
+#pragma once
 
 #include <stdint.h>
 
-#pragma pack (push, 1)
-
-struct IdtDescriptor {
-    // lower 16 bits of IR address
-    uint16_t baseLo;
-
-    // selector in GDT
-    uint16_t sel;
-
-    // reserved, should be 0
-    uint8_t reserved;
-
-    // bit flags
-    // should be 1__01110 (for interrupt gate), where the underlines denotes the DPL
-    uint8_t flags;
-
-    // higher 16 bits of IR address
-    uint16_t baseHi;
-};
-
-#pragma pack (pop)
-
 void idtInitialize();
 
-#endif
+/**
+ * Set a handler in the IDT.
+ * Note that handler implementations MUST use
+ * 'returnFromInterruptHandler' to return.
+ * @param i index into IDT
+ * @param dpl privilege level
+ * @param sel selector into GDT
+ * @param handler the handler function
+ */
+void idtSetHandler(
+        uint32_t i,
+        uint8_t dpl,
+        uint16_t sel,
+        void (*handler)());
+
+#define returnFromInterruptHandler(ret) \
+do {\
+    asm volatile (\
+    "mov eax, %0\n"\
+    "mov esp, ebp\n"\
+    "pop ebp\n"\
+    "iret\n"\
+    : : "r" (ret)\
+    : "eax", "esp"\
+    );\
+} while (0)

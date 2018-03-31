@@ -29,3 +29,5 @@ uint16_t gdtAddDescriptor(
 #define GDT_FLAG_DB 0x4000
 #define GDT_FLAG_P 0x0080
 #define GDT_FLAG_S 0x0010
+
+uint16_t kernelCodeSelector();

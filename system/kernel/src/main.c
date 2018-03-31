@@ -3,6 +3,7 @@
 #include <stdint.h>
 #include "hal/gdt.h"
 #include "hal/idt.h"
+#include "syscall/syscall.h"
 
 enum App {
     TOP_LEFT, TOP_RIGHT, BOTTOM_LEFT, BOTTOM_RIGHT
@@ -15,8 +16,8 @@ static void showInfo();
 void _start() {
     gdtInitialize();
     idtInitialize();
+    syscallInitialize();
 
-    asm("int 0x80");
     showInfo();
     disableCurser();
     uint8_t *buffer = (void *) 0x200000;

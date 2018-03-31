@@ -5,7 +5,6 @@
 void _start() {
     char ch = '0';
     putchar(0, 0, ch);
-    syscall();
     ++ch;
     putchar(0, 0, ch);
 }

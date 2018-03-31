@@ -7,7 +7,9 @@ set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -nostartfiles -fno-builtin -nostdlib -nostdi
 add_executable(kernel
         src/main.c
         src/hal/gdt.c
-        src/hal/idt.c)
+        src/hal/idt.c
+        src/hal/io.h
+        src/syscall/syscall.c)
 
 add_custom_command(TARGET kernel
         POST_BUILD

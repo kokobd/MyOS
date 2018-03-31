@@ -94,3 +94,7 @@ void gdtInitialize() {
     "nop"
     );
 }
+
+uint16_t kernelCodeSelector() {
+    return 0x8;
+}

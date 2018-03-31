@@ -5,6 +5,24 @@
 
 #pragma pack (push, 1)
 
+struct IdtDescriptor {
+    // lower 16 bits of IR address
+    uint16_t baseLo;
+
+    // selector in GDT
+    uint16_t sel;
+
+    // reserved, should be 0
+    uint8_t reserved;
+
+    // bit flags
+    // should be 1__01110 (for interrupt gate), where the underlines denotes the DPL
+    uint8_t flags;
+
+    // higher 16 bits of IR address
+    uint16_t baseHi;
+};
+
 struct Idtr {
     // size of the IDT
     uint16_t limit;
@@ -32,7 +50,7 @@ static void idtInstall() {
     );
 }
 
-static void idtSetHandler(
+void idtSetHandler(
         uint32_t i,
         uint8_t dpl,
         uint16_t sel,
@@ -49,11 +67,7 @@ static void idtSetHandler(
 
 static void defaultHandler() {
     // Do Nothing
-    asm volatile (
-    "mov esp, ebp\n"
-    "pop ebp\n"
-    "iret\n"
-    );
+    returnFromInterruptHandler(0);
 }
 
 void idtInitialize() {
