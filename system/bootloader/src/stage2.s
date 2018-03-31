@@ -143,7 +143,7 @@ EXECUTE:
 
 	mov eax, IMAGE_PMODE_BASE
 	mov ebp, eax
-	add ebp, 0x1FFFF
+	add ebp, 0x0FFFFF
 	mov esp, ebp
 
 	mov ecx, eax
