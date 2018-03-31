@@ -7,11 +7,15 @@ set(PUBLIC_HEADERS
         include/stdbool.h
         include/stdint.h
         include/stdio.h
-        include/sys/syscall.h)
+        include/string.h
+        include/stdlib.h
+        include/sys/syscall.h
+        )
 
 add_library(stdlib STATIC
         src/floppy.c
         src/stdio.c
+        src/string.c
         src/sys/syscall.c
         ${PUBLIC_HEADERS}
         )
