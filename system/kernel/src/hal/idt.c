@@ -1,5 +1,7 @@
+#include <stdio.h>
 #include "idt.h"
 #include "asmutil.h"
+#include "gdt.h"
 
 #pragma pack (push, 1)
 
@@ -13,18 +15,20 @@ struct Idtr {
 
 #pragma pack (pop)
 
-static struct IdtDescriptor idt[256] = {0};
+#define IDT_LEN 256
+#define IDT_SIZE (IDT_LEN * sizeof(struct IdtDescriptor))
 
-#define IDT_SIZE (sizeof(idt) / sizeof(struct IdtDescriptor))
+static struct IdtDescriptor idt[IDT_LEN] = {0};
 
 static struct Idtr idtr;
 
 static void idtInstall() {
-    idtr.limit = sizeof(idt);
-    idtr.base = (uint32_t) idt;
-    __asm__(
-        "lidt [eax]\n"
-        : : "a"(&idtr)
+    idtr.limit = IDT_SIZE;
+    idtr.base = (uint32_t) &idt[0];
+    asm (
+    "cli\n"
+    "lidt [eax]\n"
+    : : "a"(&idtr)
     );
 }
 
@@ -32,27 +36,29 @@ static void idtSetHandler(
         uint32_t i,
         uint8_t dpl,
         uint16_t sel,
-        void (*handler)()
-    ) {
-    if (i >= IDT_SIZE
-        || handler == 0)
+        void (*handler)()) {
+    if (i >= IDT_SIZE || handler == 0)
         return;
     uint32_t handlerAddress = (uint32_t) handler;
-    idt[i].baseLo = handlerAddress & 0x0000FFFF;
-    idt[i].baseHi = (handlerAddress & 0xFFFF0000) >> 16;
+    idt[i].baseLo = (uint16_t) (handlerAddress & 0x0000FFFF);
+    idt[i].baseHi = (uint16_t) ((handlerAddress >> 16) & 0xFFFF);
     idt[i].reserved = 0;
     idt[i].sel = sel;
-    idt[i].flags = ((dpl << 5) & 0x60) | 0x8E;
+    idt[i].flags = (dpl << 5) | (uint8_t) 0b10001110;
 }
 
-void defaultHandler() {
+static void defaultHandler() {
     // Do Nothing
-    asm ( "iret" );
+    asm volatile (
+    "mov esp, ebp\n"
+    "pop ebp\n"
+    "iret\n"
+    );
 }
 
-void idtInitialize(uint16_t sel) {
-    for (uint32_t i = 0; i < IDT_SIZE; ++i) {
-        idtSetHandler(i, 0, sel, defaultHandler);
+void idtInitialize() {
+    for (uint32_t i = 0; i < IDT_LEN; ++i) {
+        idtSetHandler(i, 0, 8, defaultHandler);
     }
     idtInstall();
 }

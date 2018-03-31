@@ -25,4 +25,6 @@ struct IdtDescriptor {
 
 #pragma pack (pop)
 
+void idtInitialize();
+
 #endif

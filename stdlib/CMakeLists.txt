@@ -1,18 +1,19 @@
 project(myos-stdlib LANGUAGES C)
 
 set(CMAKE_C_STANDARD 99)
+set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -fno-builtin -nostdlib -nostdinc -m32 -masm=intel -fPIC")
+
+set(PUBLIC_HEADERS
+        include/stdbool.h
+        include/stdint.h
+        include/stdio.h
+        include/sys/syscall.h)
 
 add_library(stdlib STATIC
         src/floppy.c
-        src/stdio.c)
-
-target_compile_options(stdlib BEFORE
-        PUBLIC -fno-builtin
-        PUBLIC -nostdlib
-        PUBLIC -nostdinc
-        PUBLIC -m32
-        PUBLIC -fPIC
-        PRIVATE -masm=intel
+        src/stdio.c
+        src/sys/syscall.c
+        ${PUBLIC_HEADERS}
         )
 
 target_include_directories(stdlib
