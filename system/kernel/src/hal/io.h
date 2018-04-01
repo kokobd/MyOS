@@ -2,7 +2,7 @@
 
 #include <stdint.h>
 
-inline uint8_t inb(uint32_t port) {
+inline static uint8_t inb(uint32_t port) {
     uint8_t data = 0;
     asm volatile(
     "in %0, dx"
@@ -12,7 +12,7 @@ inline uint8_t inb(uint32_t port) {
     return data;
 }
 
-inline void outb(uint32_t port, uint8_t data) {
+inline static void outb(uint32_t port, uint8_t data) {
     asm volatile(
     "out dx, al"
     : : "d" (port), "a" (data)

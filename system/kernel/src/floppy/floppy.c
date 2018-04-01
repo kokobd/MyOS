@@ -1,14 +1,15 @@
 #include "floppy.h"
-#include <stdio.h>
+#include "../hal/io.h"
+#include <stdbool.h>
 
 /**
  * Convert LBA(Logical Block Addressing) to CHS(Cylinder, Head, Sector)
  */
 static void lbaToChs(uint32_t lba, uint16_t *cyl, uint16_t *head, uint16_t *sector) {
 #define SECTORS_PER_TRACK 18
-    *cyl = lba / (2 * SECTORS_PER_TRACK);
-    *head = ((lba % (2 * SECTORS_PER_TRACK)) / SECTORS_PER_TRACK);
-    *sector = ((lba % (2 * SECTORS_PER_TRACK)) % SECTORS_PER_TRACK + 1);
+    *cyl = (uint16_t) (lba / (2 * SECTORS_PER_TRACK));
+    *head = (uint16_t) ((lba % (2 * SECTORS_PER_TRACK)) / SECTORS_PER_TRACK);
+    *sector = (uint16_t) ((lba % (2 * SECTORS_PER_TRACK)) % SECTORS_PER_TRACK + 1);
 #undef SECTORS_PER_TRACK
 }
 
@@ -25,28 +26,8 @@ enum FloppyRegisters {
     CONFIGURATION_CONTROL_REGISTER = 0x3F7 // w
 };
 
-static void inb(void *port, uint8_t *val) {
-    __asm__(
-    "in %0, dx"
-    : "=r" (*val)
-    : "d" (port)
-    :
-    );
-}
-
-static void outb(void *port, uint8_t val) {
-    __asm__(
-    "out dx, al"
-    :
-    : "d" (port), "a" (val)
-    :
-    );
-}
-
 static uint8_t getMsr() {
-    uint8_t msr = 0;
-    inb((void *) MAIN_STATUS_REGISTER, &msr);
-    return msr;
+    return inb(MAIN_STATUS_REGISTER);
 }
 
 static void waitUntilReady() {
@@ -57,20 +38,20 @@ static void waitUntilReady() {
     } while (!ready);
 }
 
-int32_t loadSector(uint8_t *buffer, uint32_t lba) {
+void loadSector(uint8_t *buffer, uint32_t lba) {
     uint16_t cyl, head, sector;
     lbaToChs(lba, &cyl, &head, &sector);
 
     // Start motor, enable controller, select drive 0.
-    outb((void *) DIGITAL_OUTPUT_REGISTER, 0b00010100);
+    outb(DIGITAL_OUTPUT_REGISTER, 0b00010100);
 
     // send command to read sector
     uint8_t cmds[9] = {
             0b01000110,
             0,
-            cyl,
-            head,
-            sector,
+            (uint8_t) cyl,
+            (uint8_t) head,
+            (uint8_t) sector,
             2,
             1,
             42,
@@ -78,20 +59,19 @@ int32_t loadSector(uint8_t *buffer, uint32_t lba) {
     };
     for (int i = 0; i < 9; ++i) {
         waitUntilReady();
-        outb((void *) DATA_FIFO, cmds[i]);
+        outb(DATA_FIFO, cmds[i]);
     }
     uint8_t *pt = buffer;
     while (true) {
         waitUntilReady();
-        inb((void *) DATA_FIFO, pt);
+        *pt = inb(DATA_FIFO);
         ++pt;
         if (pt - buffer == 512)
             break;
     }
-    outb((void *) DIGITAL_OUTPUT_REGISTER, 0);
-    int x = 0;
-    while (x < 1000000) { // wait for some time
+    outb(DIGITAL_OUTPUT_REGISTER, 0);
+    volatile int x = 0; // avoid x from being optimized out
+    while (x < 10000) { // wait for some time
         ++x;
     }
-    return 0;
 }

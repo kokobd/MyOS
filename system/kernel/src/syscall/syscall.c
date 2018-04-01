@@ -1,6 +1,7 @@
 #include "syscall.h"
 #include "../hal/idt.h"
 #include "../hal/gdt.h"
+#include "file.h"
 
 static void syscallHandler();
 
@@ -32,5 +33,13 @@ static void syscallHandler() {
 #pragma clang diagnostic pop
 
 static int32_t syscall(int32_t arg0, int32_t arg1, int32_t arg2, int32_t arg3) {
-
+    int32_t ret = -1;
+    switch (arg0) {
+        case 0:
+            ret = fopen((const char *) arg1, (uint32_t) arg2);
+            break;
+        default:
+            break;
+    }
+    return ret;
 }

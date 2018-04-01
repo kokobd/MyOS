@@ -12,7 +12,9 @@ add_executable(kernel
         src/hal/asmutil.h
         src/floppy/floppy.c
         src/filesystem/fat12.c
-        src/syscall/syscall.c)
+        src/syscall/syscall.c
+        src/syscall/file.c
+        )
 
 add_custom_command(TARGET kernel
         POST_BUILD
