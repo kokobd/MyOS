@@ -16,7 +16,7 @@ static void showInfo();
 void _start() {
     gdtInitialize();
     idtInitialize();
-    syscallInitialize();
+    kernel_syscall_initialize();
 
     showInfo();
     disableCurser();

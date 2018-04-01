@@ -2,6 +2,8 @@
 #include "../hal/io.h"
 #include <stdbool.h>
 
+#define NS(X) kernel_floppy_ ## X
+
 /**
  * Convert LBA(Logical Block Addressing) to CHS(Cylinder, Head, Sector)
  */
@@ -38,7 +40,7 @@ static void waitUntilReady() {
     } while (!ready);
 }
 
-void loadSector(uint8_t *buffer, uint32_t lba) {
+int32_t NS(loadSector)(uint8_t *buffer, uint32_t lba) {
     uint16_t cyl, head, sector;
     lbaToChs(lba, &cyl, &head, &sector);
 
@@ -74,4 +76,5 @@ void loadSector(uint8_t *buffer, uint32_t lba) {
     while (x < 10000) { // wait for some time
         ++x;
     }
+    return 0;
 }

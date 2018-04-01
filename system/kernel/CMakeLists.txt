@@ -13,7 +13,7 @@ add_executable(kernel
         src/floppy/floppy.c
         src/filesystem/fat12.c
         src/syscall/syscall.c
-        src/syscall/file.c
+        src/filesystem/file.c
         )
 
 add_custom_command(TARGET kernel

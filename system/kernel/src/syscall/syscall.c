@@ -1,13 +1,15 @@
 #include "syscall.h"
 #include "../hal/idt.h"
 #include "../hal/gdt.h"
-#include "file.h"
+#include "../filesystem/file.h"
+
+#define NAMESPACE(X) kernel_syscall_ ## X
 
 static void syscallHandler();
 
 static int32_t syscall(int32_t arg0, int32_t arg1, int32_t arg2, int32_t arg3);
 
-void syscallInitialize() {
+void NAMESPACE(initialize)() {
     idtSetHandler(0x80, 0, kernelCodeSelector(), syscallHandler);
 }
 
@@ -36,7 +38,7 @@ static int32_t syscall(int32_t arg0, int32_t arg1, int32_t arg2, int32_t arg3) {
     int32_t ret = -1;
     switch (arg0) {
         case 0:
-            ret = fopen((const char *) arg1, (uint32_t) arg2);
+            ret = kernel_filesystem_file_fopen((const char *) arg1, (uint32_t) arg2);
             break;
         default:
             break;
