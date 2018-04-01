@@ -11,9 +11,10 @@ add_executable(kernel
         src/hal/io.h
         src/hal/asmutil.h
         src/floppy/floppy.c
+        src/screen/vga.c
         src/filesystem/fat12.c
-        src/syscall/syscall.c
         src/filesystem/file.c
+        src/syscall/syscall.c
         )
 
 add_custom_command(TARGET kernel
