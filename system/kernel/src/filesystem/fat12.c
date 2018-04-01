@@ -2,17 +2,19 @@
 #include <string.h>
 #include "fat12.h"
 
+#define NS(X) kernel_filesystem_fat12_ ## X
+
 static uint16_t nextCluster(uint16_t cluster, const uint8_t *fat);
 
-void fat12Init(struct FAT12 *this, SectorLoader sectorLoader) {
+void NS(fat12Init)(NS(FAT12) *this, NS(SectorLoader) sectorLoader) {
     this->sectorLoader = sectorLoader;
 }
 
-struct FAT12File fat12GetFileByName(struct FAT12 *this, const char *fileName) {
+NS(File) NS(fat12GetFileByName)(NS(FAT12) *this, const char *fileName) {
     // Each sector is 512 bytes
     // Root directory: [19..33), has 14 sectors
     //   Each entry in root directory area has 32 bytes
-    struct FAT12File result;
+    NS(File) result;
     result.size = 0;
     result.name[FAT12_FILENAME_SIZE] = '\0';
     uint8_t sector[512];
@@ -34,11 +36,11 @@ struct FAT12File fat12GetFileByName(struct FAT12 *this, const char *fileName) {
     return result;
 }
 
-int32_t fat12FileReadAllBytes(
-        struct FAT12 *this,
-        const struct FAT12File *file,
+int32_t NS(fileReadAllBytes)(
+        NS(FAT12) *this,
+        const NS(File) *file,
         uint8_t *dest) {
-    if (!fat12FileExists(file))
+    if (!NS(fileExists)(file))
         return -1;
     uint8_t fatSector0[512];
     this->sectorLoader(fatSector0, 1);
@@ -49,7 +51,7 @@ int32_t fat12FileReadAllBytes(
         this->sectorLoader(buffer, cluster + (uint16_t) 31);
         cluster = nextCluster(cluster, fatSector0);
         if (cluster >= 0xFF8) {
-            uint32_t lastPartSize = fat12FileGetSize(file) % 512;
+            uint32_t lastPartSize = NS(fileGetSize)(file) % 512;
             memcpy(dest, buffer, lastPartSize);
         } else {
             memcpy(dest, buffer, 512);

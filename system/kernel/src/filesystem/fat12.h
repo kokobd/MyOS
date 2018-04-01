@@ -3,27 +3,30 @@
 #include <stdint.h>
 #include <stdbool.h>
 
-typedef int32_t (*SectorLoader)(uint8_t *, uint32_t);
+#pragma push_macro("NS")
+#define NS(X) kernel_filesystem_fat12_ ## X
 
-struct FAT12 {
-    SectorLoader sectorLoader;
-};
+typedef int32_t (*NS(SectorLoader))(uint8_t *, uint32_t);
+
+typedef struct {
+    NS(SectorLoader) sectorLoader;
+} NS(FAT12);
 
 #define FAT12_FILENAME_SIZE 11
 
-struct FAT12File {
+typedef struct {
     char name[FAT12_FILENAME_SIZE + 1];
     uint16_t firstCluster;
     uint32_t size;
     int32_t index;
-};
+} NS(File);
 
 /**
  * Initialize an FAT12 object.
  * @param fat12 pointer to an uninitialized FAT12 object
  * @param sectorLoader Pointer to a function to load sectors.
  */
-void fat12Init(struct FAT12 *fat12, SectorLoader sectorLoader);
+void NS(fat12Init)(NS(FAT12) *fat12, NS(SectorLoader) sectorLoader);
 
 /**
  * Get meta information of a file. The returned struct can be used
@@ -32,17 +35,17 @@ void fat12Init(struct FAT12 *fat12, SectorLoader sectorLoader);
  * @param fileName strlen(fileName) MUST be 11, with all letters in UPPER CASE.
  * @return A struct containing meta information of that file.
  */
-struct FAT12File fat12GetFileByName(struct FAT12 *fat12, const char *fileName);
+NS(File) NS(fat12GetFileByName)(NS(FAT12) *fat12, const char *fileName);
 
-inline static const char *fat12FileGetName(const struct FAT12File *file) {
+inline static const char *NS(fileGetName)(const NS(File) *file) {
     return file->name;
 }
 
-inline static uint32_t fat12FileGetSize(const struct FAT12File *file) {
+inline static uint32_t NS(fileGetSize)(const NS(File) *file) {
     return file->size;
 }
 
-inline static bool fat12FileExists(const struct FAT12File *file) {
+inline static bool NS(fileExists)(const NS(File) *file) {
     return file->size != 0;
 }
 
@@ -53,7 +56,9 @@ inline static bool fat12FileExists(const struct FAT12File *file) {
  * @param dest where to put file contents
  * @return 0 on success, other values on failure.
  */
-int32_t fat12FileReadAllBytes(
-        struct FAT12 *fat12,
-        const struct FAT12File *file,
+int32_t NS(fileReadAllBytes)(
+        NS(FAT12) *fat12,
+        const NS(File) *file,
         uint8_t *dest);
+
+#pragma pop_macro("NS")
