@@ -18,6 +18,7 @@ add_library(stdlib STATIC
         src/stdio.c
         src/string.c
         src/ctype.c
+        src/crt.c
         src/sys/syscall.c
         ${PUBLIC_HEADERS}
         )

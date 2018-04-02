@@ -6,28 +6,9 @@
 #include "keyboard/input.h"
 #include "shell.h"
 
-#pragma clang diagnostic push
-#pragma ide diagnostic ignored "OCUnusedGlobalDeclarationInspection"
-
 static void initHardware();
 
-// TODO remove this function
-// prints x in reverse order.
-void itoa(uint8_t x, char *buf) {
-    int i = 0;
-    if (x == 0) {
-        buf[i++] = '0';
-    }
-    while (x > 0) {
-        int digit = x % 10;
-        buf[i++] = (char) (digit + '0');
-        x /= 10;
-    }
-    buf[i] = '\0';
-}
-
-
-void _start() {
+int main() {
     initHardware();
 
     kernel_shell_Terminal terminal;
@@ -56,6 +37,3 @@ static void initHardware() {
     kernel_syscall_initialize();
     kernel_keyboard_input_initialize();
 }
-
-
-#pragma clang diagnostic pop
