@@ -28,9 +28,13 @@ int32_t NS(initialize)() {
     // so that we will use codeset 2
     waitUntilReadyForOutput();
     outb(0x64, 0x60);
+
     waitUntilReadyForOutput();
-    outb(0x64, 0b00000100);
+    outb(0x60, 0b00000100);
+
     waitUntilReadyForOutput();
+
+    kernel_keyboard_scanCode_init();
 }
 
 static uint8_t getScanCode() {
@@ -41,10 +45,14 @@ static uint8_t getScanCode() {
 
 char NS(getChar)() {
     uint8_t code = getScanCode();
-    kernel_keyboard_key_Key key = kernel_keyboard_scanCode_toKey(code);
-    if (!key.pressed) {
-        return -1;
+    kernel_keyboard_key_Key key;
+    if (code == 0xF0) {
+        code = getScanCode();
+//        key = kernel_keyboard_scanCode_toKey(code);
+//        key.pressed = false;
+        return 0;
+    } else {
+        key = kernel_keyboard_scanCode_toKey(code);
+        return key.keyCode;
     }
-    if (key.keyCode > 0)
-        return (char) key.keyCode;
 }

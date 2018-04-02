@@ -89,9 +89,9 @@ void NS(termPutChar)(NS(Terminal) *this, char ch) {
     } else if (ch == '\b') {
         // move back the cursor, then put a ' '
         termCursorMoveBackward(this);
-        vga(setChar)(this->curX, this->curY, ' ');
+        vga(setChar)(this->curY, this->curX, ' ');
     } else {
-        vga(setChar)(this->curX, this->curY, ch);
+        vga(setChar)(this->curY, this->curX, ch);
         termCursorMoveForward(this);
     }
     termUpdateHWCursor(this);
@@ -125,6 +125,8 @@ char NS(termGetChar)(NS(Terminal) *this) {
         char next;
         do {
             next = kernel_keyboard_input_getChar();
+            if (next == 0)
+                continue;
             if (next != '\b') {
                 *(this->bufferEnd) = next;
                 incBufferPt(this, &(this->bufferEnd));

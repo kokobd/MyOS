@@ -2,7 +2,7 @@ project(myos-system-kernel LANGUAGES C)
 
 set(CMAKE_C_STANDARD 99)
 
-set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -nostartfiles -fno-builtin -nostdlib -nostdinc -m32 -masm=intel -fPIE -mno-red-zone")
+set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -nostdlib -ffreestanding -m32 -masm=intel -fPIC -mno-red-zone")
 
 add_executable(kernel
         src/main.c
