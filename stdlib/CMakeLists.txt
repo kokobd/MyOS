@@ -14,7 +14,6 @@ set(PUBLIC_HEADERS
         )
 
 add_library(stdlib STATIC
-        src/floppy.c
         src/stdio.c
         src/string.c
         src/ctype.c
