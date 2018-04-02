@@ -15,6 +15,10 @@ bool NS(setChar)(int row, int col, char ch) {
     return true;
 }
 
+char NS(getChar)(int row, int col) {
+    return *(VIDEO_ADDR + (80 * row + col) * 2);
+}
+
 bool NS(changeAttribute)(
         int row, int col,
         bool blink,
@@ -33,4 +37,13 @@ bool NS(changeAttribute)(
     *(VIDEO_ADDR + (80 * row + col) * 2 + 1) = attribute;
 
     return true;
+}
+
+void NS(moveCursor)(int x, int y) {
+    int pos = y * NS(getWidth)() + x;
+
+    outb(0x3D4, 0x0F);
+    outb(0x3D5, (uint8_t) (pos & 0xFF));
+    outb(0x3D4, 0x0E);
+    outb(0x3D5, (uint8_t) ((pos >> 8) & 0xFF));
 }

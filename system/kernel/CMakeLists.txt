@@ -12,6 +12,7 @@ add_executable(kernel
         src/hal/asmutil.h
         src/floppy/floppy.c
         src/screen/vga.c
+        src/shell.c
         src/filesystem/fat12.c
         src/filesystem/file.c
         src/syscall/syscall.c
