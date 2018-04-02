@@ -4,7 +4,7 @@
 #define NS(X) kernel_keyboard_key_ ## X
 
 typedef struct {
-    char keyCode;
+    int8_t keyCode;
     bool pressed;
 } NS(Key);
 

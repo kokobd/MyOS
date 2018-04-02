@@ -15,6 +15,7 @@ add_executable(kernel
         src/shell.c
         src/keyboard/scanCode.c
         src/keyboard/key.h
+        src/keyboard/input.c
         src/filesystem/fat12.c
         src/filesystem/file.c
         src/syscall/syscall.c
