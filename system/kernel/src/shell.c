@@ -8,7 +8,7 @@
 
 /**
  * Scroll down contents of the terminal.
- * Doesn't change curser position.
+ * Doesn't change cursor position.
  * @param this the terminal
  * @param lines the number of lines to scroll down.
  */
