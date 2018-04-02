@@ -13,6 +13,8 @@ add_executable(kernel
         src/floppy/floppy.c
         src/screen/vga.c
         src/shell.c
+        src/keyboard/scanCode.c
+        src/keyboard/key.h
         src/filesystem/fat12.c
         src/filesystem/file.c
         src/syscall/syscall.c

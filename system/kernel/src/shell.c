@@ -68,6 +68,7 @@ void NS(termPutChar)(NS(Terminal) *this, char ch) {
 }
 
 char NS(termGetChar)(NS(Terminal) *term) {
+    // TODO termGetChar
     // If the buffer is ready
     //   return a character from the buffer
     // Else: wait and read from keyboard, until
