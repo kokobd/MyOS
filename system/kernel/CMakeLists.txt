@@ -2,8 +2,6 @@ project(myos-system-kernel LANGUAGES C)
 
 set(CMAKE_C_STANDARD 99)
 
-set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -nostdlib -ffreestanding -m32 -masm=intel -fPIC -mno-red-zone")
-
 add_executable(kernel
         src/main.c
         src/hal/gdt.c
@@ -20,6 +18,18 @@ add_executable(kernel
         src/filesystem/file.c
         src/syscall/syscall.c
         )
+
+target_compile_options(kernel
+        PRIVATE -m32
+        PRIVATE -masm=intel
+        PRIVATE -mno-red-zone
+        PRIVATE -fno-builtin
+        PRIVATE -fno-stack-protector
+        PRIVATE -fPIE
+        )
+
+set_target_properties(kernel PROPERTIES
+        LINK_FLAGS "-nostdlib -m32 -fno-builtin -fPIE")
 
 add_custom_command(TARGET kernel
         POST_BUILD

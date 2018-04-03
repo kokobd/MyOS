@@ -85,6 +85,7 @@ void gdtInitialize() {
     gdtInstall();
 
     asm volatile (
+    "xor eax, eax\n"
     "mov ax, 0x10\n"
     "mov ds, ax\n"
     "mov ss, ax\n"

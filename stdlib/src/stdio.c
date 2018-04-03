@@ -9,5 +9,7 @@ int getchar() {
 }
 
 int puts(const char *str) {
-    // TODO
+    while (*str != '\0')
+        putchar(*str++);
+    return 0;
 }
