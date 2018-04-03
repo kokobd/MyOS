@@ -6,6 +6,12 @@
 #define NS(X) kernel_shell_ ## X
 #define vga(X) kernel_screen_vga_ ## X
 
+static NS(Terminal) globalTerminal;
+
+NS(Terminal) *NS(getGlobalTerminal)() {
+    return &globalTerminal;
+}
+
 /**
  * Scroll down contents of the terminal.
  * Doesn't change cursor position.

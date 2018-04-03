@@ -2,6 +2,7 @@
 #include "../hal/idt.h"
 #include "../hal/gdt.h"
 #include "../filesystem/file.h"
+#include "../shell.h"
 
 #define NAMESPACE(X) kernel_syscall_ ## X
 
@@ -17,15 +18,10 @@ void NAMESPACE(initialize)() {
 #pragma clang diagnostic ignored "-Wuninitialized"
 
 static void syscallHandler() {
-    int32_t eax, ebx, ecx, edx;
-    asm volatile (
-    "mov %0, eax\n"
-    "mov %1, ebx\n"
-    "mov %2, ecx\n"
-    "mov %3, edx\n"
-    : "=rm" (eax), "=rm" (ebx), "=rm" (ecx), "=rm" (edx)
-    : : "eax", "ebx", "ecx", "edx"
-    );
+    register int32_t eax asm("eax");
+    register int32_t ebx asm("ebx");
+    register int32_t ecx asm("ecx");
+    register int32_t edx asm("edx");
 
     int32_t ret = syscall(eax, ebx, ecx, edx);
 
@@ -39,6 +35,13 @@ static int32_t syscall(int32_t arg0, int32_t arg1, int32_t arg2, int32_t arg3) {
     switch (arg0) {
         case 0:
             ret = kernel_filesystem_file_fopen((const char *) arg1, (uint32_t) arg2);
+            break;
+        case 3:
+            kernel_shell_termPutChar(kernel_shell_getGlobalTerminal(), (char) arg1);
+            ret = 0;
+            break;
+        case 4:
+            ret = kernel_shell_termGetChar(kernel_shell_getGlobalTerminal());
             break;
         default:
             break;

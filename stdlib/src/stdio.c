@@ -1,11 +1,12 @@
 #include <stdio.h>
+#include <sys/syscall.h>
 
 int putchar(int ch) {
-    // TODO
+    return syscall(3, ch, 0, 0);
 }
 
 int getchar() {
-    // TODO
+    return syscall(4, 0, 0, 0);
 }
 
 int puts(const char *str) {

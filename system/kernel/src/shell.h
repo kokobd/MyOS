@@ -19,6 +19,8 @@ typedef struct {
     bool bufferReady;
 } NS(Terminal);
 
+NS(Terminal) *NS(getGlobalTerminal)();
+
 /**
  * Initialize a terminal object.
  * @param term the terminal object.
