@@ -2,24 +2,28 @@
 
 This is an experimental operating system implementation, targeting x86 processors.
 
-To develop, you need to install:
+You will need the following tools to compile and develop the project.
 
-- `make`
-- `gcc`
-- `nasm`
+- `gcc 5.4.1`
+- `nasm 2.11.08`
+- `cmake >= 3.9`
 
-We currently only supports to build on Linux.
+A Linux environment is required. We are using Ubuntu 16.04.
 
-Run `sudo make image` to execute all build steps and create a bootable
-floppy image containing the kernel and applications.
-Run `make` to build, but doesn't bundle the executables into an image.
+Other distributions and tool versions may also work, but we haven't tested it.
 
-You may use any text editor you like, such as VIM, EMacs, or Atom.
-We use Visual Studio Code. A handwritten workspace setting file for VSCode
-is provided in the repository to ensure everyone use the same tabsize, etc.
-If you choose to use another text editor, make sure you follow our existing
-code style.
+Jetbrains CLion is recommended, but not required, for best experience.
 
-To run, please use the latest version of Oracle VM VirtualBox. Load the image
-as a floppy drive. Select that drive as your boot drive. Then it should work.
-Note that you **MUST** use a desktop keyboard.
+## Compile and bundle
+
+```sh
+mkdir cmake-build-debug
+cd cmake-build-debug
+cmake ..
+make
+cd ..
+sudo scripts/bundle cmake-build-debug
+```
+
+You shall see a file named `myos.img` inside `cmake-build-debug`.
+Set it as your VBox virtual machine startup image, then run the VM.
