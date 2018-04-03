@@ -82,6 +82,7 @@ EnterStage3:
 bits 32
 
 BadImage db "*** FATAL: Invalid or corrupt kernel image. Halting system.", 0
+IMAGE_PMODE_BASE dd 0x100000
 
 Stage3:
 
@@ -98,16 +99,39 @@ Stage3:
 	call	ClrScr32
 
 CopyImage:
-  	mov	eax, dword [ImageSize]
-  	movzx ebx, word [bpbBytesPerSector]
-  	mul	ebx
-  	mov	ebx, 4
-  	div	ebx
-    cld
-    mov esi, IMAGE_RMODE_BASE
-    mov	edi, IMAGE_PMODE_BASE
-    mov	ecx, eax
-    rep	movsd                   ; copy image to its protected mode address
+	mov ebx, IMAGE_RMODE_BASE
+	mov eax, [ebx + 0x1C] ; program header offset in file
+	add eax, ebx ; now eax points to the first program header
+	xor ecx, ecx
+	mov cx, [ebx + 0x2C] ; number of entries in the program header
+	.CopySection:
+	; size of entry in the program header is 0x20
+	mov edx, [eax]
+	cmp edx, 1
+	jne .Continue
+	mov esi, IMAGE_RMODE_BASE
+	add esi, [eax + 0x04]
+	mov edi, [eax + 0x08]
+	push ecx
+	mov ecx, [eax + 0x10]
+	rep movsb
+	pop ecx
+	.Continue:
+    add eax, 0x20
+	dec ecx
+	cmp ecx, 0
+	jne .CopySection
+
+;  	mov	eax, dword [ImageSize]
+;  	movzx ebx, word [bpbBytesPerSector]
+;  	mul	ebx
+;  	mov	ebx, 4
+;  	div	ebx
+;    cld
+;    mov esi, IMAGE_RMODE_BASE
+;    mov	edi, [IMAGE_PMODE_BASE]
+;    mov	ecx, eax
+;    rep	movsd                   ; copy image to its protected mode address
 
 	jmp EXECUTE
 
@@ -126,30 +150,16 @@ CopyImage:
 ; ImageSig db 'PE'
 
 EXECUTE:
-
-	;---------------------------------------;
-	;   Execute Kernel
-	;---------------------------------------;
-
-    ; parse the programs header info structures to get its entry point
-
-	; add		ebx, 24
-	; mov		eax, [ebx]			; _IMAGE_FILE_HEADER is 20 bytes + size of sig (4 bytes)
-	; add		ebx, 20-4			; address of entry point
-	; mov		ebp, dword [ebx]		; get entry point offset in code section	
-	; add		ebx, 12				; image base is offset 8 bytes from entry point
-	; mov		eax, dword [ebx]		; add image base
-	; add		ebp, eax
-
-	mov eax, IMAGE_PMODE_BASE
+    ; adjust stack pointer
+	mov eax, [IMAGE_PMODE_BASE]
 	mov ebp, eax
 	add ebp, 0x0FFFFF
 	mov esp, ebp
 
-	mov ecx, eax
+    ; put entry point into eax
+	mov ecx, [IMAGE_PMODE_BASE]
 	add ecx, 24
-	add eax, [ecx]
-	sub eax, 0x08048000
+	mov eax, [ecx]
 
 	cli
 	call eax               	      ; Execute Kernel

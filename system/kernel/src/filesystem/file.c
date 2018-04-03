@@ -4,12 +4,26 @@
 #include "fat12.h"
 #include "../floppy/floppy.h"
 
-#define NAMESPACE(X) kernel_filesystem_file_ ## X
+#define NS(X) kernel_filesystem_file_ ## X
 #define fat12(X) kernel_filesystem_fat12_ ## X
 
-static fat12(File) files[256] = {0};
+typedef struct {
+    fat12(File) fat12File;
+    bool opened;
+    int32_t position;
+} File;
 
-int32_t NAMESPACE(fopen)(const char *fileName, uint32_t flags) {
+#define MAX_HANDLES 256
+
+static fat12(File) files[MAX_HANDLES] = {0};
+static bool handleOccupied[MAX_HANDLES];
+
+void NS(init)() {
+    memset(files, 0, MAX_HANDLES * sizeof(fat12(File)));
+    memset(handleOccupied, 0, MAX_HANDLES * sizeof(bool));
+}
+
+int32_t NS(fopen)(const char *fileName, uint32_t flags) {
     char fat12FileName[11] = {' '};
 
     size_t dotIndex = 0;
@@ -50,5 +64,17 @@ int32_t NAMESPACE(fopen)(const char *fileName, uint32_t flags) {
         return -1;
     }
 
+    handleOccupied[i] = true;
     return i;
+}
+
+int32_t NS(fread)(int32_t fileHandle, uint8_t *dest, size_t limit) {
+    if (0 <= fileHandle && fileHandle < MAX_HANDLES) {
+
+    }
+}
+
+int32_t NS(fclose)(int32_t fileHandle) {
+    if (0 <= fileHandle && fileHandle < MAX_HANDLES)
+        handleOccupied[fileHandle] = false;
 }

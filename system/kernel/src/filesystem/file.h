@@ -2,9 +2,15 @@
 
 #include <stdint.h>
 
-#pragma push_macro("NAMESPACE")
-#define NAMESPACE(X) kernel_filesystem_file_ ## X
+#pragma push_macro("NS")
+#define NS(X) kernel_filesystem_file_ ## X
 
-int32_t NAMESPACE(fopen)(const char *fileName, uint32_t flags);
+void NS(init)();
 
-#pragma pop_macro("NAMESPACE")
+int32_t NS(fopen)(const char *fileName, uint32_t flags);
+
+int32_t NS(fread)(int32_t fileHandle, uint8_t *dest, size_t limit);
+
+int32_t NS(fclose)(int32_t fileHandle);
+
+#pragma pop_macro("NS")

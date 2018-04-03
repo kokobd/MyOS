@@ -1,5 +1,4 @@
 #include "gdt.h"
-#include "asmutil.h"
 
 #pragma pack (push, 1)
 
@@ -90,7 +89,7 @@ void gdtInitialize() {
     "mov ds, ax\n"
     "mov ss, ax\n"
     "mov es, ax\n"
-    "jmp 0x08:" label_(.FixCS) "\n"
+    "jmp 0x08:.FixCS\n"
     ".FixCS:\n"
     "nop"
     );

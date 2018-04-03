@@ -1,6 +1,5 @@
 #include <stdio.h>
 #include "idt.h"
-#include "asmutil.h"
 #include "gdt.h"
 
 #pragma pack (push, 1)

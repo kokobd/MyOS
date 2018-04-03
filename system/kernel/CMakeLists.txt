@@ -7,7 +7,6 @@ add_executable(kernel
         src/hal/gdt.c
         src/hal/idt.c
         src/hal/io.h
-        src/hal/asmutil.h
         src/floppy/floppy.c
         src/screen/vga.c
         src/shell.c
@@ -25,15 +24,14 @@ target_compile_options(kernel
         PRIVATE -mno-red-zone
         PRIVATE -fno-builtin
         PRIVATE -fno-stack-protector
-        PRIVATE -fPIE
         )
 
 set_target_properties(kernel PROPERTIES
-        LINK_FLAGS "-nostdlib -m32 -fno-builtin -fPIE")
+        LINK_FLAGS "-nostdlib -m32 -fno-builtin -Wl,-Ttext=0x100400")
 
 add_custom_command(TARGET kernel
         POST_BUILD
-        COMMAND strip ARGS ${CMAKE_CURRENT_BINARY_DIR}/kernel)
+        COMMAND strip ARGS -g ${CMAKE_CURRENT_BINARY_DIR}/kernel)
 
 target_link_libraries(kernel
         stdlib)
