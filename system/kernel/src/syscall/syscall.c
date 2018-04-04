@@ -49,6 +49,11 @@ static int32_t syscall(int32_t arg0, int32_t arg1, int32_t arg2, int32_t arg3) {
         case 4:
             ret = kernel_shell_termGetChar(kernel_shell_getGlobalTerminal());
             break;
+        case 5:
+            ret = kernel_filesystem_file_fGetSize(arg1);
+            break;
+        case 6:
+            ret = (int32_t) kernel_shell_getGlobalTerminal()->arg;
         default:
             break;
     }

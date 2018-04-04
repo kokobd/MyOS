@@ -17,6 +17,8 @@ typedef struct {
     char *bufferBegin;
     char *bufferEnd;
     bool bufferReady;
+
+    const char *arg; // TODO remove this
 } NS(Terminal);
 
 NS(Terminal) *NS(getGlobalTerminal)();
@@ -51,5 +53,8 @@ char NS(termGetChar)(NS(Terminal) *term);
 void NS(termPutString)(NS(Terminal) *term, const char *str);
 
 size_t NS(termReadLine)(NS(Terminal) *term, char *dest, size_t limit);
+
+// TODO remove this
+void NS(termSetArg)(NS(Terminal) *term, const char *arg);
 
 #pragma pop_macro("NS")

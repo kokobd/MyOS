@@ -29,14 +29,25 @@ int main() {
         memset(input, 0, INPUT_LIMIT);
         size_t inputSize = kernel_shell_termReadLine(terminal, input, INPUT_LIMIT - 1);
 
-        const char *suffix = ".exe";
-        memcpy(input + inputSize - 1, suffix, strlen(suffix));
+        const char *progNameEnd;
+        for (progNameEnd = input; *progNameEnd != '\0'; ++progNameEnd) {
+            if (isspace(*progNameEnd))
+                break;
+        }
 
-        for (char *pt = input; *pt != '\0'; ++pt) {
+        char progName[80];
+        memset(progName, 0, 80);
+        memcpy(progName, input, progNameEnd - input);
+
+        const char *suffix = ".exe";
+        memcpy(progName + strlen(progName), suffix, strlen(suffix));
+
+        for (char *pt = progName; *pt != '\0'; ++pt) {
             *pt = (char) toupper(*pt);
         }
 
-        executeApplication(terminal, input);
+        kernel_shell_termSetArg(terminal, input);
+        executeApplication(terminal, progName);
     }
 
     kernel_shell_termPutString(terminal, "Exited.\n");

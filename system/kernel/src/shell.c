@@ -190,3 +190,8 @@ size_t NS(termReadLine)(NS(Terminal) *this, char *dest, size_t limit) {
     }
     return actualLength;
 }
+
+// TODO remove this
+void NS(termSetArg)(NS(Terminal) *this, const char *arg) {
+    this->arg = arg;
+}
