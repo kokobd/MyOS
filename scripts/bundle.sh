@@ -20,6 +20,7 @@ mount myos.img myos
 cp system/bootloader/krnldr.sys myos/KRNLDR.SYS
 cp system/kernel/kernel myos/KERNEL.SYS
 cp apps/welcome myos/WELCOME.EXE
+cp apps/clear myos/CLEAR.EXE
 sync myos/*
 umount myos
 rmdir myos
