@@ -33,7 +33,7 @@ static uint8_t getMsr() {
 }
 
 static void waitUntilReady() {
-    bool ready = false;
+    bool ready;
     do {
         uint8_t msr = getMsr();
         ready = (msr & 0x80) == 0x80;

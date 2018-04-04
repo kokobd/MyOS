@@ -1,6 +1,7 @@
 #include <stdbool.h>
 #include <string.h>
 #include "fat12.h"
+#include "../screen/vga.h"
 
 #define NS(X) kernel_filesystem_fat12_ ## X
 
@@ -19,11 +20,12 @@ NS(File) NS(fat12GetFileByName)(NS(FAT12) *this, const char *fileName) {
     result.name[FAT12_FILENAME_SIZE] = '\0';
     uint8_t sector[512];
     for (uint32_t i = 19; i < 33; ++i) {
-        this->sectorLoader(sector, 19);
+        this->sectorLoader(sector, i);
 
         for (uint32_t j = 0; j < 512 / 32; ++j) {
             uint8_t *entry = sector + j * 32;
             char name[FAT12_FILENAME_SIZE + 1] = {0};
+            name[FAT12_FILENAME_SIZE] = '\0';
             memcpy(name, entry, FAT12_FILENAME_SIZE);
             if (strcmp(fileName, name) == 0) {
                 result.firstCluster = *(uint16_t *) (entry + 0x1A);

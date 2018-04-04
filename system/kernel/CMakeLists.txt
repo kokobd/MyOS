@@ -16,6 +16,7 @@ add_executable(kernel
         src/filesystem/fat12.c
         src/filesystem/file.c
         src/syscall/syscall.c
+        src/exec/elf32.c
         )
 
 target_compile_options(kernel

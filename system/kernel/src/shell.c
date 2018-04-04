@@ -144,6 +144,20 @@ static char termPopFromBuffer(NS(Terminal) *this) {
     return next;
 }
 
+static void termEraseLastFromBuffer(NS(Terminal) *this) {
+    if (bufferIsEmpty(this))
+        return;
+    if (this->bufferEnd == this->inputBuffer) {
+        this->bufferEnd = this->inputBuffer + NS(INPUT_BUFFER_SIZE) - 1;
+    } else {
+        --this->bufferEnd;
+    }
+
+    if (bufferIsEmpty(this)) {
+        this->bufferReady = false;
+    }
+}
+
 char NS(termGetChar)(NS(Terminal) *this) {
     if (!this->bufferReady) {
         // read a line into buffer
@@ -156,7 +170,7 @@ char NS(termGetChar)(NS(Terminal) *this) {
                 *(this->bufferEnd) = next;
                 incBufferPt(this, &(this->bufferEnd));
             } else {
-                termPopFromBuffer(this);
+                termEraseLastFromBuffer(this);
             }
 
             NS(termPutChar)(this, next);

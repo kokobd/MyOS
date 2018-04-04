@@ -36,6 +36,12 @@ static int32_t syscall(int32_t arg0, int32_t arg1, int32_t arg2, int32_t arg3) {
         case 0:
             ret = kernel_filesystem_file_fopen((const char *) arg1, (uint32_t) arg2);
             break;
+        case 1:
+            ret = kernel_filesystem_file_fclose(arg1);
+            break;
+        case 2:
+            ret = kernel_filesystem_file_fread(arg1, (uint8_t *) arg2, (size_t) arg3);
+            break;
         case 3:
             kernel_shell_termPutChar(kernel_shell_getGlobalTerminal(), (char) arg1);
             ret = 0;
