@@ -83,13 +83,20 @@ void NS(termInit)(NS(Terminal) *this) {
     this->bufferBegin = this->inputBuffer;
     this->bufferEnd = this->inputBuffer;
     memset(this->inputBuffer, 0, NS(INPUT_BUFFER_SIZE));
+
+    termUpdateHWCursor(this);
 }
 
 static inline bool bufferIsEmpty(NS(Terminal) *this) {
     return this->bufferBegin == this->bufferEnd;
 }
 
-void NS(termPutChar)(NS(Terminal) *this, char ch) {
+/**
+ * Print a character without updating the hardware cursor.
+ * @param this the terminal
+ * @param ch the character to print
+ */
+static void termPutChar_(NS(Terminal) *this, char ch) {
     if (ch == '\n') {
         termNextLine(this);
     } else if (ch == '\b') {
@@ -99,6 +106,18 @@ void NS(termPutChar)(NS(Terminal) *this, char ch) {
     } else {
         vga(setChar)(this->curY, this->curX, ch);
         termCursorMoveForward(this);
+    }
+}
+
+void NS(termPutChar)(NS(Terminal) *this, char ch) {
+    termPutChar_(this, ch);
+    termUpdateHWCursor(this);
+}
+
+void NS(termPutString)(NS(Terminal) *this, const char *pt) {
+    while (*pt != '\0') {
+        termPutChar_(this, *pt);
+        ++pt;
     }
     termUpdateHWCursor(this);
 }
@@ -146,4 +165,14 @@ char NS(termGetChar)(NS(Terminal) *this) {
         this->bufferReady = true;
     }
     return termPopFromBuffer(this);
+}
+
+size_t NS(termReadLine)(NS(Terminal) *this, char *dest, size_t limit) {
+    size_t actualLength = 0;
+    char ch = '\0';
+    while (ch != '\n' && actualLength < limit) {
+        ch = NS(termGetChar)(this);
+        dest[actualLength++] = ch;
+    }
+    return actualLength;
 }

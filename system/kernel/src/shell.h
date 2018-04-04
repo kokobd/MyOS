@@ -43,4 +43,13 @@ void NS(termPutChar)(NS(Terminal) *term, char ch);
  */
 char NS(termGetChar)(NS(Terminal) *term);
 
+/**
+ * Print a null terminated string to the terminal
+ * @param term
+ * @param str
+ */
+void NS(termPutString)(NS(Terminal) *term, const char *str);
+
+size_t NS(termReadLine)(NS(Terminal) *term, char *dest, size_t limit);
+
 #pragma pop_macro("NS")

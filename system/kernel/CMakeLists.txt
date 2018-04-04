@@ -29,9 +29,5 @@ target_compile_options(kernel
 set_target_properties(kernel PROPERTIES
         LINK_FLAGS "-nostdlib -m32 -fno-builtin -Wl,-Ttext=0x100400")
 
-add_custom_command(TARGET kernel
-        POST_BUILD
-        COMMAND strip ARGS -g ${CMAKE_CURRENT_BINARY_DIR}/kernel)
-
 target_link_libraries(kernel
         stdlib)

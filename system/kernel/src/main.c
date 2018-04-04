@@ -1,6 +1,8 @@
 #include <stdbool.h>
 #include <stdio.h>
 #include <stdint.h>
+#include <string.h>
+#include <ctype.h>
 #include "hal/gdt.h"
 #include "hal/idt.h"
 #include "syscall/syscall.h"
@@ -11,7 +13,6 @@
 
 static void initAll();
 
-static char prompt[20] = "MyOS> \0";
 
 int main() {
     initAll();
@@ -19,10 +20,16 @@ int main() {
     kernel_shell_Terminal *terminal = kernel_shell_getGlobalTerminal();
     kernel_shell_termInit(terminal);
 
-    for (char *pt = prompt; *pt != '\0'; ++pt) {
-        kernel_shell_termPutChar(terminal, *pt);
+    size_t INPUT_LIMIT = 120;
+    char input[INPUT_LIMIT];
+    input[INPUT_LIMIT - 1] = '\0';
+    while (strcmp(input, "EXIT") != 0) {
+        kernel_shell_termPutString(terminal, "MyOS 0.1> ");
+        kernel_shell_termReadLine(terminal, input, INPUT_LIMIT - 1);
+        kernel_shell_termPutString(terminal, input);
     }
 
+    kernel_shell_termPutString(terminal, "Exited.\n");
     asm(
     "cli\n"
     "hlt"
