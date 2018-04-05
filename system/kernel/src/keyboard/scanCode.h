@@ -2,7 +2,7 @@
 
 #include <stdint.h>
 #include <stdbool.h>
-#include "key.h"
+#include "key.hpp"
 
 #pragma push_macro("NS")
 #define NS(X) kernel_keyboard_scanCode_ ## X

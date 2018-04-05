@@ -1,9 +1,9 @@
 #include <stdlib.h>
 #include <stdbool.h>
 #include "input.h"
-#include "../hal/io.h"
+#include "../hal/io.hpp"
 #include "scanCode.h"
-#include "key.h"
+#include "key.hpp"
 
 #define NS(X) kernel_keyboard_input_ ## X
 

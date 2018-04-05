@@ -1,8 +1,8 @@
-#include <stdbool.h>
-#include <stdio.h>
-#include <stdint.h>
-#include <string.h>
-#include <ctype.h>
+#include <cstdio>
+#include <cstdint>
+#include <cstring>
+#include <cctype>
+
 #include "hal/gdt.h"
 #include "hal/idt.h"
 #include "syscall/syscall.h"
@@ -15,7 +15,7 @@ static void initAll();
 
 static void executeApplication(kernel_shell_Terminal *terminal, const char *name);
 
-int main() {
+extern "C" int main() {
     initAll();
 
     kernel_shell_Terminal *terminal = kernel_shell_getGlobalTerminal();

@@ -1,5 +1,6 @@
-#include <string.h>
-#include <ctype.h>
+#include <cstring>
+#include <cctype>
+
 #include "file.h"
 #include "fat12.h"
 #include "../floppy/floppy.h"

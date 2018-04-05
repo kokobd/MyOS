@@ -1,5 +1,5 @@
-#include <stdbool.h>
-#include <string.h>
+#include <cstring>
+
 #include "fat12.h"
 #include "../screen/vga.h"
 
@@ -7,11 +7,11 @@
 
 static uint16_t nextCluster(uint16_t cluster, const uint8_t *fat);
 
-void NS(fat12Init)(NS(FAT12) *this, NS(SectorLoader) sectorLoader) {
-    this->sectorLoader = sectorLoader;
+void NS(fat12Init)(NS(FAT12) *this_, NS(SectorLoader) sectorLoader) {
+    this_->sectorLoader = sectorLoader;
 }
 
-NS(File) NS(fat12GetFileByName)(NS(FAT12) *this, const char *fileName) {
+NS(File) NS(fat12GetFileByName)(NS(FAT12) *this_, const char *fileName) {
     // Each sector is 512 bytes
     // Root directory: [19..33), has 14 sectors
     //   Each entry in root directory area has 32 bytes
@@ -20,7 +20,7 @@ NS(File) NS(fat12GetFileByName)(NS(FAT12) *this, const char *fileName) {
     result.name[FAT12_FILENAME_SIZE] = '\0';
     uint8_t sector[512];
     for (uint32_t i = 19; i < 33; ++i) {
-        this->sectorLoader(sector, i);
+        this_->sectorLoader(sector, i);
 
         for (uint32_t j = 0; j < 512 / 32; ++j) {
             uint8_t *entry = sector + j * 32;
@@ -39,18 +39,18 @@ NS(File) NS(fat12GetFileByName)(NS(FAT12) *this, const char *fileName) {
 }
 
 int32_t NS(fileReadAllBytes)(
-        NS(FAT12) *this,
+        NS(FAT12) *this_,
         const NS(File) *file,
         uint8_t *dest) {
     if (!NS(fileExists)(file))
         return -1;
     uint8_t fatSector0[512];
-    this->sectorLoader(fatSector0, 1);
+    this_->sectorLoader(fatSector0, 1);
 
     uint16_t cluster = file->firstCluster;
     uint8_t buffer[512];
     while (cluster < 0xFF7) {
-        this->sectorLoader(buffer, cluster + (uint16_t) 31);
+        this_->sectorLoader(buffer, cluster + (uint16_t) 31);
         cluster = nextCluster(cluster, fatSector0);
         if (cluster >= 0xFF8) {
             uint32_t lastPartSize = NS(fileGetSize)(file) % 512;

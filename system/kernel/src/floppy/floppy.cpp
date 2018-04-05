@@ -1,5 +1,5 @@
 #include "floppy.h"
-#include "../hal/io.h"
+#include "../hal/io.hpp"
 #include <stdbool.h>
 
 #define NS(X) kernel_floppy_ ## X

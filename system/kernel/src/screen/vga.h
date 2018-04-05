@@ -1,7 +1,7 @@
 #pragma once
 
 #include <stdbool.h>
-#include "../hal/io.h"
+#include "../hal/io.hpp"
 
 #pragma push_macro("NS")
 #define NS(X) kernel_screen_vga_ ## X

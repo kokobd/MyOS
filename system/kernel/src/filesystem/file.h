@@ -1,6 +1,7 @@
 #pragma once
 
 #include <stdint.h>
+#include <stddef.h>
 
 #pragma push_macro("NS")
 #define NS(X) kernel_filesystem_file_ ## X
