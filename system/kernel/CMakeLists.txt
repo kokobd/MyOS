@@ -4,7 +4,16 @@ set(CMAKE_CXX_STANDARD 14)
 
 add_executable(kernel
         src/main.cpp
-        src/hal/gdt.cpp
+
+        include/myos/kernel/Kernel.hpp
+        src/Kernel.cpp
+
+        include/myos/kernel/cpu/CPU.hpp
+        src/cpu/CPU.cpp
+
+        include/myos/kernel/cpu/GDT.hpp
+
+        #        src/hal/gdt.cpp
         src/hal/idt.cpp
         src/hal/io.hpp
         src/floppy/floppy.cpp
@@ -28,6 +37,9 @@ target_compile_options(kernel
         PRIVATE -fno-exceptions
         PRIVATE -fno-rtti
         )
+
+target_include_directories(kernel
+        PRIVATE include)
 
 set_target_properties(kernel PROPERTIES
         LINK_FLAGS "-nostdlib -m32 -ffreestanding -Wl,-Ttext=0x100400")

@@ -3,7 +3,7 @@
 #include <cstring>
 #include <cctype>
 
-#include "hal/gdt.h"
+#include <myos/kernel/Kernel.hpp>
 #include "hal/idt.h"
 #include "syscall/syscall.h"
 #include "keyboard/input.h"
@@ -15,7 +15,10 @@ static void initAll();
 
 static void executeApplication(kernel_shell_Terminal *terminal, const char *name);
 
+using myos::kernel::Kernel;
+
 extern "C" int main() {
+    Kernel kernel;
     initAll();
 
     kernel_shell_Terminal *terminal = kernel_shell_getGlobalTerminal();
@@ -73,7 +76,6 @@ static void executeApplication(kernel_shell_Terminal *terminal, const char *name
 }
 
 static void initAll() {
-    gdtInitialize();
     idtInitialize();
     kernel_syscall_initialize();
     kernel_keyboard_input_initialize();

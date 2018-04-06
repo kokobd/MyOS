@@ -1,6 +1,5 @@
 #include "syscall.h"
 #include "../hal/idt.h"
-#include "../hal/gdt.h"
 #include "../filesystem/file.h"
 #include "../shell.h"
 
@@ -11,7 +10,7 @@ static void syscallHandler();
 static int32_t syscall(int32_t arg0, int32_t arg1, int32_t arg2, int32_t arg3);
 
 void NAMESPACE(initialize)() {
-    idtSetHandler(0x80, 0, kernelCodeSelector(), syscallHandler);
+    idtSetHandler(0x80, 0, 0x08, syscallHandler);
 }
 
 #pragma clang diagnostic push
