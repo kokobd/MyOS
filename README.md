@@ -4,7 +4,7 @@ This is an experimental operating system implementation, targeting x86 processor
 
 You will need the following tools to compile and develop the project.
 
-- `gcc 5.4.1`
+- `g++-6.3.0`
 - `nasm 2.11.08`
 - `cmake >= 3.9`
 
