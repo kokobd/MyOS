@@ -18,4 +18,4 @@ target_include_directories(stdlibcpp
         )
 
 target_link_libraries(stdlibcpp
-        stdlibc)
+        PUBLIC stdlibc)

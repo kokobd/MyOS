@@ -157,7 +157,7 @@ EXECUTE:
 	mov esp, ebp
 
     ; put entry point into eax
-	mov ecx, [IMAGE_PMODE_BASE]
+	mov ecx, IMAGE_RMODE_BASE
 	add ecx, 24
 	mov eax, [ecx]
 

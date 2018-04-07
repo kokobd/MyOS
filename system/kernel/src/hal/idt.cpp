@@ -1,6 +1,5 @@
 #include <cstdio>
 #include "idt.h"
-#include "gdt.h"
 
 #pragma pack (push, 1)
 

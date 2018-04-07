@@ -23,6 +23,7 @@ extern "C" int main() {
 
     kernel_shell_Terminal *terminal = kernel_shell_getGlobalTerminal();
     kernel_shell_termInit(terminal);
+    kernel_shell_termPutString(terminal, "Hello\n");
 
     size_t INPUT_LIMIT = 120;
     char input[INPUT_LIMIT];
@@ -82,7 +83,3 @@ static void initAll() {
     kernel_filesystem_file_init();
 }
 
-void runProgram(const char *name) {
-    int32_t fileHandle = kernel_filesystem_file_fopen(name, 0);
-
-}

@@ -9,16 +9,17 @@ fi
 
 BUILD_DIR="$1"
 
+rm -f "${BUILD_DIR}/myos.img"
+cp scripts/bin/myos.img "${BUILD_DIR}"
+
 cd "${BUILD_DIR}"
-rm -f myos.img
 rm -rf myos
 
-mkfs.vfat -C myos.img 1440
-dd if=system/bootloader/bootloader of=myos.img conv=notrunc
+# dd if=system/bootloader/bootloader of=myos.img conv=notrunc
 mkdir -p myos
 mount myos.img myos
-cp system/bootloader/krnldr.sys myos/KRNLDR.SYS
-cp system/kernel/kernel myos/KERNEL.SYS
+# cp system/bootloader/krnldr.sys myos/KRNLDR.SYS
+cp system/kernel/kernel myos/boot/kernel.bin
 cp apps/welcome myos/WELCOME.EXE
 cp apps/clear myos/CLEAR.EXE
 cp apps/file myos/FILE.EXE
