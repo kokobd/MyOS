@@ -15,6 +15,7 @@ endforeach ()
 
 add_executable(kernel
         src/multiboot.asm
+        src/kernel_start.asm
         src/main.cpp
 
         include/myos/kernel/Kernel.hpp
