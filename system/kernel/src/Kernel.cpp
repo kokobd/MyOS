@@ -6,6 +6,8 @@ Kernel *Kernel::currentKernel = nullptr;
 
 Kernel::Kernel() {
     if (currentKernel == nullptr) {
+        heap = reinterpret_cast<uint8_t *>(0x120000);
+
         // TODO Do necessary initialization
         currentKernel = this;
     }

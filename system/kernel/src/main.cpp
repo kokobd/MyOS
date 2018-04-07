@@ -19,6 +19,19 @@ using myos::kernel::Kernel;
 
 extern "C" int main() {
     Kernel kernel;
+
+    int eax;
+    asm volatile (
+    "mov eax, 1\n"
+    "mov ebx, 2\n"
+    "mov ecx, 3\n"
+    "mov edx, 4\n"
+    "int 0x80\n"
+    "mov %0, eax"
+    : "=rm" (eax)
+    : : "ebx", "ecx", "edx"
+    );
+
     initAll();
 
     kernel_shell_Terminal *terminal = kernel_shell_getGlobalTerminal();
@@ -77,7 +90,6 @@ static void executeApplication(kernel_shell_Terminal *terminal, const char *name
 }
 
 static void initAll() {
-    idtInitialize();
     kernel_syscall_initialize();
     kernel_keyboard_input_initialize();
     kernel_filesystem_file_init();

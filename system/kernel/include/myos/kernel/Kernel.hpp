@@ -13,6 +13,8 @@ public:
 
     ~Kernel();
 
+    cpu::CPU &getCPU() { return cpu; }
+
 private:
     cpu::CPU cpu;
 
@@ -32,6 +34,8 @@ public:
 
 private:
     static Kernel *currentKernel;
+
+    uint8_t *heap;
 };
 
 }
