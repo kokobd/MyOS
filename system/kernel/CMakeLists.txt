@@ -21,6 +21,9 @@ add_executable(kernel
         include/myos/kernel/Kernel.hpp
         src/Kernel.cpp
 
+        include/myos/kernel/SysCall.hpp
+        src/SysCall.cpp
+
         include/myos/kernel/cpu/CPU.hpp
         src/cpu/CPU.cpp
         src/cpu/8259A.asm
@@ -29,7 +32,6 @@ add_executable(kernel
         include/myos/kernel/cpu/InterruptHandler.hpp
         include/myos/kernel/cpu/NoopHandler.hpp
         src/cpu/NoopHandler.cpp
-
         include/myos/kernel/cpu/GDT.hpp
         include/myos/kernel/cpu/IDT.hpp
         src/cpu/IDT.cpp
