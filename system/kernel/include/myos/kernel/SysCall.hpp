@@ -6,8 +6,16 @@ namespace myos::kernel {
 
 class Kernel;
 
+/**
+ * You should create an object of this class
+ * and leave it there.
+ */
 class SysCall {
 public:
+    /**
+     * Initialize the system call module.
+     * @param kernel
+     */
     explicit SysCall(Kernel &kernel);
 
 private:
@@ -16,6 +24,7 @@ private:
     class InterruptHandlerImpl : public cpu::InterruptHandler {
     public:
         explicit InterruptHandlerImpl(Kernel &kernel);
+
         void handleInterrupt(
                 cpu::InterruptType interrupt,
                 const cpu::RegisterState &registerState) override;
@@ -25,6 +34,7 @@ private:
                             uint32_t arg1,
                             uint32_t arg2,
                             uint32_t arg3);
+
         Kernel &kernel;
     };
 
