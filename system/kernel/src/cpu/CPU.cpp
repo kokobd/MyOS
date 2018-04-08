@@ -6,6 +6,8 @@ extern "C" void interruptHandlerPrim();
 
 extern "C" int interruptHandlerPrimOffset;
 
+extern "C" void cpu_init8259A();
+
 namespace myos::kernel::cpu {
 
 extern "C" uint32_t interruptDispatcher(uint32_t interrupt, uint32_t eax, uint32_t ebx, uint32_t ecx, uint32_t edx,
@@ -14,6 +16,8 @@ extern "C" uint32_t interruptDispatcher(uint32_t interrupt, uint32_t eax, uint32
 }
 
 CPU::CPU() {
+    cpu_init8259A();
+
     for (size_t i = 0; i < IDT::MAX_HANDLERS; ++i) {
         interruptHandlerRegistry[i] = &defaultHandler;
     }
@@ -24,6 +28,8 @@ CPU::CPU() {
                                (reinterpret_cast<uint8_t *>(interruptHandlerPrim))
                                + i * interruptHandlerPrimOffset));
     }
+
+    enableHWInterrupts();
 }
 
 void CPU::enableHWInterrupts() {

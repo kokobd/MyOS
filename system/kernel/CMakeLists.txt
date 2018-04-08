@@ -23,6 +23,7 @@ add_executable(kernel
 
         include/myos/kernel/cpu/CPU.hpp
         src/cpu/CPU.cpp
+        src/cpu/8259A.asm
         include/myos/kernel/cpu/InterryptType.hpp
         include/myos/kernel/cpu/RegisterState.hpp
         include/myos/kernel/cpu/InterruptHandler.hpp
