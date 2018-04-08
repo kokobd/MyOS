@@ -15,7 +15,7 @@ extern "C" uint32_t interruptDispatcher(uint32_t interrupt, uint32_t eax, uint32
 
 CPU::CPU() {
     for (size_t i = 0; i < IDT::MAX_HANDLERS; ++i) {
-        interruptHandlerRegistry[i] = nullptr;
+        interruptHandlerRegistry[i] = &defaultHandler;
     }
 
     for (size_t i = 0; i < IDT::MAX_HANDLERS; ++i) {
@@ -38,8 +38,8 @@ void CPU::disableHWInterrupts() {
     );
 }
 
-void CPU::registerInterruptHandler(InterruptHandler *handler) {
-    interruptHandlerRegistry[handler->getInterruptNumber()] = handler;
+void CPU::registerInterruptHandler(InterruptType type, InterruptHandler *handler) {
+    interruptHandlerRegistry[typeToNumber(type)] = handler;
 }
 
 CPU &CPU::getCurrentCPU() {
@@ -47,8 +47,68 @@ CPU &CPU::getCurrentCPU() {
 }
 
 uint32_t CPU::handleInterrupt(uint32_t interrupt, const RegisterState &registerState) {
-    interruptHandlerRegistry[interrupt]->handleInterrupt(registerState);
+    interruptHandlerRegistry[interrupt]->handleInterrupt(
+            numberToType(static_cast<uint8_t>(interrupt)),
+            registerState);
     return interruptHandlerRegistry[interrupt]->getReturnValue();
+}
+
+uint8_t CPU::typeToNumber(InterruptType type) {
+    uint8_t number;
+    switch (type) {
+        case InterruptType::DIVISION_ERROR:
+            number = 0x0;
+            break;
+        case InterruptType::GENERAL_PROTECTION_FAULT:
+            number = 0xD;
+            break;
+        case InterruptType::PAGE_FAULT:
+            number = 0xE;
+            break;
+        case InterruptType::TIMER:
+            number = 0x20;
+            break;
+        case InterruptType::KEYBOARD:
+            number = 0x21;
+            break;
+        case InterruptType::FLOPPY:
+            number = 0x26;
+            break;
+        case InterruptType::SYSTEM_CALL:
+            number = 0x80;
+            break;
+    }
+    return number;
+}
+
+InterruptType CPU::numberToType(uint8_t number) {
+    InterruptType type;
+    switch (number) {
+        case 0x0:
+            type = InterruptType::DIVISION_ERROR;
+            break;
+        case 0xD:
+            type = InterruptType::GENERAL_PROTECTION_FAULT;
+            break;
+        case 0xE:
+            type = InterruptType::PAGE_FAULT;
+            break;
+        case 0x20:
+            type = InterruptType::TIMER;
+            break;
+        case 0x21:
+            type = InterruptType::KEYBOARD;
+            break;
+        case 0x26:
+            type = InterruptType::FLOPPY;
+            break;
+        case 0x80:
+            type = InterruptType::SYSTEM_CALL;
+            break;
+        default:
+            type = InterruptType::GENERAL_PROTECTION_FAULT;
+    }
+    return type;
 }
 
 }

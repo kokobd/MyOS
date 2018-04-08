@@ -2,12 +2,8 @@
 
 namespace myos::kernel::cpu {
 
-NoopHandler &NoopHandler::instance() {
-
-}
-
-NoopHandler::NoopHandler(uint8_t interrupt) {
-
+void NoopHandler::handleInterrupt(InterruptType interrupt, const RegisterState &registerState) {
+    // do nothing
 }
 
 }

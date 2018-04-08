@@ -3,6 +3,8 @@
 #include "GDT.hpp"
 #include "IDT.hpp"
 #include "InterruptHandler.hpp"
+#include "NoopHandler.hpp"
+#include "InterryptType.hpp"
 #include "RegisterState.hpp"
 
 namespace myos::kernel::cpu {
@@ -11,7 +13,7 @@ class CPU {
 public:
     CPU();
 
-    void registerInterruptHandler(InterruptHandler *handler);
+    void registerInterruptHandler(InterruptType type, InterruptHandler *handler);
 
     void enableHWInterrupts();
 
@@ -26,6 +28,11 @@ private:
     IDT idt;
 
     InterruptHandler *interruptHandlerRegistry[IDT::MAX_HANDLERS];
+    NoopHandler defaultHandler;
+
+    uint8_t static typeToNumber(InterruptType type);
+
+    InterruptType static numberToType(uint8_t number);
 };
 
 }

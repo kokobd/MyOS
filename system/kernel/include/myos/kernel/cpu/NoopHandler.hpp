@@ -6,12 +6,9 @@ namespace myos::kernel::cpu {
 
 class NoopHandler : public InterruptHandler {
 public:
-    NoopHandler(uint8_t interrupt);
+    NoopHandler() = default;
 
-    static NoopHandler &instance();
-
-private:
-    static NoopHandler handler; // TODO how can this be initialized?
+    void handleInterrupt(InterruptType interrupt, const RegisterState &registerState) override;
 };
 
 }
