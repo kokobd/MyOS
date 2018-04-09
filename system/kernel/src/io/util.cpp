@@ -1,8 +1,8 @@
-#pragma once
+#include <myos/kernel/io/util.hpp>
 
-#include <stdint.h>
+namespace myos::kernel::io::util {
 
-inline static uint8_t inb(uint32_t port) {
+uint8_t inb(uint32_t port) {
     uint8_t data = 0;
     asm volatile(
     "in %0, dx"
@@ -12,9 +12,11 @@ inline static uint8_t inb(uint32_t port) {
     return data;
 }
 
-inline static void outb(uint32_t port, uint8_t data) {
+void outb(uint32_t port, uint8_t data) {
     asm volatile(
     "out dx, al"
     : : "d" (port), "a" (data)
     );
+}
+
 }

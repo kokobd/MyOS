@@ -37,8 +37,15 @@ add_executable(kernel
         src/cpu/IDT.cpp
         src/cpu/int.asm
 
-        src/hal/idt.cpp
-        src/hal/io.hpp
+        include/myos/kernel/io/util.hpp
+        src/io/util.cpp
+        include/myos/kernel/io/Floppy.hpp
+        src/io/Floppy.cpp
+        include/myos/kernel/io/VGAScreen.hpp
+        src/io/VGAScreen.cpp
+        include/myos/kernel/io/Keyboard.hpp
+        src/io/Keyboard.cpp
+
         src/floppy/floppy.cpp
         src/screen/vga.cpp
         src/shell.cpp

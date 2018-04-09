@@ -4,7 +4,6 @@
 #include <cctype>
 
 #include <myos/kernel/Kernel.hpp>
-#include "hal/idt.h"
 #include "keyboard/input.h"
 #include "shell.h"
 #include "filesystem/file.h"

@@ -1,9 +1,12 @@
 #include <stdlib.h>
 #include <stdbool.h>
 #include "input.h"
-#include "../hal/io.hpp"
 #include "scanCode.h"
 #include "key.hpp"
+#include <myos/kernel/io/util.hpp>
+
+using myos::kernel::io::util::inb;
+using myos::kernel::io::util::outb;
 
 #define NS(X) kernel_keyboard_input_ ## X
 
