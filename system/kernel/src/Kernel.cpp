@@ -4,7 +4,7 @@ namespace myos::kernel {
 
 Kernel *Kernel::currentKernel = nullptr;
 
-Kernel::Kernel() {
+Kernel::Kernel() : sysCall(*this) {
     if (currentKernel == nullptr) {
         heap = reinterpret_cast<uint8_t *>(0x120000);
 

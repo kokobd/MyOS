@@ -47,7 +47,6 @@ add_executable(kernel
         src/keyboard/input.cpp
         src/filesystem/fat12.cpp
         src/filesystem/file.cpp
-        src/syscall/syscall.cpp
         src/exec/elf32.cpp
         )
 

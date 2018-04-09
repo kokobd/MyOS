@@ -1,6 +1,7 @@
 #pragma once
 
 #include <myos/kernel/cpu/CPU.hpp>
+#include <myos/kernel/SysCall.hpp>
 
 namespace myos::kernel {
 
@@ -36,6 +37,8 @@ private:
     static Kernel *currentKernel;
 
     uint8_t *heap;
+
+    SysCall sysCall;
 };
 
 }

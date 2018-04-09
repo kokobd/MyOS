@@ -5,7 +5,6 @@
 
 #include <myos/kernel/Kernel.hpp>
 #include "hal/idt.h"
-#include "syscall/syscall.h"
 #include "keyboard/input.h"
 #include "shell.h"
 #include "filesystem/file.h"
@@ -78,7 +77,6 @@ static void executeApplication(kernel_shell_Terminal *terminal, const char *name
 }
 
 static void initAll() {
-//    kernel_syscall_initialize();
     kernel_keyboard_input_initialize();
     kernel_filesystem_file_init();
 }
