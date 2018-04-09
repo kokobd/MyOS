@@ -4,6 +4,10 @@ project(myos LANGUAGES C)
 
 set(CMAKE_C_STANDARD 99)
 
+add_subdirectory(dependencies/catch2-cmake)
+
+enable_testing()
+
 add_subdirectory(stdlibc)
 add_subdirectory(stdlibcpp)
 add_subdirectory(system)
