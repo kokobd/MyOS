@@ -1,19 +1,17 @@
 project(myos-system-kernel LANGUAGES CXX)
 
-set(CMAKE_CXX_STANDARD 14)
+set(CMAKE_CXX_STANDARD 11)
 
 enable_language(ASM_NASM)
 
 set(CMAKE_ASM_NASM_OBJECT_FORMAT elf32)
 set(CMAKE_ASM_NASM_COMPILE_OBJECT "<CMAKE_ASM_NASM_COMPILER> <INCLUDES> <FLAGS> -f elf32 -o <OBJECT> <SOURCE>")
 
-get_cmake_property(_variableNames VARIABLES)
-list(SORT _variableNames)
-foreach (_variableName ${_variableNames})
-    message(STATUS "${_variableName}=${${_variableName}}")
-endforeach ()
+set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -DDEBUG")
 
 add_executable(kernel
+        include/myos/kernel/debug/trace.hpp
+
         src/multiboot.asm
         src/kernel_start.asm
         src/main.cpp
@@ -36,6 +34,19 @@ add_executable(kernel
         include/myos/kernel/cpu/IDT.hpp
         src/cpu/IDT.cpp
         src/cpu/int.asm
+
+        include/myos/kernel/common/Function.hpp
+        include/myos/kernel/common/Future.hpp
+
+        include/myos/kernel/ram/sbrk.hpp
+        src/ram/sbrk.cpp
+        include/myos/kernel/ram/Memory.hpp
+        src/ram/Memory.cpp
+        include/myos/kernel/ram/Heap.hpp
+        src/ram/Heap.cpp
+
+        include/myos/kernel/process/Process.hpp
+        src/process/Process.cpp
 
         include/myos/kernel/io/util.hpp
         src/io/util.cpp

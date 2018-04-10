@@ -26,3 +26,7 @@ bool Kernel::isRunning() {
 }
 
 }
+
+extern "C" void __cxa_pure_virtual() {
+    // No op
+}

@@ -2,4 +2,7 @@
 
 namespace myos::kernel::io {
 
+Floppy::Floppy() {
+}
+
 }

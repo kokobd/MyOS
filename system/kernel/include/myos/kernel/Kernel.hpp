@@ -2,6 +2,7 @@
 
 #include <myos/kernel/cpu/CPU.hpp>
 #include <myos/kernel/SysCall.hpp>
+#include <myos/kernel/ram/Memory.hpp>
 
 namespace myos::kernel {
 
@@ -16,8 +17,11 @@ public:
 
     cpu::CPU &getCPU() { return cpu; }
 
+    ram::Memory &getMemory() { return memory; }
+
 private:
     cpu::CPU cpu;
+    ram::Memory memory;
 
 public:
     /**

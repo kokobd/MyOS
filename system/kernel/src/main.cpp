@@ -33,7 +33,11 @@ private:
     kernel_shell_Terminal *terminal;
 };
 
+//uint32_t _end;
+extern "C" uint32_t end;
+
 extern "C" int main() {
+    uint32_t *endp = &end;
     Kernel kernel;
 
     initAll();
