@@ -1,3 +1,0 @@
-[submodule "dependencies/catch2-cmake"]
-	path = dependencies/catch2-cmake
-	url = git@github.com:zelinf/catch2-cmake.git

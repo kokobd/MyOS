@@ -1,10 +1,9 @@
 cmake_minimum_required(VERSION 3.9)
 
-project(myos LANGUAGES C)
+project(myos LANGUAGES C CXX)
 
 set(CMAKE_C_STANDARD 99)
-
-add_subdirectory(dependencies/catch2-cmake)
+set(CMAKE_CXX_STANDARD 11)
 
 enable_testing()
 
