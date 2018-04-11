@@ -1,5 +1,5 @@
-#include <myos/kernel/io/VGAScreen.hpp>
+#include <myos/kernel/drivers/VGAScreen.hpp>
 
-namespace myos::kernel::io {
+namespace myos::kernel::drivers {
 
 }

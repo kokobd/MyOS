@@ -1,6 +1,6 @@
 #pragma once
 
-namespace myos::kernel::io {
+namespace myos::kernel::drivers {
 
 class Keyboard {
 

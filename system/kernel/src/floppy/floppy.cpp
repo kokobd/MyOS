@@ -1,11 +1,11 @@
 #include "floppy.h"
-#include <myos/kernel/io/util.hpp>
+#include <myos/kernel/drivers/util.hpp>
 #include <stdbool.h>
 
 #define NS(X) kernel_floppy_ ## X
 
-using myos::kernel::io::util::inb;
-using myos::kernel::io::util::outb;
+using myos::kernel::drivers::util::inb;
+using myos::kernel::drivers::util::outb;
 
 /**
  * Convert LBA(Logical Block Addressing) to CHS(Cylinder, Head, Sector)

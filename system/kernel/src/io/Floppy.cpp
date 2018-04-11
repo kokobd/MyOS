@@ -1,6 +1,6 @@
-#include <myos/kernel/io/Floppy.hpp>
+#include <myos/kernel/drivers/Floppy.hpp>
 
-namespace myos::kernel::io {
+namespace myos::kernel::drivers {
 
 Floppy::Floppy() {
 }

@@ -3,7 +3,7 @@
 #include <cstddef>
 #include <myos/kernel/common/Function.hpp>
 
-namespace myos::kernel::io {
+namespace myos::kernel::drivers {
 
 class Floppy {
 public:

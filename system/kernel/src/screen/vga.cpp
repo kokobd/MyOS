@@ -1,8 +1,8 @@
 #include "vga.h"
-#include <myos/kernel/io/util.hpp>
+#include <myos/kernel/drivers/util.hpp>
 
-using myos::kernel::io::util::inb;
-using myos::kernel::io::util::outb;
+using myos::kernel::drivers::util::inb;
+using myos::kernel::drivers::util::outb;
 
 #define NS(X) kernel_screen_vga_ ## X
 

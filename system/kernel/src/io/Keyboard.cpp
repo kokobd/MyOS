@@ -1,5 +1,5 @@
-#include <myos/kernel/io/Keyboard.hpp>
+#include <myos/kernel/drivers/Keyboard.hpp>
 
-namespace myos::kernel::io {
+namespace myos::kernel::drivers {
 
 }

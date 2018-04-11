@@ -37,6 +37,7 @@ add_executable(kernel
 
         include/myos/kernel/common/Function.hpp
         include/myos/kernel/common/Future.hpp
+        include/myos/kernel/common/Queue.hpp
 
         include/myos/kernel/ram/sbrk.hpp
         src/ram/sbrk.cpp
@@ -48,13 +49,16 @@ add_executable(kernel
         include/myos/kernel/process/Process.hpp
         src/process/Process.cpp
 
-        include/myos/kernel/io/util.hpp
+        include/myos/kernel/terminal/Terminal.hpp
+        src/terminal/Terminal.cpp
+
+        include/myos/kernel/drivers/util.hpp
         src/io/util.cpp
-        include/myos/kernel/io/Floppy.hpp
+        include/myos/kernel/drivers/Floppy.hpp
         src/io/Floppy.cpp
-        include/myos/kernel/io/VGAScreen.hpp
+        include/myos/kernel/drivers/VGAScreen.hpp
         src/io/VGAScreen.cpp
-        include/myos/kernel/io/Keyboard.hpp
+        include/myos/kernel/drivers/Keyboard.hpp
         src/io/Keyboard.cpp
 
         src/floppy/floppy.cpp
@@ -66,6 +70,13 @@ add_executable(kernel
         src/filesystem/fat12.cpp
         src/filesystem/file.cpp
         src/exec/elf32.cpp
+
+        src/test/TestMain.hpp
+        src/test/TestMain.cpp
+        src/test/TestBase.hpp
+        src/test/TestBase.cpp
+        src/test/ram/HeapTest.hpp
+        src/test/ram/HeapTest.cpp
         )
 
 target_compile_options(kernel

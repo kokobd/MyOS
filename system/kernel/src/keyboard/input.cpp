@@ -3,10 +3,10 @@
 #include "input.h"
 #include "scanCode.h"
 #include "key.hpp"
-#include <myos/kernel/io/util.hpp>
+#include <myos/kernel/drivers/util.hpp>
 
-using myos::kernel::io::util::inb;
-using myos::kernel::io::util::outb;
+using myos::kernel::drivers::util::inb;
+using myos::kernel::drivers::util::outb;
 
 #define NS(X) kernel_keyboard_input_ ## X
 
