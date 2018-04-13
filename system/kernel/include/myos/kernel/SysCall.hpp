@@ -1,6 +1,8 @@
 #pragma once
 
 #include <myos/kernel/cpu/InterruptHandler.hpp>
+#include <myos/kernel/cpu/CPU.hpp>
+#include <myos/kernel/cpu/RegisterState.hpp>
 
 namespace myos::kernel {
 
@@ -27,7 +29,7 @@ private:
 
         void handleInterrupt(
                 cpu::InterruptType interrupt,
-                const cpu::RegisterState &registerState) override;
+                cpu::RegisterState &registerState) override;
 
     private:
         uint32_t runSysCall(uint32_t number,

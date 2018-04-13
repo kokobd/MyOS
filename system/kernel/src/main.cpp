@@ -21,7 +21,7 @@ using namespace myos::kernel;
 class ClockHandler : public cpu::InterruptHandler {
 public:
     explicit ClockHandler(kernel_shell_Terminal *terminal) : ch('0'), terminal(terminal) {}
-    void handleInterrupt(cpu::InterruptType interrupt, const cpu::RegisterState &registerState) override {
+    void handleInterrupt(cpu::InterruptType interrupt, cpu::RegisterState &registerState) override {
         kernel_shell_termPutChar(terminal, ch);
 
         if (ch == '9')
@@ -33,28 +33,31 @@ private:
     kernel_shell_Terminal *terminal;
 };
 
-//uint32_t _end;
-extern "C" uint32_t end;
+void userFunc() {
+    asm volatile (
+    "int 0x80\n"
+    );
+}
 
 extern "C" int main() {
-    uint32_t *endp = &end;
     Kernel kernel;
+    void *userProgram = reinterpret_cast<void *>(userFunc);
+    kernel.getCPU().enterUserCode(userProgram,
+                                  (void *) 0x300000);
 
-    initAll();
-
-    kernel_shell_Terminal *terminal = kernel_shell_getGlobalTerminal();
-    kernel_shell_termInit(terminal);
-    kernel_shell_termPutString(terminal, "Hello\n");
-
-    ClockHandler clockHandler(terminal);
-    kernel.getCPU().registerInterruptHandler(cpu::InterruptType::TIMER, &clockHandler);
-#pragma clang diagnostic push
-#pragma clang diagnostic ignored "-Wmissing-noreturn"
-    while (true) {
-        asm volatile ( "nop" );
-    }
-#pragma clang diagnostic pop
-
+//    kernel_shell_Terminal *terminal = kernel_shell_getGlobalTerminal();
+//    kernel_shell_termInit(terminal);
+//    kernel_shell_termPutString(terminal, "Hello\n");
+//
+//    ClockHandler clockHandler(terminal);
+//    kernel.getCPU().registerInterruptHandler(cpu::InterruptType::TIMER, &clockHandler);
+//#pragma clang diagnostic push
+//#pragma clang diagnostic ignored "-Wmissing-noreturn"
+//    while (true) {
+//        asm volatile ( "nop" );
+//    }
+//#pragma clang diagnostic pop
+//
 //    size_t INPUT_LIMIT = 120;
 //    char input[INPUT_LIMIT];
 //    memset(input, 0, INPUT_LIMIT);
@@ -83,12 +86,12 @@ extern "C" int main() {
 //        kernel_shell_termSetArg(terminal, input);
 //        executeApplication(terminal, progName);
 //    }
-
-    kernel_shell_termPutString(terminal, "Exited.\n");
-    asm(
-    "cli\n"
-    "hlt"
-    );
+//
+//    kernel_shell_termPutString(terminal, "Exited.\n");
+//    asm(
+//    "cli\n"
+//    "hlt"
+//    );
 }
 
 static void executeApplication(kernel_shell_Terminal *terminal, const char *name) {
@@ -105,9 +108,3 @@ static void executeApplication(kernel_shell_Terminal *terminal, const char *name
         kernel_shell_termPutChar(terminal, '\n');
     }
 }
-
-static void initAll() {
-    kernel_keyboard_input_initialize();
-    kernel_filesystem_file_init();
-}
-

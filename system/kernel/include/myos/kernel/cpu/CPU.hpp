@@ -1,13 +1,12 @@
 #pragma once
 
-#include "GDT.hpp"
 #include "IDT.hpp"
-#include "InterruptHandler.hpp"
-#include "NoopHandler.hpp"
 #include "InterryptType.hpp"
 #include "RegisterState.hpp"
 
 namespace myos::kernel::cpu {
+
+class InterruptHandler;
 
 class CPU {
 public:
@@ -15,20 +14,16 @@ public:
 
     void registerInterruptHandler(InterruptType type, InterruptHandler *handler);
 
-    void enableHWInterrupts();
-
-    void disableHWInterrupts();
-
     static CPU &getCurrentCPU();
 
-    uint32_t handleInterrupt(uint32_t interrupt, const RegisterState &registerState);
+    void handleInterrupt(uint32_t interrupt, RegisterState &registerState);
+
+    void enterUserCode(void *target, void *userStack);
 
 private:
-    GDT<16> gdt;
     IDT idt;
 
     InterruptHandler *interruptHandlerRegistry[IDT::MAX_HANDLERS];
-    NoopHandler defaultHandler;
 
     uint8_t static typeToNumber(InterruptType type);
 

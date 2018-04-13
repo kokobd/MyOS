@@ -5,20 +5,10 @@ extern "C" int end;
 
 namespace myos::kernel::ram {
 
-Memory::Memory() {
+Memory::Memory()
+        : kernelHeap(&end) {
     kernelBegin = reinterpret_cast<void *>(0x100000u);
-
-    kernelBreak = reinterpret_cast<void *> (&end);
-
     kernelEnd = reinterpret_cast<void *>(0x200000u);
-}
-
-void *Memory::heapAllocate(size_t size) {
-
-}
-
-void Memory::heapDeallocate(void *pt) {
-    // TODO free
 }
 
 }
@@ -26,17 +16,17 @@ void Memory::heapDeallocate(void *pt) {
 using myos::kernel::Kernel;
 
 void *operator new(size_t size) {
-    return Kernel::getCurrentKernel().getMemory().heapAllocate(size);
+    return Kernel::getCurrentKernel().getMemory().getHeap().allocate(size);
 }
 
 void operator delete(void *pt) {
-    Kernel::getCurrentKernel().getMemory().heapDeallocate(pt);
+    Kernel::getCurrentKernel().getMemory().getHeap().deallocate(pt);
 }
 
 void *operator new[](size_t size) {
-    return Kernel::getCurrentKernel().getMemory().heapAllocate(size);
+    return Kernel::getCurrentKernel().getMemory().getHeap().allocate(size);
 }
 
 void operator delete[](void *pt) {
-    Kernel::getCurrentKernel().getMemory().heapDeallocate(pt);
+    Kernel::getCurrentKernel().getMemory().getHeap().deallocate(pt);
 }

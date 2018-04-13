@@ -1,5 +1,4 @@
 #include <myos/kernel/cpu/IDT.hpp>
-#include <myos/kernel/cpu/GDT.hpp>
 #include <cstddef>
 
 namespace myos::kernel::cpu {

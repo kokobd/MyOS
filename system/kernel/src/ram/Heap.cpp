@@ -4,11 +4,14 @@ namespace myos::kernel::ram {
 
 template<typename T>
 inline T align4(T x) {
-    return (((((uintmax_t) x) - 1) >> 2) << 2 + 4);
+    uint8_t *pt = reinterpret_cast<uint8_t *>(x);
+    uintptr_t ret = (reinterpret_cast<uintptr_t>(pt - 1) >> 2) << 2 + 4;
+    return reinterpret_cast<T>(ret);
 }
 
 Heap::Heap(void *start, size_t maxSize) {
-    firstBlock = reinterpret_cast<BlockHeader *>(start);
+    firstBlock = reinterpret_cast<BlockHeader *>(
+            align4(start));
     firstBlock->prev = nullptr;
     firstBlock->next = nullptr;
     firstBlock->size = maxSize;

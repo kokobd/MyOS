@@ -6,42 +6,32 @@ extern "C" void interruptHandlerPrim();
 
 extern "C" int interruptHandlerPrimOffset;
 
-extern "C" void cpu_init8259A();
+extern "C" void cpu_initialize();
+
+extern "C" void cpu_enterUserCode(void *target, void *userStack);
 
 namespace myos::kernel::cpu {
 
-extern "C" uint32_t interruptDispatcher(uint32_t interrupt, uint32_t eax, uint32_t ebx, uint32_t ecx, uint32_t edx,
-                                        uint32_t esi, uint32_t edi) {
-    return CPU::getCurrentCPU().handleInterrupt(interrupt, RegisterState(eax, ebx, ecx, edx, esi, edi));
+extern "C" void interruptDispatcher(uint32_t interrupt, RegisterState *registerState) {
+    CPU::getCurrentCPU().handleInterrupt(interrupt, *registerState);
 }
 
 CPU::CPU() {
-    cpu_init8259A();
+    cpu_initialize();
 
     for (size_t i = 0; i < IDT::MAX_HANDLERS; ++i) {
-        interruptHandlerRegistry[i] = &defaultHandler;
+        interruptHandlerRegistry[i] = nullptr;
     }
 
     for (size_t i = 0; i < IDT::MAX_HANDLERS; ++i) {
-        idt.setHandler(i, 0, GDT<16>::defaultCodeDescriptor(),
+        uint8_t cpl = 0;
+        if (i == 0x80)
+            cpl = 3;
+        idt.setHandler(i, cpl, 0x08,
                        reinterpret_cast<void (*)()> (
                                (reinterpret_cast<uint8_t *>(interruptHandlerPrim))
                                + i * interruptHandlerPrimOffset));
     }
-
-    enableHWInterrupts();
-}
-
-void CPU::enableHWInterrupts() {
-    asm volatile (
-    "sti\n"
-    );
-}
-
-void CPU::disableHWInterrupts() {
-    asm volatile (
-    "cli\n"
-    );
 }
 
 void CPU::registerInterruptHandler(InterruptType type, InterruptHandler *handler) {
@@ -52,11 +42,12 @@ CPU &CPU::getCurrentCPU() {
     Kernel::getCurrentKernel().getCPU();
 }
 
-uint32_t CPU::handleInterrupt(uint32_t interrupt, const RegisterState &registerState) {
-    interruptHandlerRegistry[interrupt]->handleInterrupt(
-            numberToType(static_cast<uint8_t>(interrupt)),
-            registerState);
-    return interruptHandlerRegistry[interrupt]->getReturnValue();
+void CPU::handleInterrupt(uint32_t interrupt, RegisterState &registerState) {
+    if (interruptHandlerRegistry[interrupt]) {
+        interruptHandlerRegistry[interrupt]->handleInterrupt(
+                numberToType(static_cast<uint8_t>(interrupt)),
+                registerState);
+    }
 }
 
 uint8_t CPU::typeToNumber(InterruptType type) {
@@ -115,6 +106,10 @@ InterruptType CPU::numberToType(uint8_t number) {
             type = InterruptType::GENERAL_PROTECTION_FAULT;
     }
     return type;
+}
+
+void CPU::enterUserCode(void *target, void *userStack) {
+    cpu_enterUserCode(target, userStack);
 }
 
 }

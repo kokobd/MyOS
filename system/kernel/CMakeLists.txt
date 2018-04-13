@@ -28,12 +28,10 @@ add_executable(kernel
         include/myos/kernel/cpu/InterryptType.hpp
         include/myos/kernel/cpu/RegisterState.hpp
         include/myos/kernel/cpu/InterruptHandler.hpp
-        include/myos/kernel/cpu/NoopHandler.hpp
-        src/cpu/NoopHandler.cpp
-        include/myos/kernel/cpu/GDT.hpp
         include/myos/kernel/cpu/IDT.hpp
         src/cpu/IDT.cpp
         src/cpu/int.asm
+        src/cpu/cpu.asm
 
         include/myos/kernel/common/Function.hpp
         include/myos/kernel/common/Future.hpp
@@ -53,13 +51,13 @@ add_executable(kernel
         src/terminal/Terminal.cpp
 
         include/myos/kernel/drivers/util.hpp
-        src/io/util.cpp
+        src/drivers/util.cpp
         include/myos/kernel/drivers/Floppy.hpp
-        src/io/Floppy.cpp
+        src/drivers/Floppy.cpp
         include/myos/kernel/drivers/VGAScreen.hpp
-        src/io/VGAScreen.cpp
+        src/drivers/VGAScreen.cpp
         include/myos/kernel/drivers/Keyboard.hpp
-        src/io/Keyboard.cpp
+        src/drivers/Keyboard.cpp
 
         src/floppy/floppy.cpp
         src/screen/vga.cpp

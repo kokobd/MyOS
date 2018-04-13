@@ -2,7 +2,7 @@
 
 #include <cstddef>
 
-namespace std::ext {
+namespace myos::kernel::common {
 
 template<typename E, size_t MAX_SIZE = 256>
 class Queue {

@@ -14,12 +14,12 @@ SysCall::SysCall(Kernel &kernel)
 
 void SysCall::InterruptHandlerImpl::handleInterrupt(
         cpu::InterruptType interrupt,
-        const cpu::RegisterState &registerState) {
+        cpu::RegisterState &registerState) {
     if (interrupt != cpu::InterruptType::SYSTEM_CALL) {
         return;
     }
     uint32_t ret = runSysCall(registerState.eax, registerState.ebx, registerState.ecx, registerState.edx);
-    setReturnValue(ret);
+    registerState.eax = ret;
 }
 
 uint32_t SysCall::InterruptHandlerImpl::runSysCall(

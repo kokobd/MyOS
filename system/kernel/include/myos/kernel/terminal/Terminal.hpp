@@ -3,19 +3,30 @@
 #include <cstddef>
 #include <cstdint>
 #include <myos/kernel/common/Queue.hpp>
+#include <myos/kernel/drivers/VGAScreen.hpp>
 
 namespace myos::kernel::drivers::terminal {
 
 class Terminal {
+private:
+    VGAScreen &screen;
 public:
-    Terminal() = default;
+    explicit Terminal(VGAScreen &screen);
+
+    void putChar(char ch);
+
+    void putString(const char *c_str);
+
+    char getChar();
 
 private:
-    int32_t curX;
-    int32_t curY;
-    int32_t maxWidth;
-    int32_t maxHeight;
+    uint32_t curX;
+    uint32_t curY;
+    uint32_t maxWidth;
+    uint32_t maxHeight;
 
+    common::Queue<char> inputBuffer;
+    bool inputBufferReady;
 
 };
 
