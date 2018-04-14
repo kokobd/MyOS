@@ -78,17 +78,17 @@ add_executable(kernel
         )
 
 target_compile_options(kernel
-        PRIVATE $<$<COMPILE_LANGUAGE:CXX>:-m32 -masm=intel -mno-red-zone -ffreestanding -fno-stack-protector -fno-exceptions -fno-rtti>
+        PRIVATE $<$<COMPILE_LANGUAGE:CXX>:-mno-red-zone>
         )
 
 target_include_directories(kernel
-        PRIVATE include)
+        PRIVATE include
+        )
 
 set_target_properties(kernel PROPERTIES
-        LINK_FLAGS "-nostdlib -m32 -ffreestanding -Wl,-T${CMAKE_CURRENT_SOURCE_DIR}/linker.ld"
+        LINK_FLAGS "-m32 -nostdlib -Wl,-T${CMAKE_CURRENT_SOURCE_DIR}/linker.ld"
         LINK_DEPENDS ${CMAKE_CURRENT_SOURCE_DIR}/linker.ld
         )
-#        LINK_FLAGS "-nostdlib -m32 -ffreestanding -Wl,-Ttext=0x100400,--verbose")
 
 target_link_libraries(kernel
-        stdlibcpp)
+        base)

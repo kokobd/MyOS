@@ -1,5 +1,7 @@
 #pragma once
 
+#include <cstdint>
+
 #pragma push_macro("NS")
 #define NS(X) kernel_keyboard_input_ ## X
 

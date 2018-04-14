@@ -7,6 +7,7 @@ set(CMAKE_CXX_STANDARD 11)
 
 enable_testing()
 
+add_subdirectory(base)
 add_subdirectory(stdlibc)
 add_subdirectory(stdlibcpp)
 add_subdirectory(system)
