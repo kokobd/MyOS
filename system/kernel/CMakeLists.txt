@@ -80,7 +80,7 @@ add_executable(kernel
         )
 
 target_compile_options(kernel
-        PRIVATE $<$<COMPILE_LANGUAGE:CXX>:-mno-red-zone>
+        PRIVATE $<$<COMPILE_LANGUAGE:CXX>:-mno-red-zone -Wall>
         )
 
 target_include_directories(kernel
