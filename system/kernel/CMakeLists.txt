@@ -43,6 +43,8 @@ add_executable(kernel
         src/ram/Memory.cpp
         include/myos/kernel/ram/Heap.hpp
         src/ram/Heap.cpp
+        include/myos/kernel/ram/VirtualMemoryMapping.hpp
+        src/ram/VirtualMemoryMapping.cpp
 
         include/myos/kernel/process/Process.hpp
         src/process/Process.cpp
