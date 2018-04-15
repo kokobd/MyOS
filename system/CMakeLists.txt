@@ -4,5 +4,4 @@ project(myos-kernel LANGUAGES C)
 
 set(CMAKE_C_STANDARD 99)
 
-add_subdirectory(bootloader)
 add_subdirectory(kernel)
