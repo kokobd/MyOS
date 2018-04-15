@@ -23,7 +23,7 @@ void *Heap::allocate(size_t size) {
 
     BlockHeader *&pt = firstBlock;
     while (pt != nullptr) {
-        if (!pt->occupied && pt->size > size) {
+        if (!pt->occupied && pt->size > size + sizeof(BlockHeader)) {
             // If there is enough room, split the block
             // 32 is an arbitrarily selected number.
             if (pt->size > size + sizeof(BlockHeader) + 32) {
