@@ -38,7 +38,7 @@ void userFunc() {
     );
 }
 
-extern "C" int main() {
+int main() {
     Kernel kernel;
     void *userProgram = reinterpret_cast<void *>(userFunc);
     kernel.getCPU().enterUserCode(userProgram,

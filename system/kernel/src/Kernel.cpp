@@ -30,3 +30,9 @@ bool Kernel::isRunning() {
 extern "C" void __cxa_pure_virtual() {
     // No op
 }
+
+extern "C" int c_main() {
+    extern int main();
+
+    return main();
+}

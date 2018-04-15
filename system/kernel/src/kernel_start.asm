@@ -1,6 +1,6 @@
 BITS 32
 
-extern main
+extern c_main
 
 global kernel_start
 
@@ -9,7 +9,7 @@ kernel_start:
     mov ebp, 0x1FFFFF
     mov esp, ebp
 
-    call main
+    call c_main
 
     cli
     hlt
