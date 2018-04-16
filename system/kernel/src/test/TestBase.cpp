@@ -1,5 +1,7 @@
 #include "TestBase.hpp"
 
+#ifdef DEBUG
+
 namespace myos::kernel::test {
 
 TestBase::TestBase()
@@ -27,3 +29,5 @@ void TestBase::assertTrue(bool condition, const char *assertionName) {
 }
 
 }
+
+#endif
