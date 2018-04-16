@@ -29,7 +29,7 @@ public:
     /**
      * Get size of a page frame.
      */
-    size_t pageFrameSize() const { return 1 << 12; }
+    static constexpr size_t pageFrameSize() { return 1 << 12; }
 
     /**
      * Maps an virtual address to a page frame.

@@ -20,17 +20,17 @@ Memory::Memory()
 using myos::kernel::Kernel;
 
 void *operator new(size_t size) {
-    return Kernel::getCurrentKernel().getMemory().getHeap().allocate(size);
+    return Kernel::getCurrentKernel().getMemory().getKernelHeap().allocate(size);
 }
 
 void operator delete(void *pt) {
-    Kernel::getCurrentKernel().getMemory().getHeap().deallocate(pt);
+    Kernel::getCurrentKernel().getMemory().getKernelHeap().deallocate(pt);
 }
 
 void *operator new[](size_t size) {
-    return Kernel::getCurrentKernel().getMemory().getHeap().allocate(size);
+    return Kernel::getCurrentKernel().getMemory().getKernelHeap().allocate(size);
 }
 
 void operator delete[](void *pt) {
-    Kernel::getCurrentKernel().getMemory().getHeap().deallocate(pt);
+    Kernel::getCurrentKernel().getMemory().getKernelHeap().deallocate(pt);
 }

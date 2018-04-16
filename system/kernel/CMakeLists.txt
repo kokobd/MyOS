@@ -36,6 +36,8 @@ add_executable(kernel
         include/myos/kernel/common/Function.hpp
         include/myos/kernel/common/Future.hpp
         include/myos/kernel/common/Queue.hpp
+        include/myos/kernel/common/BitSet.hpp
+        src/common/BitSet.cpp
 
         include/myos/kernel/ram/sbrk.hpp
         src/ram/sbrk.cpp
@@ -45,12 +47,15 @@ add_executable(kernel
         src/ram/Heap.cpp
         include/myos/kernel/ram/VirtualMemoryMapping.hpp
         src/ram/VirtualMemoryMapping.cpp
+        include/myos/kernel/ram/PageFrameManager.hpp
+        src/ram/PageFrameManager.cpp
+        src/ram/util.hpp
 
         include/myos/kernel/process/Process.hpp
         src/process/Process.cpp
 
-#        include/myos/kernel/terminal/Terminal.hpp
-#        src/terminal/Terminal.cpp
+        #        include/myos/kernel/terminal/Terminal.hpp
+        #        src/terminal/Terminal.cpp
 
         include/myos/kernel/drivers/util.hpp
         src/drivers/util.cpp

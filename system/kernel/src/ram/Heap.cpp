@@ -1,17 +1,13 @@
 #include <myos/kernel/ram/Heap.hpp>
+#include "util.hpp"
 
 namespace myos::kernel::ram {
 
-template<typename T>
-inline T align4(T x) {
-    uint8_t *pt = reinterpret_cast<uint8_t *>(x);
-    uintptr_t ret = (reinterpret_cast<uintptr_t>(pt - 1) >> 2) << 2 + 4;
-    return reinterpret_cast<T>(ret);
-}
+using util::align;
 
 Heap::Heap(void *start, size_t maxSize) {
     firstBlock = reinterpret_cast<BlockHeader *>(
-            align4(start));
+            align(2, start));
     firstBlock->prev = nullptr;
     firstBlock->next = nullptr;
     firstBlock->size = maxSize;
@@ -19,7 +15,7 @@ Heap::Heap(void *start, size_t maxSize) {
 }
 
 void *Heap::allocate(size_t size) {
-    size = align4(size);
+    size = align(2, size);
 
     BlockHeader *&pt = firstBlock;
     while (pt != nullptr) {
