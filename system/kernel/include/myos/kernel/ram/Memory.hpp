@@ -4,6 +4,8 @@
 #include <cstdint>
 #include "Heap.hpp"
 #include "VirtualMemoryMapping.hpp"
+#include "PageFrameManager.hpp"
+
 namespace myos::kernel::ram {
 
 /**
@@ -23,6 +25,7 @@ private:
     void *kernelEnd;
     Heap kernelHeap;
 
+    PageFrameManager pageFrameManager;
     VirtualMemoryMapping identityMapping;
 };
 

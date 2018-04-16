@@ -2,27 +2,17 @@
 
 namespace myos::kernel {
 
-Kernel *Kernel::currentKernel = nullptr;
+Kernel Kernel::currentKernel;
 
 Kernel::Kernel() : sysCall(*this) {
-    if (currentKernel == nullptr) {
-        heap = reinterpret_cast<uint8_t *>(0x120000);
-
-        // TODO Do necessary initialization
-        currentKernel = this;
-    }
-}
-
-Kernel::~Kernel() {
-    currentKernel = nullptr;
 }
 
 Kernel &Kernel::getCurrentKernel() {
-    return *currentKernel;
+    return currentKernel;
 }
 
 bool Kernel::isRunning() {
-    return currentKernel != nullptr;
+    return true;
 }
 
 }

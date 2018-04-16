@@ -13,8 +13,6 @@ public:
      */
     Kernel();
 
-    ~Kernel();
-
     cpu::CPU &getCPU() { return cpu; }
 
     ram::Memory &getMemory() { return memory; }
@@ -22,6 +20,7 @@ public:
 private:
     cpu::CPU cpu;
     ram::Memory memory;
+    SysCall sysCall;
 
 public:
     /**
@@ -38,11 +37,8 @@ public:
     static bool isRunning();
 
 private:
-    static Kernel *currentKernel;
+    static Kernel currentKernel;
 
-    uint8_t *heap;
-
-    SysCall sysCall;
 };
 
 }

@@ -10,7 +10,7 @@ void userFunc() {
 }
 
 int main() {
-    Kernel kernel;
+    Kernel &kernel = Kernel::getCurrentKernel();
     void *userProgram = reinterpret_cast<void *>(userFunc);
     kernel.getCPU().enterUserCode(userProgram,
                                   (void *) 0x300000);
