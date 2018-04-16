@@ -3,6 +3,7 @@
 #include <cstddef>
 #include <cstdint>
 #include "Heap.hpp"
+#include "VirtualMemoryMapping.hpp"
 namespace myos::kernel::ram {
 
 class Memory {
@@ -15,6 +16,8 @@ private:
     void *kernelBegin;
     void *kernelEnd;
     Heap kernelHeap;
+
+    VirtualMemoryMapping identityMapping;
 };
 
 }

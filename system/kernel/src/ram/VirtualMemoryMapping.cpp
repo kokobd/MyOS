@@ -52,4 +52,20 @@ VirtualMemoryMapping::~VirtualMemoryMapping() {
     delete[] memory;
 }
 
+void VirtualMemoryMapping::install() {
+    asm volatile (
+    "mov cr3, %0\n"
+    : : "r" (pageDirectoryTable)
+    );
+}
+
+void VirtualMemoryMapping::enablePaging() {
+    asm volatile (
+    "mov eax, cr0\n"
+    "or eax, 0x80000000\n"
+    "mov cr0, eax\n"
+    : : : "eax"
+    );
+}
+
 }

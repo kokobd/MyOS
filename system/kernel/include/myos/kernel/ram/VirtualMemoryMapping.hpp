@@ -10,6 +10,10 @@ namespace myos::kernel::ram {
  * Note that we can only map the lowest 8MiB memory,
  * i.e. 0x000000 to 0x7FFFFF. All higher address are
  * mapped as 'not present'.
+ *
+ * Before dropping a mapping, you MUST install another.
+ * The only way you may change virtual memory mapping is
+ * through this class. Otherwise, no behavior is guranteed.
  */
 class VirtualMemoryMapping {
 public:
@@ -37,6 +41,17 @@ public:
      * @return whether it succeeded.
      */
     bool set(void *address, void *pageFrame);
+
+    /**
+     * Tells the CPU to use the current memory mapping.
+     * This method will flush TLB, if necessary.
+     */
+    void install();
+
+    /**
+     * Enable paging. You must install one prior to calling this.
+     */
+    static void enablePaging();
 
 private:
 
