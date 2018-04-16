@@ -49,8 +49,8 @@ add_executable(kernel
         include/myos/kernel/process/Process.hpp
         src/process/Process.cpp
 
-        include/myos/kernel/terminal/Terminal.hpp
-        src/terminal/Terminal.cpp
+#        include/myos/kernel/terminal/Terminal.hpp
+#        src/terminal/Terminal.cpp
 
         include/myos/kernel/drivers/util.hpp
         src/drivers/util.cpp
@@ -60,16 +60,6 @@ add_executable(kernel
         src/drivers/VGAScreen.cpp
         include/myos/kernel/drivers/Keyboard.hpp
         src/drivers/Keyboard.cpp
-
-        src/floppy/floppy.cpp
-        src/screen/vga.cpp
-        src/shell.cpp
-        src/keyboard/scanCode.cpp
-        src/keyboard/key.hpp
-        src/keyboard/input.cpp
-        src/filesystem/fat12.cpp
-        src/filesystem/file.cpp
-        src/exec/elf32.cpp
 
         src/test/TestMain.hpp
         src/test/TestMain.cpp
