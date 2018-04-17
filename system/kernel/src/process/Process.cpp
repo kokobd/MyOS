@@ -2,6 +2,8 @@
 
 namespace myos::kernel::process {
 
+Process::Process(const char *file) {
 
+}
 
 }

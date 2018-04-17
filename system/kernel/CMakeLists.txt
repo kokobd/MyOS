@@ -38,6 +38,9 @@ add_executable(kernel
         include/myos/kernel/common/Queue.hpp
         include/myos/kernel/common/BitSet.hpp
         src/common/BitSet.cpp
+        include/myos/kernel/common/Stack.hpp
+#        include/myos/kernel/common/ArrayList.hpp
+#        src/common/ArrayList.cpp
 
         include/myos/kernel/ram/sbrk.hpp
         src/ram/sbrk.cpp
@@ -53,6 +56,8 @@ add_executable(kernel
 
         include/myos/kernel/process/Process.hpp
         src/process/Process.cpp
+        include/myos/kernel/process/Scheduler.hpp
+        src/process/Scheduler.cpp
 
         #        include/myos/kernel/terminal/Terminal.hpp
         #        src/terminal/Terminal.cpp

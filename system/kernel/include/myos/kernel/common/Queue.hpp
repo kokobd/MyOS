@@ -9,6 +9,10 @@ class Queue {
 public:
     Queue() : begp(data), endp(begp) {}
 
+    Queue(const Queue &another) = delete;
+
+    Queue &operator=(const Queue &another) = delete;
+
     constexpr size_t maxSize() const { return MAX_SIZE; }
 
     bool empty() const {
