@@ -4,7 +4,7 @@ namespace myos::kernel {
 
 Kernel Kernel::currentKernel;
 
-Kernel::Kernel() : sysCall(*this) {
+Kernel::Kernel() : sysCall(vgaScreen) {
 }
 
 Kernel &Kernel::getCurrentKernel() {

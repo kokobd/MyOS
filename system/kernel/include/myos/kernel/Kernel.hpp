@@ -3,6 +3,7 @@
 #include <myos/kernel/cpu/CPU.hpp>
 #include <myos/kernel/SysCall.hpp>
 #include <myos/kernel/ram/Memory.hpp>
+#include <myos/kernel/drivers/VGAScreen.hpp>
 
 namespace myos::kernel {
 
@@ -20,6 +21,8 @@ public:
 private:
     cpu::CPU cpu;
     ram::Memory memory;
+
+    drivers::VGAScreen vgaScreen;
     SysCall sysCall;
 
 public:

@@ -3,8 +3,13 @@
 #include <myos/kernel/cpu/InterruptHandler.hpp>
 #include <myos/kernel/cpu/CPU.hpp>
 #include <myos/kernel/cpu/RegisterState.hpp>
+#include <myos/kernel/drivers/VGAScreen.hpp>
 
 namespace myos::kernel {
+
+namespace drivers {
+class VGAScreen;
+}
 
 class Kernel;
 
@@ -14,18 +19,13 @@ class Kernel;
  */
 class SysCall {
 public:
-    /**
-     * Initialize the system call module.
-     * @param kernel
-     */
-    explicit SysCall(Kernel &kernel);
+    explicit SysCall(drivers::VGAScreen &vgaScreen);
 
 private:
-    Kernel &kernel;
 
     class InterruptHandlerImpl : public cpu::InterruptHandler {
     public:
-        explicit InterruptHandlerImpl(Kernel &kernel);
+        explicit InterruptHandlerImpl(drivers::VGAScreen &vgaScreen);
 
         void handleInterrupt(
                 cpu::InterruptType interrupt,
@@ -37,7 +37,7 @@ private:
                             uint32_t arg2,
                             uint32_t arg3);
 
-        Kernel &kernel;
+        drivers::VGAScreen &vgaScreen;
     };
 
     InterruptHandlerImpl handler;
