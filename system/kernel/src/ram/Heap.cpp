@@ -40,13 +40,15 @@ void *Heap::allocate(size_t size) {
 }
 
 void Heap::deallocate(void *pt) {
-    BlockHeader *block = reinterpret_cast<BlockHeader *>(
-            reinterpret_cast<uint8_t *>(pt) - sizeof(BlockHeader)
-    );
-    block->occupied = false;
+    if (pt) {
+        BlockHeader *block = reinterpret_cast<BlockHeader *>(
+                reinterpret_cast<uint8_t *>(pt) - sizeof(BlockHeader)
+        );
+        block->occupied = false;
 
-    tryMergeBlockWithNext(block);
-    tryMergeBlockWithNext(block->prev);
+        tryMergeBlockWithNext(block);
+        tryMergeBlockWithNext(block->prev);
+    }
 }
 
 void Heap::tryMergeBlockWithNext(BlockHeader *block) {
