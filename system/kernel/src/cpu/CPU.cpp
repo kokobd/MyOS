@@ -39,7 +39,7 @@ void CPU::registerInterruptHandler(InterruptType type, InterruptHandler *handler
 }
 
 CPU &CPU::getCurrentCPU() {
-    Kernel::getCurrentKernel().getCPU();
+    return Kernel::getCurrentKernel().getCPU();
 }
 
 void CPU::handleInterrupt(uint32_t interrupt, RegisterState &registerState) {
