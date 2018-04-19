@@ -39,8 +39,8 @@ add_executable(kernel
         include/myos/kernel/common/BitSet.hpp
         src/common/BitSet.cpp
         include/myos/kernel/common/Stack.hpp
-#        include/myos/kernel/common/ArrayList.hpp
-#        src/common/ArrayList.cpp
+        #        include/myos/kernel/common/ArrayList.hpp
+        #        src/common/ArrayList.cpp
 
         include/myos/kernel/ram/sbrk.hpp
         src/ram/sbrk.cpp
@@ -70,6 +70,10 @@ add_executable(kernel
         src/drivers/VGAScreen.cpp
         include/myos/kernel/drivers/Keyboard.hpp
         src/drivers/Keyboard.cpp
+
+        include/myos/kernel/filesystem/FileSystem.hpp
+        src/filesystem/FileSystem.cpp
+        include/myos/kernel/filesystem/SectorReader.hpp
 
         src/test/TestMain.hpp
         src/test/TestMain.cpp

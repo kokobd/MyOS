@@ -5,6 +5,7 @@
 #include <myos/kernel/ram/Memory.hpp>
 #include <myos/kernel/drivers/VGAScreen.hpp>
 #include <myos/kernel/drivers/Floppy.hpp>
+#include <myos/kernel/filesystem/FileSystem.hpp>
 
 namespace myos::kernel {
 
@@ -25,6 +26,7 @@ private:
 
     drivers::VGAScreen vgaScreen;
     drivers::Floppy floppy;
+    filesystem::FileSystem fileSystem;
     SysCall sysCall;
 
 public:

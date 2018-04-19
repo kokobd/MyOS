@@ -9,13 +9,14 @@ using util::inb;
 using util::outb;
 
 Floppy::Floppy() : interruptHandler(sectorReadFinished) {
+    setSectorSize(512);
     Kernel::getCurrentKernel().getCPU()
             .registerInterruptHandler(cpu::InterruptType::FLOPPY,
                                       &interruptHandler);
     setupDMA();
 }
 
-bool Floppy::loadSector(void *dest, uint32_t lba) {
+bool Floppy::readSector(uint8_t *dest, uint32_t lba) {
     outb(0x0A, 0x06);
     outb(0x0B, 0x56);
     outb(0x0A, 0x02);

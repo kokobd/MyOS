@@ -3,14 +3,15 @@
 #include <cstddef>
 #include <myos/kernel/common/Function.hpp>
 #include <myos/kernel/cpu/InterruptHandler.hpp>
+#include <myos/kernel/filesystem/SectorReader.hpp>
 
 namespace myos::kernel::drivers {
 
-class Floppy {
+class Floppy : public filesystem::SectorReader {
 public:
     Floppy();
 
-    bool loadSector(void *dest, uint32_t lba);
+    bool readSector(uint8_t *dest, uint32_t lba) override;
 
 private:
     volatile bool sectorReadFinished = false;

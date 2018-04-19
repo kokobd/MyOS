@@ -4,7 +4,9 @@ namespace myos::kernel {
 
 Kernel Kernel::currentKernel;
 
-Kernel::Kernel() : sysCall(vgaScreen) {
+Kernel::Kernel()
+        : fileSystem(floppy),
+          sysCall(vgaScreen) {
 }
 
 Kernel &Kernel::getCurrentKernel() {
