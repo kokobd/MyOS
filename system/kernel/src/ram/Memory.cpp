@@ -16,6 +16,14 @@ Memory::Memory()
     VirtualMemoryMapping::enablePaging();
 }
 
+void *Memory::allocatePageFrame() {
+    return pageFrameManager.allocatePageFrame();
+}
+
+void Memory::deallocatePageFrame(void *pageFrame) {
+    pageFrameManager.deallocatePageFrame(pageFrame);
+}
+
 }
 
 using myos::kernel::Kernel;

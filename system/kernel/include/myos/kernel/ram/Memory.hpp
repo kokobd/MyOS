@@ -20,6 +20,10 @@ public:
 
     Heap &getKernelHeap() { return kernelHeap; }
 
+    void *allocatePageFrame();
+
+    void deallocatePageFrame(void *pageFrame);
+
 private:
     void *kernelBegin;
     void *kernelEnd;

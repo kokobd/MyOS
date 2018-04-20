@@ -1,4 +1,5 @@
 #include <myos/kernel/Kernel.hpp>
+#include <myos/kernel/process/Process.hpp>
 
 namespace myos::kernel {
 
@@ -7,6 +8,9 @@ Kernel Kernel::currentKernel;
 Kernel::Kernel()
         : fileSystem(floppy),
           sysCall(vgaScreen) {
+    using process::Process;
+    scheduler.spawnProcess(new Process("SPIN.EXE"));
+    scheduler.spawnProcess(new Process("KSAPP.EXE"));
 }
 
 Kernel &Kernel::getCurrentKernel() {

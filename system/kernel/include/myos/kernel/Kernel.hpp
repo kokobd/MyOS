@@ -6,6 +6,7 @@
 #include <myos/kernel/drivers/VGAScreen.hpp>
 #include <myos/kernel/drivers/Floppy.hpp>
 #include <myos/kernel/filesystem/FileSystem.hpp>
+#include <myos/kernel/process/Scheduler.hpp>
 
 namespace myos::kernel {
 
@@ -20,6 +21,8 @@ public:
 
     ram::Memory &getMemory() { return memory; }
 
+    filesystem::FileSystem &getFileSystem() { return fileSystem; }
+
 private:
     cpu::CPU cpu;
     ram::Memory memory;
@@ -28,6 +31,8 @@ private:
     drivers::Floppy floppy;
     filesystem::FileSystem fileSystem;
     SysCall sysCall;
+
+    process::Scheduler scheduler;
 
 public:
     /**

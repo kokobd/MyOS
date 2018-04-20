@@ -4,10 +4,8 @@
 
 namespace myos::kernel::process {
 
-Scheduler::Scheduler(ram::PageFrameManager &pageFrameManager)
-        : running(nullptr), pageFrameManager(pageFrameManager) {
-
-}
+Scheduler::Scheduler()
+        : running(nullptr) {}
 
 Scheduler::~Scheduler() {
     // We implement a destructor, though it probably will not run.
@@ -17,6 +15,32 @@ Scheduler::~Scheduler() {
         delete front;
         ready.popFront();
     }
+}
+
+void Scheduler::spawnProcess(Process *newProcess) {
+    ready.pushBack(newProcess);
+}
+
+void Scheduler::ClockInterruptHandler::handleInterrupt(
+        cpu::InterruptType interrupt,
+        cpu::RegisterState &registerState) {
+    if (interrupt != cpu::InterruptType::TIMER) {
+        return;
+    }
+
+    if (scheduler.ready.empty()) {
+        // No other processes to run.
+        return;
+    }
+
+    Process *next = scheduler.ready.front();
+    registerState = next->getRegisterState();
+    next->switchVirtualMemory();
+    if (scheduler.running != nullptr) {
+        scheduler.ready.pushBack(scheduler.running);
+    }
+    scheduler.running = next;
+    scheduler.ready.popFront();
 }
 
 }
