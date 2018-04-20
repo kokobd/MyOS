@@ -5,11 +5,11 @@
 namespace myos::kernel::filesystem {
 
 inline uint16_t clusterToIndex(uint16_t cluster) {
-    return cluster + static_cast<uint16_t>(17);
+    return cluster + static_cast<uint16_t>(31);
 }
 
 inline uint16_t indexToCluster(uint16_t index) {
-    return index - static_cast<uint16_t>(17);
+    return index - static_cast<uint16_t>(31);
 }
 
 FileSystem::FAT::FAT(SectorReader &sectorReader)
@@ -28,9 +28,9 @@ uint32_t FileSystem::FAT::operator[](uint32_t index) {
     const uint8_t firstByte = getByte(firstByteIndex);
     const uint8_t secondByte = getByte(secondByteIndex);
     const uint16_t word =
-            secondByte | (static_cast<uint16_t>(firstByte) << 8);
-    const uint16_t nextCluster = cluster % 2 != 0
-                                 ? (word >> 4) : word;
+            firstByte | (static_cast<uint16_t>(secondByte) << 8u);
+    const uint16_t nextCluster = (cluster % 2 != 0
+                                  ? (word >> 4) : word) & (uint16_t) 0x0FFF;
 
     if (nextCluster < 0xFF7) {
         return clusterToIndex(nextCluster);
@@ -44,7 +44,7 @@ FileSystem::FAT::~FAT() {
 
 uint8_t FileSystem::FAT::getByte(uint32_t byteIndex) {
     uint32_t expectedBufferIndex =
-            byteIndex / sectorReader.sectorSize();
+            byteIndex / sectorReader.sectorSize() + 1;
     if (expectedBufferIndex != bufferIndex) {
         sectorReader.readSector(buffer, expectedBufferIndex);
         bufferIndex = expectedBufferIndex;
@@ -84,17 +84,17 @@ FileSystem::FileHandle FileSystem::openFile(const char *path) {
         for (uint32_t j = 0; j < 512 / 32; ++j) {
             uint8_t *entry = buffer + j * 32;
             char name[12] = {'\0'};
-            memcpy(name, buffer, 11);
+            memcpy(name, entry, 11);
             if (strcmp(name, file->fileName) == 0) {
                 file->firstSector =
                         clusterToIndex(*(uint16_t *) (entry + 0x1A));
+                file->size = *(uint32_t *) (entry + 28);
                 found = true;
                 goto endLoop;
             }
         }
     }
     endLoop:
-
     if (found) {
         return static_cast<FileHandle>(file - files);
     } else {
@@ -118,6 +118,7 @@ bool FileSystem::readAllBytes(FileSystem::FileHandle fileHandle, void *destinati
             len = files[fileHandle].size % sectorReader.sectorSize();
         }
         memcpy(dest, buffer, len);
+        dest += sectorReader.sectorSize();
     }
 
     return true;

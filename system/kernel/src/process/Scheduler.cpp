@@ -33,17 +33,20 @@ void Scheduler::ClockInterruptHandler::handleInterrupt(
         return;
     }
 
-    if (scheduler.ready.empty()) {
+    size_t totalProcesses = scheduler.ready.size()
+                            + ((scheduler.running != nullptr) ? 1 : 0);
+    if (totalProcesses < 2) {
         // No other processes to run.
         return;
     }
 
+    if (scheduler.running != nullptr) {
+        scheduler.ready.pushBack(scheduler.running);
+        scheduler.running->setRegisterState(registerState);
+    }
     Process *next = scheduler.ready.front();
     registerState = next->getRegisterState();
     next->switchVirtualMemory();
-    if (scheduler.running != nullptr) {
-        scheduler.ready.pushBack(scheduler.running);
-    }
     scheduler.running = next;
     scheduler.ready.popFront();
 }

@@ -28,7 +28,7 @@ struct RegisterState {
     uint32_t eip{};
     uint16_t cs = 0x1B;
     uint16_t null4{};
-    uint32_t eflags{};
+    uint32_t eflags = 0x3246;
     uint32_t esp{};
     uint16_t ss = 0x23;
     uint16_t null5{};

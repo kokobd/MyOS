@@ -13,16 +13,15 @@ int main() {
         flag++;
         if (flag > 0 && flag < 80) {
             c++;
-        } else if (flag >= 80 && flag < 103) {
+        } else if (flag >= 80 && flag < 104) {
             r++;
-        } else if (flag >= 103 && flag < 182) {
+        } else if (flag >= 104 && flag < 183) {
             c--;
-        } else if (flag >= 182 && flag < 205) {
+        } else if (flag >= 183 && flag < 207) {
             r--;
-        } else if (flag == 205) {
+        } else if (flag == 207) {
             flag = 0;
         }
-
     }
     return 0;
 }

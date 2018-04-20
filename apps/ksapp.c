@@ -1,5 +1,7 @@
 #include <stdio.h>
 
+void sleep();
+
 int main() {
     char ch = 'A';
 #pragma clang diagnostic push
@@ -11,6 +13,7 @@ int main() {
         } else {
             ch++;
         }
+        sleep();
     }
 #pragma clang diagnostic pop
     return 0;

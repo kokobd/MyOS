@@ -16,6 +16,10 @@ public:
         return registerState;
     }
 
+    void setRegisterState(const cpu::RegisterState &registerState) {
+        this->registerState = registerState;
+    }
+
     void switchVirtualMemory();
 
 private:

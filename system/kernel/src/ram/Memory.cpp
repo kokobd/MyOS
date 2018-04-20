@@ -8,7 +8,7 @@ namespace myos::kernel::ram {
 
 Memory::Memory()
         : kernelHeap(&end),
-          pageFrameManager(kernelEnd, VirtualMemoryMapping::pageFrameSize(), 1536) {
+          pageFrameManager(reinterpret_cast<void *>(0x200000u), VirtualMemoryMapping::pageFrameSize(), 1536) {
     kernelBegin = reinterpret_cast<void *>(0x100000u);
     kernelEnd = reinterpret_cast<void *>(0x200000u);
 

@@ -35,7 +35,7 @@ public:
 
 private:
     bool checkBoundary(uint32_t row, uint32_t col) {
-        return row < getWidth() && col < getHeight();
+        return col < getWidth() && row < getHeight();
     }
 
     void *const VIDEO_ADDR;
