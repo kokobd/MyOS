@@ -13,24 +13,25 @@ Floppy::Floppy() : interruptHandler(sectorReadFinished) {
     Kernel::getCurrentKernel().getCPU()
             .registerInterruptHandler(cpu::InterruptType::FLOPPY,
                                       &interruptHandler);
-    setupDMA();
 }
 
 bool Floppy::readSector(uint8_t *dest, uint32_t lba) {
-    outb(0x0A, 0x06);
-    outb(0x0B, 0x56);
-    outb(0x0A, 0x02);
+    setupDMA();
 
     uint16_t cyl, head, sector;
     lbaToChs(lba, &cyl, &head, &sector);
 
-    writeDOR(0);
     // Start motor, enable controller, select drive 0.
+    writeDOR(0);
+    for (int i = 0; i < 50000; ++i) {
+        asm volatile("nop");
+    }
     writeDOR(0b00011100);
-
+    sectorReadFinished = false;
     asm volatile("sti");
     while (!sectorReadFinished);
-    sectorReadFinished = false;
+    asm volatile("cli");
+
     sendCommand(8); // SENSE_INTERRUPT
     readData();
     readData();
@@ -38,7 +39,7 @@ bool Floppy::readSector(uint8_t *dest, uint32_t lba) {
     // send command to read sector
     uint8_t cmds[9] = {
             0b01000110,
-            0,
+            static_cast<uint8_t>(head << 2),
             (uint8_t) cyl,
             (uint8_t) head,
             (uint8_t) sector,
@@ -52,9 +53,10 @@ bool Floppy::readSector(uint8_t *dest, uint32_t lba) {
         sendCommand(cmds[i]);
     }
     // Wait for IRQ6
+    sectorReadFinished = false;
+    asm volatile("sti");
     while (!sectorReadFinished);
     asm volatile("cli");
-    sectorReadFinished = false;
     for (int i = 0; i != 7; ++i) {
         readData();
     }
@@ -104,6 +106,7 @@ void Floppy::setupDMA() {
     outb(0x05, 0xFF);
     outb(0x05, 0x01);
     outb(0x81, 0);
+    outb(0x0B, 0x46);
     outb(0x0A, 0x02);
 
 }

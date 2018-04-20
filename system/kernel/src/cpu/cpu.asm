@@ -53,7 +53,9 @@ cpu_enterUserCode:
     mov es, ax
     mov gs, ax
     mov fs, ax
-    iret
+
+    sti
+    int 0x20
 
 [SECTION .data]
 tss:

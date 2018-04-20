@@ -11,3 +11,10 @@ add_executable(spin
 target_link_libraries(spin
         stdlibc
         )
+
+add_executable(ksapp
+        ksapp.c
+        )
+target_link_libraries(ksapp
+        stdlibc
+        )

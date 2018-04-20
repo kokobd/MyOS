@@ -1,11 +1,16 @@
 #include <myos/kernel/process/Scheduler.hpp>
 #include <myos/kernel/process/Process.hpp>
 #include <myos/kernel/ram/PageFrameManager.hpp>
+#include <myos/kernel/cpu/CPU.hpp>
 
 namespace myos::kernel::process {
 
 Scheduler::Scheduler()
-        : running(nullptr) {}
+        : running(nullptr),
+          clockInterruptHandler(*this) {
+    cpu::CPU::getCurrentCPU()
+            .registerInterruptHandler(cpu::InterruptType::TIMER, &clockInterruptHandler);
+}
 
 Scheduler::~Scheduler() {
     // We implement a destructor, though it probably will not run.

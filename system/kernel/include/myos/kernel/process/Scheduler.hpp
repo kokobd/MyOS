@@ -35,6 +35,8 @@ public:
 private:
     Process *running;
     common::Queue<Process *> ready;
+
+    ClockInterruptHandler clockInterruptHandler;
 };
 
 }

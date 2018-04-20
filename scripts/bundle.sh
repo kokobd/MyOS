@@ -18,6 +18,6 @@ cd "${BUILD_DIR}"
 # cp system/bootloader/krnldr.sys myos/KRNLDR.SYS
 
 mcopy -i myos.img system/kernel/kernel ::/boot/kernel.bin
-# mcopy -i myos.img apps/welcome ::/WELCOME.EXE
-# mcopy -i myos.img apps/clear ::/CLEAR.EXE
+mcopy -i myos.img apps/ksapp ::/KSAPP.EXE
+mcopy -i myos.img apps/spin ::/SPIN.EXE
 # mcopy -i myos.img apps/file ::/FILE.EXE

@@ -95,9 +95,12 @@ FileSystem::FileHandle FileSystem::openFile(const char *path) {
     }
     endLoop:
 
-    if (found)
+    if (found) {
         return static_cast<FileHandle>(file - files);
-    return -1;
+    } else {
+        file->inUse = false;
+        return -1;
+    }
 }
 
 bool FileSystem::readAllBytes(FileSystem::FileHandle fileHandle, void *destination) {
