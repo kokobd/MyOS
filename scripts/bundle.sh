@@ -17,7 +17,4 @@ cd "${BUILD_DIR}"
 # dd if=system/bootloader/bootloader of=myos.img conv=notrunc
 # cp system/bootloader/krnldr.sys myos/KRNLDR.SYS
 
-mcopy -i myos.img system/kernel/kernel ::/boot/kernel.bin
-mcopy -i myos.img apps/ksapp ::/KSAPP.EXE
-mcopy -i myos.img apps/spin ::/SPIN.EXE
-# mcopy -i myos.img apps/file ::/FILE.EXE
+mcopy -i myos.img src/kernel/kernel ::/boot/kernel.bin

@@ -7,14 +7,12 @@ set(CMAKE_CXX_STANDARD 11)
 
 enable_testing()
 
-add_subdirectory(base)
-add_subdirectory(stdlibc)
-add_subdirectory(system)
-add_subdirectory(apps)
+add_subdirectory(src/base)
+add_subdirectory(src/kernel)
 
 add_custom_command(
         OUTPUT ${CMAKE_CURRENT_BINARY_DIR}/myos.img
-        DEPENDS kernel ksapp spin
+        DEPENDS kernel scripts/bundle.sh
         WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
         COMMAND ./scripts/bundle.sh ${CMAKE_CURRENT_BINARY_DIR}
 )
