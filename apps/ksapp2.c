@@ -7,11 +7,11 @@ int main() {
 #pragma clang diagnostic push
 #pragma clang diagnostic ignored "-Wmissing-noreturn"
     for (int i = 0; i < 50000; ++i) {
-        setChar(13, 42, ch);
-        if (ch == 'A') {
-            ch = 'Z';
+        setChar(13, 38, ch);
+        if (ch == 'Z') {
+            ch = 'A';
         } else {
-            ch--;
+            ch++;
         }
         sleep();
     }
