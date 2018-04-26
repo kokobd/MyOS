@@ -5,6 +5,10 @@ project(myos LANGUAGES C CXX)
 set(CMAKE_C_STANDARD 99)
 set(CMAKE_CXX_STANDARD 11)
 
+if (PROFILE MATCHES UNIT_TEST)
+    add_subdirectory(deps/catch2-cmake)
+endif ()
+
 enable_testing()
 
 add_subdirectory(src/base)

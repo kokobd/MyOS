@@ -1,9 +1,11 @@
-#include <string.h>
-#include <stdint.h>
+#include <myos/base/cstring>
+#include <myos/base/cstdint>
+
+namespace myos::base {
 
 size_t strlen(const char *str) {
     size_t length = 0;
-    if (str == NULL)
+    if (str == nullptr)
         return length;
     while (*str != '\0') {
         ++length;
@@ -45,3 +47,27 @@ void *memset(void *dest, int ch, size_t count) {
     }
     return dest;
 }
+
+}
+
+#ifndef UNIT_TEST
+extern "C" {
+
+size_t strlen(const char *str) {
+    return myos::base::strlen(str);
+}
+
+int strcmp(const char *lhs, const char *rhs) {
+    return myos::base::strcmp(lhs, rhs);
+}
+
+void *memcpy(void *dest, const void *src, size_t count) {
+    return myos::base::memcpy(dest, src, count);
+}
+
+void *memset(void *dest, int ch, size_t count) {
+    return myos::base::memset(dest, ch, count);
+}
+
+}
+#endif

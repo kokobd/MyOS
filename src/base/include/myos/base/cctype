@@ -1,5 +1,7 @@
 #pragma once
 
+namespace myos::base {
+
 int islower(int ch);
 
 int isupper(int ch);
@@ -16,5 +18,4 @@ int tolower(int ch);
 
 int toupper(int ch);
 
-
-
+}
