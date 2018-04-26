@@ -7,12 +7,15 @@ set(CMAKE_CXX_STANDARD 11)
 add_library(base STATIC
         src/ctype.cpp
         src/string.cpp
+        src/collections/BitSet.cpp
+        include/myos/base/collections/BitSet.hpp
         )
 
 set(TEST_SOURCES
         test/main.cpp
         test/cstring.cpp
         test/ctype.cpp
+        test/collections/BitSet.cpp
         )
 if (PROFILE MATCHES UNIT_TEST)
     target_compile_definitions(base
