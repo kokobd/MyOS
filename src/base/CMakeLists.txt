@@ -8,6 +8,12 @@ add_library(base STATIC
         src/ctype.cpp
         src/string.cpp
         )
+
+set(TEST_SOURCES
+        test/main.cpp
+        test/cstring.cpp
+        test/ctype.cpp
+        )
 if (PROFILE MATCHES UNIT_TEST)
     target_compile_definitions(base
             PRIVATE UNIT_TEST
@@ -17,10 +23,7 @@ if (PROFILE MATCHES UNIT_TEST)
             PRIVATE src
             )
 
-    add_executable(base-test
-            test/main.cpp
-            test/cstring.cpp
-            )
+    add_executable(base-test ${TEST_SOURCES})
     target_link_libraries(base-test
             PRIVATE catch2 base
             )
