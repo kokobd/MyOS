@@ -16,6 +16,7 @@ set(TEST_SOURCES
         test/cstring.cpp
         test/ctype.cpp
         test/collections/BitSet.cpp
+        test/collections/Queue.cpp
         )
 if (PROFILE MATCHES UNIT_TEST)
     target_compile_definitions(base

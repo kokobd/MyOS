@@ -2,7 +2,7 @@
 
 #include <cstddef>
 
-namespace myos::kernel::common {
+namespace myos::base::collections {
 
 template<typename E, size_t MAX_SIZE = 256>
 class Queue {
