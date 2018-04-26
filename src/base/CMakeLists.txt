@@ -17,6 +17,7 @@ set(TEST_SOURCES
         test/ctype.cpp
         test/collections/BitSet.cpp
         test/collections/Queue.cpp
+        test/collections/Stack.cpp
         )
 if (PROFILE MATCHES UNIT_TEST)
     target_compile_definitions(base
