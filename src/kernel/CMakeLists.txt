@@ -39,11 +39,7 @@ add_executable(kernel
         include/myos/kernel/common/BitSet.hpp
         src/common/BitSet.cpp
         include/myos/kernel/common/Stack.hpp
-        #        include/myos/kernel/common/ArrayList.hpp
-        #        src/common/ArrayList.cpp
 
-        include/myos/kernel/ram/sbrk.hpp
-        src/ram/sbrk.cpp
         include/myos/kernel/ram/Memory.hpp
         src/ram/Memory.cpp
         include/myos/kernel/ram/Heap.hpp
@@ -58,9 +54,6 @@ add_executable(kernel
         src/process/Process.cpp
         include/myos/kernel/process/Scheduler.hpp
         src/process/Scheduler.cpp
-
-        #        include/myos/kernel/terminal/Terminal.hpp
-        #        src/terminal/Terminal.cpp
 
         include/myos/kernel/drivers/util.hpp
         src/drivers/util.cpp
@@ -97,4 +90,5 @@ set_target_properties(kernel PROPERTIES
         )
 
 target_link_libraries(kernel
-        base)
+        base
+        )
