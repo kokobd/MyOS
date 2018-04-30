@@ -90,5 +90,5 @@ set_target_properties(kernel PROPERTIES
         )
 
 target_link_libraries(kernel
-        base
+        core
         )
