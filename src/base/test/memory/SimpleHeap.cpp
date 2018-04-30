@@ -1,4 +1,5 @@
 #include <catch2/catch.hpp>
+#include <array>
 #include <myos/base/memory/SimpleHeap.hpp>
 
 using myos::base::memory::Heap;
@@ -15,9 +16,9 @@ T *allocate(Heap &heap) {
 
 TEST_CASE("memory::SimpleHeap", "[unit]") {
     constexpr size_t MAX_SIZE = 2048;
-    uint8_t mem[MAX_SIZE];
+    std::vector<uint8_t> mem(MAX_SIZE);
 
-    SimpleHeap heap(mem, MAX_SIZE);
+    SimpleHeap heap(mem.data(), MAX_SIZE);
     SECTION("allocate and deallocate") {
         auto *x = allocate<uint32_t>(heap);
         *x = 12;
