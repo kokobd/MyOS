@@ -40,4 +40,12 @@ TEST_CASE("memory::SimpleHeap", "[unit]") {
         REQUIRE(*x == 5);
         REQUIRE(*y == 20);
     }
+
+    SECTION("memory exhausted") {
+        allocate<uint32_t>(heap);
+        auto *y = heap.allocate(2048);
+        REQUIRE(y == nullptr);
+        auto *x = allocate<uint32_t>(heap);
+        REQUIRE(x != nullptr);
+    }
 }
