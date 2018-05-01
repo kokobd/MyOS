@@ -19,6 +19,8 @@ set(LIB_SOURCES
         src/memory/SimpleHeap.cpp
         include/myos/core/String.hpp
         src/String.cpp
+        include/myos/core/Maybe.hpp
+        include/myos/core/Function.hpp
         include/myos/core/cctype
         include/myos/core/cstddef
         include/myos/core/cstdint
@@ -35,6 +37,8 @@ set(TEST_SOURCES
         test/collections/ArrayList.cpp
         test/memory.cpp
         test/memory/SimpleHeap.cpp
+        test/Maybe.cpp
+        test/Function.cpp
         )
 
 if (PROFILE MATCHES UNIT_TEST)
