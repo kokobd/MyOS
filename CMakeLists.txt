@@ -15,6 +15,8 @@ enable_testing()
 add_subdirectory(src/core)
 add_subdirectory(src/kernel)
 
+if (NOT PROFILE MATCHES UNIT_TEST)
+
 add_custom_command(
         OUTPUT ${CMAKE_CURRENT_BINARY_DIR}/myos.img
         DEPENDS kernel scripts/bundle.sh
@@ -23,3 +25,5 @@ add_custom_command(
 )
 
 add_custom_target(myos-image ALL DEPENDS ${CMAKE_CURRENT_BINARY_DIR}/myos.img)
+
+endif ()
