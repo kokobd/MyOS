@@ -29,15 +29,15 @@ extern "C" void __cxa_pure_virtual() {
 
 namespace {
 
-class Dumb {
+class Int {
 public:
-    Dumb() {
+    Int() {
         asm volatile("nop");
     }
 };
 
 // So that we can make sure .init_array section exists.
-Dumb dumb;
+Int dumb;
 
 }
 

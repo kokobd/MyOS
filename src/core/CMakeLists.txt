@@ -9,11 +9,20 @@ set(LIB_SOURCES
         src/string.cpp
         src/collections/BitSet.cpp
         include/myos/core/collections/BitSet.hpp
+        include/myos/core/collections/Queue.hpp
+        include/myos/core/collections/Stack.hpp
+        include/myos/core/collections/ArrayList.hpp
         include/myos/core/memory.hpp
         src/memory.cpp
         include/myos/core/memory/Heap.hpp
         include/myos/core/memory/SimpleHeap.hpp
         src/memory/SimpleHeap.cpp
+        include/myos/core/String.hpp
+        src/String.cpp
+        include/myos/core/cctype
+        include/myos/core/cstddef
+        include/myos/core/cstdint
+        include/myos/core/cstring
         )
 
 set(TEST_SOURCES
@@ -23,6 +32,7 @@ set(TEST_SOURCES
         test/collections/BitSet.cpp
         test/collections/Queue.cpp
         test/collections/Stack.cpp
+        test/collections/ArrayList.cpp
         test/memory.cpp
         test/memory/SimpleHeap.cpp
         )
