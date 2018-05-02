@@ -39,6 +39,7 @@ set(TEST_SOURCES
         test/memory/SimpleHeap.cpp
         test/Maybe.cpp
         test/Function.cpp
+        test/String.cpp
         )
 
 if (PROFILE MATCHES UNIT_TEST)

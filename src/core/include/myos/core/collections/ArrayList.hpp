@@ -2,6 +2,7 @@
 
 #include <cstddef>
 #include <cstdint>
+#include <new>
 
 namespace myos::core::collections {
 
@@ -21,6 +22,9 @@ public:
     ~ArrayList() {
         free();
     }
+
+    template<typename T>
+    friend bool operator==(const ArrayList<T> &lhs, const ArrayList<T> &rhs);
 
     void add(const E &elem);
 
@@ -44,6 +48,14 @@ public:
 
     E &first() {
         return data[0];
+    }
+
+    const E &first() const {
+        return data[0];
+    }
+
+    E &last() {
+        return const_cast<E &>(static_cast<const ArrayList<E> &>(*this).last());
     }
 
     const E &last() const {
@@ -116,6 +128,20 @@ ArrayList<E> &ArrayList<E>::operator=(const ArrayList &that) {
     capacity = newCapacity;
 
     return *this;
+}
+
+template<typename E>
+bool operator==(const ArrayList<E> &lhs, const ArrayList<E> &rhs) {
+    if (lhs.size() != rhs.size()) {
+        return false;
+    }
+    for (size_t i = 0; i < lhs.size(); ++i) {
+        if (lhs[i] != rhs[i]) {
+            return false;
+        }
+    }
+
+    return true;
 }
 
 }
