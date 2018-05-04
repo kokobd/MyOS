@@ -7,7 +7,6 @@ extern "C" void cpu_enterUserCode(uint32_t, uint32_t);
 
 int main() {
     Kernel &kernel = Kernel::getCurrentKernel();
-    cpu_enterUserCode(0x400000, 0x7FFFFF);
 
     return 0;
 }

@@ -8,9 +8,10 @@ Kernel Kernel::currentKernel;
 Kernel::Kernel()
         : fileSystem(floppy),
           sysCall(vgaScreen) {
-    using process::Process;
-    scheduler.spawnProcess(new Process("SPIN.EXE"));
-    scheduler.spawnProcess(new Process("KSAPP.EXE"));
+//    using process::Process;
+//    scheduler.spawnProcess(new Process("SPIN.EXE"));
+//    scheduler.spawnProcess(new Process("KSAPP.EXE"));
+    vgaScreen.setChar(0, 0, 'A');
 }
 
 Kernel &Kernel::getCurrentKernel() {
