@@ -12,6 +12,7 @@ set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -DDEBUG")
 add_executable(kernel
         include/myos/kernel/debug/trace.hpp
 
+        src/multiboot.asm
         src/multiboot2.asm
         src/kernel_start.asm
         src/main.cpp

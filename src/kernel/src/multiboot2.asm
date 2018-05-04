@@ -1,6 +1,6 @@
 BITS 32
 
-section .multiboot
+section .multiboot2
 
 %define MAGIC_NUMBER 0xE85250D6
 
