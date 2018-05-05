@@ -16,3 +16,10 @@ You also need to pass in a `-DPROFILE=`, possible values are `UNIT_TEST`, `DEBUG
 
 We use the Catch framework for unit testing. Unit tests are run on host platform, so you need to use
 toolchain 1 and pass in `-DPROFILE=UNIT_TEST` .
+
+Example command to bundle and run the system under QEMU:
+```sh
+# Assuming your build directory is cmake-build-debug
+sudo scripts/bundle.sh cmake-build-debug/ \
+&& qemu-system-i386 -drive format=raw,file=cmake-build-debug/myos.img
+```
