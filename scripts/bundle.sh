@@ -1,5 +1,7 @@
 #!/bin/bash
 
+MODULES=()
+
 set -o errexit
 
 if [ -z "$1" ]; then
@@ -7,17 +9,27 @@ if [ -z "$1" ]; then
     exit 1
 fi
 
+tar x -C scripts/bin -f scripts/bin/myos.tar.gz
+
 BUILD_DIR="$1"
 
 rm -f "${BUILD_DIR}/myos.img"
 cp scripts/bin/myos.img "${BUILD_DIR}"
+cp scripts/grub.cfg "${BUILD_DIR}"
 
 cd "${BUILD_DIR}"
 
-# dd if=system/bootloader/bootloader of=myos.img conv=notrunc
-# cp system/bootloader/krnldr.sys myos/KRNLDR.SYS
+mkdir -p myos
+mount -o loop,offset=1048576 myos.img myos
+mkdir -p myos/boot/myos
+cp src/kernel/kernel myos/boot/myos/
+for item in ${MODULES[*]}; do
+    cp $item myos/boot/myos/
+done
+cp -f grub.cfg myos/boot/grub/
 
-mcopy -i myos.img system/kernel/kernel ::/boot/kernel.bin
-mcopy -i myos.img apps/ksapp ::/KSAPP.EXE
-mcopy -i myos.img apps/spin ::/SPIN.EXE
-# mcopy -i myos.img apps/file ::/FILE.EXE
+umount myos
+rmdir myos
+
+user=$(stat -c "%U" .)
+chown ${user}: myos.img

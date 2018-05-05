@@ -1,7 +1,11 @@
 **/cmake-build-*/
+build/
 
 .vscode/
 .idea/
 
 bochsout.txt
 .bochsrc
+
+Testing/
+toolchain/
