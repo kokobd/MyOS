@@ -71,8 +71,8 @@ else ()
             PRIVATE src
             )
     target_compile_options(core
-            PUBLIC $<$<COMPILE_LANGUAGE:C>:-m32 -masm=intel -ffreestanding -fno-stack-protector>
-            PUBLIC $<$<COMPILE_LANGUAGE:CXX>:-m32 -masm=intel -ffreestanding -fno-stack-protector -fno-exceptions -fno-rtti>
+            PUBLIC $<$<COMPILE_LANGUAGE:C>:-masm=intel -ffreestanding -fno-stack-protector>
+            PUBLIC $<$<COMPILE_LANGUAGE:CXX>:-masm=intel -ffreestanding -fno-stack-protector -fno-exceptions -fno-rtti>
             )
 endif ()
 
