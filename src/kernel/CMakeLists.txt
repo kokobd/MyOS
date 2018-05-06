@@ -34,13 +34,6 @@ add_executable(kernel
         src/cpu/int.asm
         src/cpu/cpu.asm
 
-        include/myos/kernel/common/Function.hpp
-        include/myos/kernel/common/Future.hpp
-        include/myos/kernel/common/Queue.hpp
-        include/myos/kernel/common/BitSet.hpp
-        src/common/BitSet.cpp
-        include/myos/kernel/common/Stack.hpp
-
         include/myos/kernel/ram/Memory.hpp
         src/ram/Memory.cpp
         include/myos/kernel/ram/Heap.hpp

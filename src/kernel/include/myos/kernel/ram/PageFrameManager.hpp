@@ -1,7 +1,7 @@
 #pragma once
 
 #include <cstddef>
-#include <myos/kernel/common/BitSet.hpp>
+#include <myos/core/collections/BitSet.hpp>
 
 namespace myos::kernel::ram {
 
@@ -35,7 +35,7 @@ public:
     void deallocatePageFrame(void *frame);
 
 private:
-    common::BitSet frameOccupied;
+    core::collections::BitSet frameOccupied;
 
     uintptr_t start;
 
