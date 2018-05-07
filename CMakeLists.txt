@@ -14,3 +14,9 @@ enable_testing()
 
 add_subdirectory(src/core)
 add_subdirectory(src/kernel)
+
+if (NOT PROFILE MATCHES UNIT_TEST)
+    add_custom_target(myos
+            DEPENDS kernel
+            )
+endif ()

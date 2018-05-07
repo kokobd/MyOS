@@ -1,8 +1,8 @@
 #pragma once
 
-#include <myos/kernel/common/Queue.hpp>
 #include <myos/kernel/filesystem/FileSystem.hpp>
 #include <myos/kernel/cpu/InterruptHandler.hpp>
+#include <myos/core/collections/Queue.hpp>
 
 namespace myos::kernel::ram {
 class PageFrameManager;
@@ -34,7 +34,7 @@ public:
 
 private:
     Process *running;
-    common::Queue<Process *> ready;
+    myos::core::collections::Queue<Process *> ready;
 
     ClockInterruptHandler clockInterruptHandler;
 };

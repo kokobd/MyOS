@@ -1,7 +1,6 @@
 #pragma once
 
 #include <cstddef>
-#include <myos/kernel/common/Function.hpp>
 #include <myos/kernel/cpu/InterruptHandler.hpp>
 #include <myos/kernel/filesystem/SectorReader.hpp>
 

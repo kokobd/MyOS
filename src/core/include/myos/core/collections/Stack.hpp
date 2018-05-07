@@ -1,7 +1,7 @@
 #pragma once
 
 #include <cstddef>
-namespace myos::base::collections {
+namespace myos::core::collections {
 
 template<typename E, size_t MAX_SIZE = 256>
 class Stack {

@@ -1,6 +1,6 @@
 #pragma once
 
-#include <myos/kernel/common/Stack.hpp>
+#include <myos/core/collections/Stack.hpp>
 #include <myos/kernel/cpu/RegisterState.hpp>
 #include <myos/kernel/ram/VirtualMemoryMapping.hpp>
 #include <myos/kernel/ram/Memory.hpp>
@@ -24,7 +24,7 @@ public:
 
 private:
     cpu::RegisterState registerState;
-    common::Stack<void *> pageFrames;
+    core::collections::Stack<void *> pageFrames;
     ram::VirtualMemoryMapping virtualMemoryMapping;
 
     void loadELF32Image(const char *fileName);

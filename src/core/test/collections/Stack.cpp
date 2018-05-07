@@ -2,7 +2,7 @@
 #include <myos/core/collections/Stack.hpp>
 #include <cstdint>
 
-using myos::base::collections::Stack;
+using myos::core::collections::Stack;
 
 TEST_CASE("collections::Stack") {
     constexpr size_t MAX_SIZE = 32;

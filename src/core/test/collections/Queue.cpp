@@ -2,7 +2,7 @@
 #include <myos/core/collections/Queue.hpp>
 #include <cstdint>
 
-using myos::base::collections::Queue;
+using myos::core::collections::Queue;
 
 TEST_CASE("collections::Queue") {
     constexpr size_t MAX_SIZE = 32;
