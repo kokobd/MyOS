@@ -73,13 +73,6 @@ if (NOT PROFILE MATCHES UNIT_TEST)
             include/myos/kernel/filesystem/FileSystem.hpp
             src/filesystem/FileSystem.cpp
             include/myos/kernel/filesystem/SectorReader.hpp
-
-            src/test/TestMain.hpp
-            src/test/TestMain.cpp
-            src/test/TestBase.hpp
-            src/test/TestBase.cpp
-            src/test/ram/HeapTest.hpp
-            src/test/ram/HeapTest.cpp
             )
 
     target_compile_options(kernel
