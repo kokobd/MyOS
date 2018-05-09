@@ -2,9 +2,8 @@
 
 #include <cstddef>
 #include <cstdint>
-#include "Heap.hpp"
 #include "VirtualMemoryMapping.hpp"
-#include "PageFrameManager.hpp"
+#include <myos/kernel/ram/PageFrameManager.hpp>
 
 namespace myos::kernel::ram {
 
@@ -18,8 +17,6 @@ class Memory {
 public:
     Memory();
 
-    Heap &getKernelHeap() { return kernelHeap; }
-
     void *allocatePageFrame();
 
     void deallocatePageFrame(void *pageFrame);
@@ -27,7 +24,6 @@ public:
 private:
     void *kernelBegin;
     void *kernelEnd;
-    Heap kernelHeap;
 
     PageFrameManager pageFrameManager;
     VirtualMemoryMapping identityMapping;

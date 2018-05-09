@@ -2,11 +2,6 @@ project(myos-system-kernel LANGUAGES CXX)
 
 set(CMAKE_CXX_STANDARD 11)
 
-enable_language(ASM_NASM)
-
-set(CMAKE_ASM_NASM_OBJECT_FORMAT elf32)
-set(CMAKE_ASM_NASM_COMPILE_OBJECT "<CMAKE_ASM_NASM_COMPILER> <INCLUDES> <FLAGS> -f elf32 -o <OBJECT> <SOURCE>")
-
 set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -DDEBUG")
 
 add_library(kernel-lib STATIC
@@ -21,58 +16,43 @@ target_include_directories(kernel-lib
         )
 
 if (NOT PROFILE MATCHES UNIT_TEST)
+    enable_language(ASM_NASM)
+
+    set(CMAKE_ASM_NASM_OBJECT_FORMAT elf32)
+    set(CMAKE_ASM_NASM_COMPILE_OBJECT "<CMAKE_ASM_NASM_COMPILER> <INCLUDES> <FLAGS> -f elf32 -o <OBJECT> <SOURCE>")
+
     add_executable(kernel
-            include/myos/kernel/debug/trace.hpp
+            exe/multiboot.asm
+            exe/multiboot2.asm
+            exe/kernel_start.asm
+            exe/main.cpp
 
-            src/multiboot.asm
-            src/multiboot2.asm
-            src/kernel_start.asm
-            src/main.cpp
+            exe_include/myos/kernel/Kernel.hpp
+            exe/Kernel.cpp
 
-            include/myos/kernel/Kernel.hpp
-            src/Kernel.cpp
+            exe_include/myos/kernel/SysCall.hpp
+            exe/SysCall.cpp
 
-            include/myos/kernel/SysCall.hpp
-            src/SysCall.cpp
+            exe_include/myos/kernel/cpu/CPU.hpp
+            exe/cpu/CPU.cpp
+            exe/cpu/8259A.asm
+            exe_include/myos/kernel/cpu/InterryptType.hpp
+            exe_include/myos/kernel/cpu/RegisterState.hpp
+            exe_include/myos/kernel/cpu/InterruptHandler.hpp
+            exe_include/myos/kernel/cpu/IDT.hpp
+            exe/cpu/IDT.cpp
+            exe/cpu/int.asm
+            exe/cpu/cpu.asm
 
-            include/myos/kernel/cpu/CPU.hpp
-            src/cpu/CPU.cpp
-            src/cpu/8259A.asm
-            include/myos/kernel/cpu/InterryptType.hpp
-            include/myos/kernel/cpu/RegisterState.hpp
-            include/myos/kernel/cpu/InterruptHandler.hpp
-            include/myos/kernel/cpu/IDT.hpp
-            src/cpu/IDT.cpp
-            src/cpu/int.asm
-            src/cpu/cpu.asm
+            exe_include/myos/kernel/ram/Memory.hpp
+            exe/ram/Memory.cpp
+            exe_include/myos/kernel/ram/VirtualMemoryMapping.hpp
+            exe/ram/VirtualMemoryMapping.cpp
 
-            include/myos/kernel/ram/Memory.hpp
-            src/ram/Memory.cpp
-            include/myos/kernel/ram/Heap.hpp
-            src/ram/Heap.cpp
-            include/myos/kernel/ram/VirtualMemoryMapping.hpp
-            src/ram/VirtualMemoryMapping.cpp
-            include/myos/kernel/ram/PageFrameManager.hpp
-            src/ram/PageFrameManager.cpp
-            src/ram/util.hpp
-
-            include/myos/kernel/process/Process.hpp
-            src/process/Process.cpp
-            include/myos/kernel/process/Scheduler.hpp
-            src/process/Scheduler.cpp
-
-            include/myos/kernel/drivers/util.hpp
-            src/drivers/util.cpp
-            include/myos/kernel/drivers/Floppy.hpp
-            src/drivers/Floppy.cpp
-            include/myos/kernel/drivers/VGAScreen.hpp
-            src/drivers/VGAScreen.cpp
-            include/myos/kernel/drivers/Keyboard.hpp
-            src/drivers/Keyboard.cpp
-
-            include/myos/kernel/filesystem/FileSystem.hpp
-            src/filesystem/FileSystem.cpp
-            include/myos/kernel/filesystem/SectorReader.hpp
+            exe_include/myos/kernel/process/Process.hpp
+            exe/process/Process.cpp
+            exe_include/myos/kernel/process/Scheduler.hpp
+            exe/process/Scheduler.cpp
             )
 
     target_compile_options(kernel
@@ -80,7 +60,7 @@ if (NOT PROFILE MATCHES UNIT_TEST)
             )
 
     target_include_directories(kernel
-            PRIVATE include
+            PRIVATE exe_include
             )
 
     set_target_properties(kernel PROPERTIES

@@ -4,7 +4,6 @@
 #include <myos/kernel/cpu/RegisterState.hpp>
 #include <myos/kernel/ram/VirtualMemoryMapping.hpp>
 #include <myos/kernel/ram/Memory.hpp>
-#include <myos/kernel/filesystem/FileSystem.hpp>
 
 namespace myos::kernel::process {
 

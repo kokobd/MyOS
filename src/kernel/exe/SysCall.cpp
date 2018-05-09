@@ -4,8 +4,7 @@
 
 namespace myos::kernel {
 
-SysCall::SysCall(drivers::VGAScreen &vgaScreen)
-        : handler(vgaScreen) {
+SysCall::SysCall() {
     Kernel::getCurrentKernel().getCPU().registerInterruptHandler(
             cpu::InterruptType::SYSTEM_CALL, &handler);
 }
@@ -28,10 +27,6 @@ uint32_t SysCall::InterruptHandlerImpl::runSysCall(
     uint32_t ret = 0xFFFFFFFF;
     switch (id) {
         case 0:
-            if (vgaScreen.setChar(arg1, arg2, static_cast<char>(arg3)))
-                ret = 0;
-            else
-                ret = 1;
             break;
         default:
             break;
@@ -39,7 +34,6 @@ uint32_t SysCall::InterruptHandlerImpl::runSysCall(
     return ret;
 }
 
-SysCall::InterruptHandlerImpl::InterruptHandlerImpl(drivers::VGAScreen &vgaScreen)
-        : vgaScreen(vgaScreen) {}
+SysCall::InterruptHandlerImpl::InterruptHandlerImpl() {}
 
 }

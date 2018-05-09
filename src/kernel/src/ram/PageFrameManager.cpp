@@ -1,5 +1,7 @@
 #include <myos/kernel/ram/PageFrameManager.hpp>
-#include "util.hpp"
+#include <myos/core/memory.hpp>
+
+using myos::core::memory::alignUp;
 
 namespace myos::kernel::ram {
 
@@ -13,7 +15,7 @@ PageFrameManager::PageFrameManager(
         ++bits;
         mask = mask << 1;
     }
-    start = util::align(bits, start); // align to 4KiB
+    start = alignUp(bits, start); // align to 4KiB
     this->start = reinterpret_cast<uintptr_t>(start);
 }
 

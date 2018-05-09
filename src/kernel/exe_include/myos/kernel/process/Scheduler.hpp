@@ -1,6 +1,5 @@
 #pragma once
 
-#include <myos/kernel/filesystem/FileSystem.hpp>
 #include <myos/kernel/cpu/InterruptHandler.hpp>
 #include <myos/core/collections/Queue.hpp>
 
