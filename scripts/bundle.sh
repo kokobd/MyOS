@@ -3,6 +3,7 @@
 MODULES=()
 
 set -o errexit
+set -o verbose
 
 if [ -z "$1" ]; then
     echo "Target directory must not be empty"
@@ -14,7 +15,7 @@ tar x -C scripts/bin -f scripts/bin/myos.tar.gz
 BUILD_DIR="$1"
 
 rm -f "${BUILD_DIR}/myos.img"
-cp scripts/bin/myos.img "${BUILD_DIR}"
+mv scripts/bin/myos.img "${BUILD_DIR}"
 cp scripts/grub.cfg "${BUILD_DIR}"
 
 cd "${BUILD_DIR}"
