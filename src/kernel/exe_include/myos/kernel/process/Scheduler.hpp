@@ -3,10 +3,6 @@
 #include <myos/kernel/cpu/InterruptHandler.hpp>
 #include <myos/core/collections/Queue.hpp>
 
-namespace myos::kernel::ram {
-class PageFrameManager;
-}
-
 namespace myos::kernel::process {
 
 class Process;

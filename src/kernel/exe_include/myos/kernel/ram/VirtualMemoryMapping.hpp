@@ -2,6 +2,7 @@
 
 #include <cstdint>
 #include <cstddef>
+#include <myos/core/collections/Stack.hpp>
 
 namespace myos::kernel::ram {
 
@@ -24,6 +25,8 @@ public:
      */
     VirtualMemoryMapping();
 
+    VirtualMemoryMapping(const VirtualMemoryMapping &that);
+
     ~VirtualMemoryMapping();
 
     /**
@@ -36,11 +39,11 @@ public:
      * Note that both parameters must be aligned to
      * the size of a page frame, and a whole page will
      * be mapped.
-     * @param address the virtual address
-     * @param pageFrame the physical address
+     * @param vaddr the virtual address
+     * @param paddr the physical address
      * @return whether it succeeded.
      */
-    bool set(void *address, void *pageFrame);
+    bool set(void *vaddr, void *paddr);
 
     /**
      * Tells the CPU to use the current memory mapping.
@@ -86,6 +89,8 @@ private:
     uint8_t *memory;
     PageDirectoryEntry *pageDirectoryTable;
     PageTableEntry *pageTable;
+
+    core::collections::Stack<void *> pages;
 };
 
 }

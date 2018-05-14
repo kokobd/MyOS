@@ -23,6 +23,8 @@ public:
         free();
     }
 
+    ArrayList(size_t initialSize, const E &initialValue);
+
     template<typename T>
     friend bool operator==(const ArrayList<T> &lhs, const ArrayList<T> &rhs);
 
@@ -61,6 +63,7 @@ public:
     const E &last() const {
         return data[size_ - 1];
     }
+
 private:
     E *data;
     size_t capacity;
@@ -142,6 +145,15 @@ bool operator==(const ArrayList<E> &lhs, const ArrayList<E> &rhs) {
     }
 
     return true;
+}
+
+template<typename E>
+ArrayList<E>::ArrayList(size_t initialSize, const E &initialValue)
+        : capacity(initialSize + 1), size_(initialSize) {
+    data = new E[capacity];
+    for (size_t i = 0; i != size_; ++i) {
+        data[i] = initialValue;
+    }
 }
 
 }

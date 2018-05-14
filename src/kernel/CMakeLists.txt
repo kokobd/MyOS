@@ -5,8 +5,9 @@ set(CMAKE_CXX_STANDARD 11)
 set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -DDEBUG")
 
 add_library(kernel-lib STATIC
-        src/ram/PageFrameManager.cpp
-        include/myos/kernel/ram/PageFrameManager.hpp
+        src/ram/PageManager.cpp
+        include/myos/kernel/ram/PageManager.hpp
+        include/myos/kernel/ram/page.hpp
         )
 target_link_libraries(kernel-lib
         core

@@ -23,7 +23,7 @@ VirtualMemoryMapping::VirtualMemoryMapping() {
         pageDirectoryTable[i].pageSize = false;
         pageDirectoryTable[i].globalPage = false;
         pageDirectoryTable[i].pageTableAddress =
-                (reinterpret_cast<uint32_t>(pageTable) >> 12) + i;
+                (reinterpret_cast<uint32_t>(pageTable) >> 12u) + i;
     }
     memset(pageTable, 0, 4096 * 2);
     for (uint32_t i = 0; i < 2048; ++i) {
@@ -37,9 +37,9 @@ VirtualMemoryMapping::VirtualMemoryMapping() {
     }
 }
 
-bool VirtualMemoryMapping::set(void *address, void *pageFrame) {
-    uint32_t source_ = reinterpret_cast<uint32_t>(address) >> 12;
-    uint32_t target_ = reinterpret_cast<uint32_t>(pageFrame) >> 12;
+bool VirtualMemoryMapping::set(void *vaddr, void *paddr) {
+    uint32_t source_ = reinterpret_cast<uint32_t>(vaddr) >> 12u;
+    uint32_t target_ = reinterpret_cast<uint32_t>(paddr) >> 12u;
     if (source_ >= 2048) {
         return false;
     }
@@ -66,6 +66,10 @@ void VirtualMemoryMapping::enablePaging() {
     "mov cr0, eax\n"
     : : : "eax"
     );
+}
+
+VirtualMemoryMapping::VirtualMemoryMapping(const VirtualMemoryMapping &that) {
+
 }
 
 }

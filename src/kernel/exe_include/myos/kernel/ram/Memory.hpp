@@ -3,7 +3,7 @@
 #include <cstddef>
 #include <cstdint>
 #include "VirtualMemoryMapping.hpp"
-#include <myos/kernel/ram/PageFrameManager.hpp>
+#include <myos/kernel/ram/PageManager.hpp>
 
 namespace myos::kernel::ram {
 
@@ -17,15 +17,11 @@ class Memory {
 public:
     Memory();
 
-    void *allocatePageFrame();
-
-    void deallocatePageFrame(void *pageFrame);
-
 private:
     void *kernelBegin;
     void *kernelEnd;
 
-    PageFrameManager pageFrameManager;
+    PageManager pageManager;
     VirtualMemoryMapping identityMapping;
 };
 

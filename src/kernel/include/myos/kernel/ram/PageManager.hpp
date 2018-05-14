@@ -2,6 +2,7 @@
 
 #include <cstddef>
 #include <myos/core/collections/BitSet.hpp>
+#include <myos/core/collections/ArrayList.hpp>
 
 namespace myos::kernel::ram {
 
@@ -10,7 +11,7 @@ namespace myos::kernel::ram {
  * A PageFrameManager merely records usage statistics about
  * page frames, it doesn't directly access them.
  */
-class PageFrameManager {
+class PageManager {
 public:
     /**
      * Construct a PageFrameManager
@@ -19,32 +20,37 @@ public:
      * @param pageFrameSize size of each page frame
      * @param count (maximum) number of page frames
      */
-    explicit PageFrameManager(void *start, size_t pageFrameSize, size_t count);
+    explicit PageManager(void *start, size_t count);
 
     /**
      * Allocate a page frame for use by user programs.
      * @return pointer to the beginning of a page frame,
      * nullptr if failed.
      */
-    void *allocatePageFrame();
+    void *newPage();
+
+    uint32_t &processCount(void *page);
+
+    const uint32_t &processCount(void *page) const;
 
     /**
-     * Deallocate the given page frame.
-     * @param frame the page frame to deallocate.
+     * Subtract the number of processes using a particular page
+     * @param physicalAddress the page frame to deallocate.
      */
-    void deallocatePageFrame(void *frame);
+    void deletePage(void *physicalAddress);
 
 private:
-    core::collections::BitSet frameOccupied;
+    // Each element is the number of processes sharing a page.
+    core::collections::ArrayList<uint32_t> counters;
 
     uintptr_t start;
-
-    size_t pageFrameSize;
 
     /**
      * Convert from index of page frame to physical memory address.
      */
-    void *fromIndex(size_t index);
+    void *indexToAddress(size_t index) const;
+
+    size_t addressToIndex(void *address) const;
 };
 
 }

@@ -23,12 +23,7 @@ public:
 
 private:
     cpu::RegisterState registerState;
-    core::collections::Stack<void *> pageFrames;
     ram::VirtualMemoryMapping virtualMemoryMapping;
-
-    void loadELF32Image(const char *fileName);
-
-    void setupStack();
 };
 
 }
