@@ -40,7 +40,7 @@ private:
     void assignValue(const E &value);
 
     template<typename U>
-    friend Maybe<U> fmap(const Maybe<U> &maybe, Function<U(const U &)> &f);
+    friend Maybe<U> fmap(const Maybe<U> &maybe, Function<U(const U &)> f);
 };
 
 template<typename E>
@@ -114,7 +114,7 @@ void Maybe<E>::match(Function<void(const E &)> &onJust, Function<void()> &onNoth
 }
 
 template<typename E>
-Maybe<E> fmap(const Maybe<E> &maybe, Function<E(const E &)> &f) {
+Maybe<E> fmap(const Maybe<E> &maybe, Function<E(const E &)> f) {
     return maybe.present ?
            Maybe<E>::just(f(maybe.dataToValue())) :
            Maybe<E>::nothing();

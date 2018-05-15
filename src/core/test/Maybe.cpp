@@ -15,8 +15,7 @@ TEST_CASE("Maybe", "[unit]") {
     m2 = m1;
     REQUIRE(m2.isJust());
 
-    Function<int32_t(const int32_t &x)> f1 = [](const int32_t &x) -> int32_t { return x + 2; };
-    m2 = fmap(m2, f1);
+    m2 = fmap<int32_t>(m2, [](const int32_t &x) -> int32_t { return x + 2; });
 
     Function<void(const int32_t &x)> onJust = [](const int32_t &x) {
         REQUIRE(x == 14);

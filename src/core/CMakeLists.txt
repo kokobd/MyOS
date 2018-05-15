@@ -27,6 +27,7 @@ set(LIB_SOURCES
         include/myos/core/cstring
         include/myos/core/stream/InputStream.hpp
         include/myos/core/stream/ArrayInputStream.hpp
+        include/myos/core/utility.hpp
         )
 
 set(TEST_SOURCES
@@ -43,6 +44,7 @@ set(TEST_SOURCES
         test/Function.cpp
         test/String.cpp
         test/stream/ArrayInputStream.cpp
+        test/shared_ptr.cpp
         )
 
 if (PROFILE MATCHES UNIT_TEST)
