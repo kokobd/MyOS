@@ -72,6 +72,10 @@ public:
 
     ~shared_ptr();
 
+    friend bool operator==(const shared_ptr<T> &lhs, const shared_ptr<T> &rhs) {
+        return lhs.obj == rhs.obj;
+    }
+
     explicit operator bool() const {
         return refCount != nullptr;
     }
