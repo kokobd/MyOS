@@ -44,7 +44,7 @@ set(TEST_SOURCES
         test/Function.cpp
         test/String.cpp
         test/stream/ArrayInputStream.cpp
-        test/shared_ptr.cpp
+        test/smart_pointers.cpp
         )
 
 if (PROFILE MATCHES UNIT_TEST)

@@ -3,6 +3,7 @@
 #include <myos/core/utility.hpp>
 
 using myos::core::memory::shared_ptr;
+using myos::core::memory::unique_ptr;
 using myos::core::utility::move;
 
 namespace {
@@ -25,24 +26,29 @@ public:
         return 42;
     }
 
+    int getAnswer() const {
+        return 43;
+    }
+
 private:
     Stat &stat;
 };
 
 }
 
-TEST_CASE("memory::shared_ptr", "[unit]") {
-    SECTION("destructor") {
-        Demo::Stat s1, s2;
-        REQUIRE_FALSE(s1.dtor_called);
-        REQUIRE_FALSE(s2.dtor_called);
+TEST_CASE("memory::smart_pointers", "[unit]") {
+    Demo::Stat s1, s2;
+    REQUIRE_FALSE(s1.dtor_called);
+    REQUIRE_FALSE(s2.dtor_called);
 
+    SECTION("shared_ptr") {
         SECTION("copy ctor") {
             {
                 shared_ptr<Demo> p1(new Demo(s1));
                 {
                     shared_ptr<Demo> p2(p1);
                     REQUIRE(&(*p1) == &(*p2));
+                    REQUIRE(p1.get() == p2.get());
                 }
                 REQUIRE_FALSE(s1.dtor_called);
             }
@@ -55,6 +61,7 @@ TEST_CASE("memory::shared_ptr", "[unit]") {
                 REQUIRE_FALSE(s1.dtor_called);
                 REQUIRE_FALSE(s2.dtor_called);
                 p2 = p1;
+                REQUIRE(p1.get() == p2.get());
                 REQUIRE(s2.dtor_called);
             }
             REQUIRE(s1.dtor_called);
@@ -79,6 +86,25 @@ TEST_CASE("memory::shared_ptr", "[unit]") {
             shared_ptr<Demo> p1(new Demo(s1));
             REQUIRE((*p1).getAnswer() == 42);
             REQUIRE(p1->getAnswer() == 42);
+            const shared_ptr<Demo> p2(new Demo(s2));
+            REQUIRE((*p2).getAnswer() == 43);
+            REQUIRE(p2->getAnswer() == 43);
         }
+    }
+
+    SECTION("convert unique_ptr to shared_ptr") {
+        Demo *raw_obj = new Demo(s1);
+        unique_ptr<Demo> p1(raw_obj);
+        REQUIRE(p1 != nullptr);
+        shared_ptr<Demo> p2(move(p1));
+        REQUIRE(p1 == nullptr);
+        REQUIRE(p2.get() == raw_obj);
+    }
+
+    SECTION("unique_ptr frees its resource") {
+        {
+            unique_ptr<Demo> p1(new Demo(s1));
+        }
+        REQUIRE(s1.dtor_called);
     }
 }
