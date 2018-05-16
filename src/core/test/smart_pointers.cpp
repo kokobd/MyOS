@@ -4,6 +4,7 @@
 
 using myos::core::memory::shared_ptr;
 using myos::core::memory::unique_ptr;
+//using myos::core::memory::weak_ptr;
 using myos::core::utility::move;
 
 namespace {
@@ -45,12 +46,15 @@ TEST_CASE("memory::smart_pointers", "[unit]") {
         SECTION("copy ctor") {
             {
                 shared_ptr<Demo> p1(new Demo(s1));
+                REQUIRE(p1.use_count() == 1);
                 {
                     shared_ptr<Demo> p2(p1);
+                    REQUIRE(p1.use_count() == 2);
+                    REQUIRE(p2.use_count() == 2);
                     REQUIRE(&(*p1) == &(*p2));
                     REQUIRE(p1.get() == p2.get());
                 }
-                REQUIRE_FALSE(s1.dtor_called);
+                REQUIRE(!s1.dtor_called);
             }
             REQUIRE(s1.dtor_called);
         }
@@ -70,6 +74,8 @@ TEST_CASE("memory::smart_pointers", "[unit]") {
             shared_ptr<Demo> p1(new Demo(s1));
             {
                 shared_ptr<Demo> p2(move(p1));
+                REQUIRE(p1.use_count() == 0);
+                REQUIRE(p2.use_count() == 1);
             }
             REQUIRE(s1.dtor_called);
         }
@@ -107,4 +113,19 @@ TEST_CASE("memory::smart_pointers", "[unit]") {
         }
         REQUIRE(s1.dtor_called);
     }
+
+//    SECTION("weak_ptr") {
+//        weak_ptr<Demo> wp1;
+//        {
+//            shared_ptr<Demo> p1(new Demo(s1));
+//            wp1 = p1;
+//            shared_ptr<Demo> p2 = wp1.lock();
+//            REQUIRE(p2.use_count() == 2);
+//            REQUIRE(p1.use_count() == 2);
+//            REQUIRE(p1 == p2);
+//        }
+//        CHECK(s1.dtor_called);
+//        CHECK(wp1.expired());
+//        CHECK(wp1.use_count() == 0);
+//    }
 }

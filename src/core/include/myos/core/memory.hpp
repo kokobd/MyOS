@@ -133,28 +133,127 @@ private:
     T *obj;
 };
 
+template<typename Y>
+class weak_ptr;
+
 template<typename T>
 class shared_ptr {
+    template<typename Y>
+    friend
+    class weak_ptr;
+
 public:
-    explicit shared_ptr(T *obj);
+    template<typename Y>
+    explicit shared_ptr(Y *obj)
+            : obj(obj) {
+        refCount = new uint32_t(1);
+    }
 
-    shared_ptr() noexcept;
+    constexpr shared_ptr() noexcept
+            : obj(nullptr), refCount(nullptr) {}
 
-    shared_ptr(nullptr_t) noexcept;
+    constexpr shared_ptr(nullptr_t) noexcept
+            : obj(nullptr), refCount(nullptr) {}
 
-    shared_ptr(const shared_ptr<T> &that);
+private:
+    template<typename Y>
+    void copy(const shared_ptr<Y> &that) {
+        obj = that.obj;
+        refCount = that.refCount;
+        if (refCount)
+            ++(*refCount);
+    }
 
-    shared_ptr<T> &operator=(const shared_ptr<T> &rhs);
+public:
+    template<typename Y>
+    shared_ptr(const shared_ptr<Y> &that) {
+        copy(that);
+    }
 
-    shared_ptr(shared_ptr &&that) noexcept;
+    shared_ptr(const shared_ptr<T> &that) {
+        copy(that);
+    }
 
-    shared_ptr<T> &operator=(shared_ptr<T> &&rhs) noexcept;
+private:
+    template<typename Y>
+    void copyAssignment(const shared_ptr<Y> &that) {
+        if (this != &that) {
+            free();
+            copy(that);
+        }
+    }
 
-    ~shared_ptr();
+public:
+    template<typename Y>
+    shared_ptr<T> &operator=(const shared_ptr<Y> &rhs) {
+        copyAssignment(rhs);
+        return *this;
+    }
 
-    shared_ptr(unique_ptr<T> &&rhs);
+    shared_ptr<T> &operator=(const shared_ptr<T> &rhs) {
+        copyAssignment(rhs);
+        return *this;
+    }
 
-    shared_ptr<T> &operator=(unique_ptr<T> &&rhs);
+private:
+    template<typename Y>
+    void move(shared_ptr<Y> &&that) noexcept {
+        if (this != &that) {
+            obj = that.obj;
+            refCount = that.refCount;
+            that.obj = nullptr;
+            that.refCount = nullptr;
+        }
+    }
+
+public:
+    template<typename Y>
+    shared_ptr(shared_ptr<Y> &&that) noexcept {
+        move(utility::move(that));
+    }
+
+    shared_ptr(shared_ptr<T> &&that) noexcept {
+        move(utility::move(that));
+    }
+
+private:
+    template<typename Y>
+    void moveAssignment(shared_ptr<Y> &&that) noexcept {
+        if (this != &that) {
+            free();
+            move(utility::move(that));
+        }
+    }
+
+public:
+    template<typename Y>
+    shared_ptr<T> &operator=(shared_ptr<Y> &&rhs) noexcept {
+        moveAssignment(utility::move(rhs));
+        return *this;
+    }
+
+    shared_ptr<T> &operator=(shared_ptr<T> &&rhs) noexcept {
+        moveAssignment(utility::move(rhs));
+        return *this;
+    }
+
+public:
+    ~shared_ptr() {
+        free();
+    }
+
+    template<typename Y>
+    shared_ptr(unique_ptr<Y> &&rhs) : obj(rhs.release()) {
+        refCount = new uint32_t(1);
+    }
+
+    template<typename Y>
+    shared_ptr<T> &operator=(unique_ptr<Y> &&rhs) {
+        free();
+        obj = rhs.release();
+        refCount = new uint32_t(1);
+        return *this;
+    }
 
     friend bool operator==(const shared_ptr<T> &lhs, const shared_ptr<T> &rhs) {
         return lhs.obj == rhs.obj;
@@ -192,6 +291,10 @@ public:
         return obj;
     }
 
+    uint32_t use_count() const {
+        return refCount ? *refCount : 0;
+    }
+
 private:
     void free();
 
@@ -200,51 +303,51 @@ private:
     uint32_t *refCount;
 };
 
-template<typename T>
-shared_ptr<T>::shared_ptr(T *obj)
-        : obj(obj) {
-    refCount = new uint32_t(1);
-}
-
-template<typename T>
-shared_ptr<T>::~shared_ptr() {
-    free();
-}
-
-template<typename T>
-shared_ptr<T>::shared_ptr(const shared_ptr<T> &that)
-        : obj(that.obj), refCount(that.refCount) {
-    ++(*refCount);
-}
-
-template<typename T>
-shared_ptr<T>::shared_ptr(shared_ptr<T> &&that) noexcept
-        : obj(that.obj), refCount(that.refCount) {
-    that.refCount = nullptr;
-    that.obj = nullptr;
-}
-
-template<typename T>
-shared_ptr<T> &shared_ptr<T>::operator=(const shared_ptr<T> &rhs) {
-    if (this != &rhs) {
-        free();
-        this->obj = rhs.obj;
-        this->refCount = rhs.refCount;
-        ++(*refCount);
-    }
-    return *this;
-}
-
-template<typename T>
-shared_ptr<T> &shared_ptr<T>::operator=(shared_ptr<T> &&rhs) noexcept {
-    if (this != &rhs) {
-        free();
-        obj = rhs.obj;
-        refCount = rhs.refCount;
-        ++(*refCount);
-    }
-    return *this;
-}
+//template<typename T>
+//class weak_ptr {
+//public:
+//    constexpr weak_ptr() : obj(nullptr), refCount(nullptr) {}
+//
+//    constexpr weak_ptr(nullptr_t) : weak_ptr() {}
+//
+//    weak_ptr(const shared_ptr<T> &pt)
+//            : obj(pt.obj), refCount(pt.refCount) {}
+//
+//public:
+//    weak_ptr(const weak_ptr<T> &rhs) = default;
+//
+//    weak_ptr<T> &operator=(const weak_ptr<T> &rhs) = default;
+//
+//    weak_ptr(weak_ptr<T> &&rhs) noexcept = default;
+//
+//    weak_ptr<T> &operator=(weak_ptr<T> &&rhs) noexcept = default;
+//
+//    ~weak_ptr() = default;
+//
+//public:
+//    uint32_t use_count() const {
+//        return refCount ? *refCount : 0;
+//    }
+//
+//    bool expired() const {
+//        return use_count() == 0;
+//    }
+//
+//    shared_ptr<T> lock() const noexcept {
+//        if (expired()) {
+//            return nullptr;
+//        }
+//        shared_ptr<T> ret;
+//        ret.obj = obj;
+//        ret.refCount = refCount;
+//        ++(*refCount);
+//        return ret;
+//    }
+//
+//private:
+//    T *obj;
+//    uint32_t *refCount;
+//};
 
 template<typename T>
 void shared_ptr<T>::free() {
@@ -255,28 +358,6 @@ void shared_ptr<T>::free() {
             delete refCount;
         }
     }
-}
-
-template<typename T>
-shared_ptr<T>::shared_ptr() noexcept
-        : obj(nullptr), refCount(nullptr) {}
-
-template<typename T>
-shared_ptr<T>::shared_ptr(nullptr_t) noexcept
-        : shared_ptr() {}
-
-template<typename T>
-shared_ptr<T> &shared_ptr<T>::operator=(unique_ptr<T> &&rhs) {
-    free();
-    obj = rhs.release();
-    refCount = new uint32_t(1);
-    return *this;
-}
-
-template<typename T>
-shared_ptr<T>::shared_ptr(unique_ptr<T> &&rhs)
-        : obj(rhs.release()) {
-    refCount = new uint32_t(1);
 }
 
 }
