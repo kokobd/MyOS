@@ -28,6 +28,9 @@ set(LIB_SOURCES
         include/myos/core/stream/InputStream.hpp
         include/myos/core/stream/ArrayInputStream.hpp
         include/myos/core/utility.hpp
+        include/myos/core/memory/smart_pointers/shared_ptr.hpp
+        include/myos/core/memory/smart_pointers/unique_ptr.hpp
+        include/myos/core/memory/smart_pointers/weak_ptr.hpp
         )
 
 set(TEST_SOURCES
