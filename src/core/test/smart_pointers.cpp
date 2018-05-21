@@ -37,6 +37,11 @@ private:
     Stat &stat;
 };
 
+class Sub : public Demo {
+public:
+    Sub(Stat &stat) : Demo(stat) {}
+};
+
 }
 
 TEST_CASE("memory::smart_pointers", "[unit]") {
@@ -109,11 +114,16 @@ TEST_CASE("memory::smart_pointers", "[unit]") {
         REQUIRE(p2.get() == raw_obj);
     }
 
-    SECTION("unique_ptr frees its resource") {
+    SECTION("unique_ptr") {
+        Demo::Stat s3;
         {
             unique_ptr<Demo> p1(new Demo(s1));
+            unique_ptr<Demo> p2(new Sub(s2));
+            unique_ptr<Demo> p3 = unique_ptr<Sub>(new Sub(s3));
         }
         REQUIRE(s1.dtor_called);
+        REQUIRE(s2.dtor_called);
+        REQUIRE(s3.dtor_called);
     }
 
     SECTION("weak_ptr") {

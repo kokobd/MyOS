@@ -1,6 +1,7 @@
 #pragma once
 
 #include <cstddef>
+#include <myos/core/utility.hpp>
 
 namespace myos::core::memory::smart_pointers {
 
@@ -11,28 +12,58 @@ template<typename T>
 class unique_ptr {
     friend class shared_ptr<T>;
 
+    template<typename Y>
+    friend
+    class unique_ptr;
+
 public:
     constexpr unique_ptr() noexcept
             : unique_ptr(nullptr) {}
 
     constexpr unique_ptr(nullptr_t) noexcept : obj(nullptr) {}
 
-    unique_ptr(T *obj) noexcept : obj(obj) {}
+    template<typename Y>
+    explicit unique_ptr(Y *obj) noexcept : obj(obj) {}
 
     unique_ptr(const unique_ptr<T> &) = delete;
 
     unique_ptr<T> &operator=(const unique_ptr<T> &) = delete;
 
-    unique_ptr(unique_ptr<T> &&that) noexcept
-            : obj(that.obj) {
+private:
+    template<typename Y>
+    void move(unique_ptr<Y> &&that) noexcept {
+        obj = that.obj;
         that.obj = nullptr;
     }
 
-    unique_ptr<T> &operator=(unique_ptr<T> &&that) noexcept {
+public:
+    template<typename Y>
+    unique_ptr(unique_ptr<Y> &&that) noexcept {
+        move(utility::move(that));
+    }
+
+    unique_ptr(unique_ptr<T> &&that) noexcept {
+        move(utility::move(that));
+    }
+
+private:
+    template<typename Y>
+    void moveAssignment(unique_ptr<Y> &&that) noexcept {
         if (this != &that) {
-            delete obj;
+            release();
             that.obj = nullptr;
         }
+    }
+
+public:
+    template<typename Y>
+    unique_ptr<T> &operator=(unique_ptr<Y> &&that) noexcept {
+        moveAssignment(utility::move(that));
+        return *this;
+    }
+
+    unique_ptr<T> &operator=(unique_ptr<T> &&that) noexcept {
+        moveAssignment(utility::move(that));
         return *this;
     }
 

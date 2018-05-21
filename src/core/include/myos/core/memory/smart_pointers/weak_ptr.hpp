@@ -8,6 +8,10 @@ namespace myos::core::memory::smart_pointers {
 
 template<typename T>
 class weak_ptr {
+    template<typename Y>
+    friend
+    class weak_ptr;
+
 public:
     constexpr weak_ptr() : obj(nullptr), refCounter(nullptr) {}
 

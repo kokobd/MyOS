@@ -16,6 +16,10 @@ class shared_ptr {
     friend
     class weak_ptr;
 
+    template<typename Y>
+    friend
+    class shared_ptr;
+
     class Counter {
     public:
     public:
