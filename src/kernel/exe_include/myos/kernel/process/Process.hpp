@@ -2,8 +2,9 @@
 
 #include <myos/core/collections/Stack.hpp>
 #include <myos/kernel/cpu/RegisterState.hpp>
-#include <myos/kernel/ram/VirtualMemoryMapping.hpp>
 #include <myos/kernel/ram/Memory.hpp>
+#include <myos/kernel/ram/IPageTable.hpp>
+#include <myos/kernel/ram/Intel386PageTable.hpp>
 
 namespace myos::kernel::process {
 
@@ -23,7 +24,7 @@ public:
 
 private:
     cpu::RegisterState registerState;
-    ram::VirtualMemoryMapping virtualMemoryMapping;
+    ram::IPageTable<ram::Intel386PageTable> pageTable;
 };
 
 }

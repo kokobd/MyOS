@@ -47,8 +47,9 @@ if (NOT PROFILE MATCHES UNIT_TEST)
 
             exe_include/myos/kernel/ram/Memory.hpp
             exe/ram/Memory.cpp
-            exe_include/myos/kernel/ram/VirtualMemoryMapping.hpp
-            exe/ram/VirtualMemoryMapping.cpp
+            exe_include/myos/kernel/ram/IPageTable.hpp
+            exe_include/myos/kernel/ram/Intel386PageTable.hpp
+            exe/ram/Intel386PageTable.cpp
 
             exe_include/myos/kernel/process/Process.hpp
             exe/process/Process.cpp

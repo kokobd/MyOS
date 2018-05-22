@@ -2,8 +2,8 @@
 
 #include <cstddef>
 #include <cstdint>
-#include "VirtualMemoryMapping.hpp"
 #include <myos/kernel/ram/PageManager.hpp>
+#include <myos/kernel/ram/Intel386PageTable.hpp>
 
 namespace myos::kernel::ram {
 
@@ -22,7 +22,6 @@ private:
     void *kernelEnd;
 
     PageManager pageManager;
-    VirtualMemoryMapping identityMapping;
 };
 
 }
