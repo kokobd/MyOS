@@ -8,7 +8,7 @@ namespace myos::kernel::ram {
 
 /**
  * Manages page frames for user programs.
- * A PageFrameManager merely records usage statistics about
+ * A PageManager simply records usage statistics of
  * page frames, it doesn't directly access them.
  */
 class PageManager {
@@ -29,15 +29,23 @@ public:
      */
     void *newPage();
 
-    uint32_t &processCount(void *page);
+    /**
+     * Number of processes that are using this page frame.
+     * @param physicalAddress the page frame to check
+     * @return number of processes
+     */
+    uint32_t &processCount(void *physicalAddress);
 
-    const uint32_t &processCount(void *page) const;
+    /**
+     * Const version of 'processCount'
+     */
+    const uint32_t &processCount(void *physicalAddress) const;
 
     /**
      * Subtract the number of processes using a particular page
      * @param physicalAddress the page frame to deallocate.
      */
-    void deletePage(void *physicalAddress);
+    void releasePage(void *physicalAddress);
 
 private:
     // Each element is the number of processes sharing a page.

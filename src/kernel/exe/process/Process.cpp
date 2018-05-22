@@ -6,10 +6,11 @@ using myos::kernel::ram::Memory;
 
 namespace myos::kernel::process {
 
-Process::Process(const char *fileName) {
+Process::Process(const char *imageAddress) {
 }
 
-void Process::switchVirtualMemory() {
+Process::Process(const Process &that) {
+
 }
 
 }

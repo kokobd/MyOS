@@ -12,6 +12,6 @@ TEST_CASE("ram::PageManager") {
     REQUIRE(f1 >= start);
     REQUIRE(f2 >= start);
     REQUIRE(reinterpret_cast<intptr_t>(f2) - reinterpret_cast<intptr_t>(f1) >= 4096);
-    pageFrameManager.deletePage(f1);
-    pageFrameManager.deletePage(f2);
+    pageFrameManager.releasePage(f1);
+    pageFrameManager.releasePage(f2);
 }

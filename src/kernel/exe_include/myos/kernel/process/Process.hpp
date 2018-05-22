@@ -10,7 +10,19 @@ namespace myos::kernel::process {
 
 class Process {
 public:
-    explicit Process(const char *fileName);
+    /**
+     * Construct one of the initial processes which are typically
+     * loaded into memory by bootloader.
+     * @param imageAddress
+     */
+    explicit Process(const char *imageAddress);
+
+    /**
+     * Copy a process. This will automatically employ copy-on-write
+     * strategy.
+     * @param that the process to copy from
+     */
+    Process(const Process &that);
 
     const cpu::RegisterState &getRegisterState() const {
         return registerState;
@@ -20,11 +32,13 @@ public:
         this->registerState = registerState;
     }
 
-    void switchVirtualMemory();
-
 private:
     cpu::RegisterState registerState;
+
     ram::IPageTable<ram::Intel386PageTable> pageTable;
+    // Physical address to the page frames in use by this process.
+    // TODO we need an efficient hash table implementation.
+    core::collections::Stack<void *> occupiedPages;
 };
 
 }

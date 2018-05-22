@@ -29,7 +29,7 @@ void *PageManager::newPage() {
     }
 }
 
-void PageManager::deletePage(void *physicalAddress) {
+void PageManager::releasePage(void *physicalAddress) {
     --processCount(physicalAddress);
 }
 
@@ -37,8 +37,8 @@ void *PageManager::indexToAddress(size_t index) const {
     return reinterpret_cast<void *>(start + page::PAGE_SIZE * index);
 }
 
-uint32_t &PageManager::processCount(void *page) {
-    return counters[addressToIndex(page)];
+uint32_t &PageManager::processCount(void *physicalAddress) {
+    return counters[addressToIndex(physicalAddress)];
 }
 
 size_t PageManager::addressToIndex(void *address) const {
@@ -47,8 +47,8 @@ size_t PageManager::addressToIndex(void *address) const {
     );
 }
 
-const uint32_t &PageManager::processCount(void *page) const {
-    return counters[addressToIndex(page)];
+const uint32_t &PageManager::processCount(void *physicalAddress) const {
+    return counters[addressToIndex(physicalAddress)];
 }
 
 }
