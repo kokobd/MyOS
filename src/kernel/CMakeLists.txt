@@ -55,6 +55,10 @@ if (NOT PROFILE MATCHES UNIT_TEST)
             exe/process/Process.cpp
             exe_include/myos/kernel/process/Scheduler.hpp
             exe/process/Scheduler.cpp
+            exe_include/myos/kernel/process/ELFImage.hpp
+            exe/process/ELFImage.cpp
+            exe_include/myos/kernel/process/ELFProgramHeader.hpp
+            exe/process/ELFProgramHeader.cpp
             )
 
     target_compile_options(kernel

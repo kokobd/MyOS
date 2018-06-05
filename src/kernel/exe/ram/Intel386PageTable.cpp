@@ -40,11 +40,7 @@ Intel386PageTable::Intel386PageTable(uintptr_t maxAddress)
     //   - 4KiB for page directory table
     //   - 4KiB * 2 for two page table
     //   - 4KiB, so that we can align tables to 4KiB
-    storage = new uint8_t[4096 * (1 + 2 + 1)];
-    pageDirectoryTable = reinterpret_cast<PageDirectoryEntry *>(
-            ((reinterpret_cast<uintptr_t>(storage) >> 12u) + 1) << 12u );
-    pageTable = reinterpret_cast<PageTableEntry *>(
-            reinterpret_cast<uint8_t *>(pageDirectoryTable) + 4096);
+    setupStorage();
     memset(pageDirectoryTable, 0, 4096);
     for (int i = 0; i < 2; ++i) {
         pageDirectoryTable[i].present = true;
@@ -117,6 +113,20 @@ void Intel386PageTable::enablePaging() const {
     : : : "eax"
     );
     pagingEnabled = true;
+}
+
+Intel386PageTable::Intel386PageTable(const Intel386PageTable &that) {
+    setupStorage();
+    memcpy(pageDirectoryTable, that.pageDirectoryTable, 4096);
+    memcpy(pageTable, that.pageTable, 4096 * 2);
+}
+
+void Intel386PageTable::setupStorage() {
+    storage = new uint8_t[4096 * (1 + 2 + 1)];
+    pageDirectoryTable = reinterpret_cast<PageDirectoryEntry *>(
+            ((reinterpret_cast<uintptr_t>(storage) >> 12u) + 1) << 12u );
+    pageTable = reinterpret_cast<PageTableEntry *>(
+            reinterpret_cast<uint8_t *>(pageDirectoryTable) + 4096);
 }
 
 }

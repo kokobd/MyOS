@@ -1,6 +1,7 @@
 #pragma once
 
 #include <cstddef>
+#include <myos/core/utility.hpp>
 
 namespace myos::core::collections {
 
@@ -28,6 +29,11 @@ public:
 
     void pushBack(const E &elem) {
         *endp = elem;
+        endp = next(endp);
+    }
+
+    void pushBack(E &&elem) {
+        *endp = utility::move(elem);
         endp = next(endp);
     }
 

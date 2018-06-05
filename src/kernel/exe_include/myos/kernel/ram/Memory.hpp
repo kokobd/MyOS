@@ -17,6 +17,20 @@ class Memory {
 public:
     Memory();
 
+    /**
+     * @return virtual address of the first byte of user space
+     */
+    static uintptr_t userSpaceStart() {
+        return 0x400000;
+    }
+
+    /**
+     * @return virtual address of the last byte of user space.
+     */
+    static uintptr_t userSpaceEnd() {
+        return 0x7FFFFF;
+    }
+
 private:
     void *kernelBegin;
     void *kernelEnd;

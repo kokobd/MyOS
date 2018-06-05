@@ -27,6 +27,12 @@ public:
         return unique_ptr<IPageTable<Impl>>(new Impl(maxAddress));
     }
 
+    static unique_ptr<IPageTable<Impl>> copyInstance(const unique_ptr<IPageTable<Impl>> &that) {
+        return unique_ptr<IPageTable<Impl>>(new Impl(
+                static_cast<const Impl &>(*that.get())
+        ));
+    }
+
     static constexpr size_t pageSize() {
         return Impl::pageSize_impl();
     }

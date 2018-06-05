@@ -2,6 +2,7 @@
 
 #include <myos/kernel/cpu/InterruptHandler.hpp>
 #include <myos/core/collections/Queue.hpp>
+#include <myos/core/memory/smart_pointers/unique_ptr.hpp>
 
 namespace myos::kernel::process {
 
@@ -20,16 +21,20 @@ private:
         Scheduler &scheduler;
     };
 
+    template<typename T>
+    using unique_ptr = core::memory::smart_pointers::unique_ptr<T>;
+
 public:
     explicit Scheduler();
 
-    void spawnProcess(Process *newProcess);
+    void spawnProcess(unique_ptr<Process> &&newProcess);
 
-    ~Scheduler();
+    void dispatch();
 
 private:
-    Process *running;
-    myos::core::collections::Queue<Process *> ready;
+
+    unique_ptr<Process> running;
+    myos::core::collections::Queue<unique_ptr<Process>> ready;
 
     ClockInterruptHandler clockInterruptHandler;
 };

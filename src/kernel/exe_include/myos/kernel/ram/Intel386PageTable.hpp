@@ -12,6 +12,8 @@ class Intel386PageTable : public IPageTable<Intel386PageTable> {
 public:
     explicit Intel386PageTable(uintptr_t maxAddress);
 
+    Intel386PageTable(const Intel386PageTable &that);
+
     static constexpr size_t pageSize_impl() {
         return 4096;
     }
@@ -73,6 +75,8 @@ private:
     mutable bool pagingEnabled;
 
     void enablePaging() const;
+
+    void setupStorage();
 };
 
 }
