@@ -8,6 +8,11 @@ add_library(kernel-lib STATIC
         src/ram/PageManager.cpp
         include/myos/kernel/ram/PageManager.hpp
         include/myos/kernel/ram/page.hpp
+
+        include/myos/kernel/ipc/MessageBox.hpp
+        src/ipc/MessageBox.cpp
+        include/myos/kernel/ipc/MsgBoxMetaInfo.hpp
+        src/ipc/MsgBoxMetaInfo.cpp
         )
 target_link_libraries(kernel-lib
         core
@@ -81,7 +86,8 @@ if (NOT PROFILE MATCHES UNIT_TEST)
 else ()
     add_executable(kernel-test
             test/main.cpp
-            test/ram/PageFrameManager.cpp
+            test/ram/PageManager.cpp
+            test/ipc/MessageBox.cpp
             )
     target_link_libraries(kernel-test
             kernel-lib

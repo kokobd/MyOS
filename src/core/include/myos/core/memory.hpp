@@ -25,8 +25,8 @@ class Heap;
 void setHeap(Heap *heap);
 
 template<typename T>
-constexpr T log2(T x) {
-    return x > 1 ? 1 + log2(x >> 1) : 0;
+constexpr uint8_t log2(T x) {
+    return static_cast<uint8_t>(x > 1 ? 1 + log2(x >> 1) : 0);
 }
 
 /**

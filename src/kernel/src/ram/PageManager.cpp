@@ -1,53 +1,53 @@
 #include <myos/kernel/ram/PageManager.hpp>
 #include <myos/core/memory.hpp>
-#include <myos/kernel/ram/page.hpp>
 
 using myos::core::memory::alignUp;
+using myos::core::memory::log2;
 
 namespace myos::kernel::ram {
 
 PageManager::PageManager(
-        void *start, size_t count)
-        : counters(count, 0) {
-    start = alignUp(page::PAGE_SHIFT<uint32_t>, start);
+        uintptr_t start, size_t pageSize, size_t count)
+        : counters(count, 0), PAGE_SIZE(pageSize) {
+    start = alignUp(log2(pageSize), start);
     this->start = reinterpret_cast<uintptr_t>(start);
 }
 
-void *PageManager::newPage() {
+uintptr_t PageManager::newPage() {
     size_t index = counters.size();
     for (size_t i = 0; i != counters.size(); ++i) {
         if (counters[i] == 0) {
-            index = counters[i];
+            index = i;
             break;
         }
     }
     if (index == counters.size()) {
-        return nullptr;
+        return 0;
     } else {
         ++counters[index];
         return indexToAddress(index);
     }
 }
 
-void PageManager::releasePage(void *physicalAddress) {
+void PageManager::releasePage(uintptr_t physicalAddress) {
     --processCount(physicalAddress);
 }
 
-void *PageManager::indexToAddress(size_t index) const {
-    return reinterpret_cast<void *>(start + page::PAGE_SIZE * index);
+uintptr_t PageManager::indexToAddress(size_t index) const {
+    return start + PAGE_SIZE * index;
 }
 
-uint32_t &PageManager::processCount(void *physicalAddress) {
+uint32_t &PageManager::processCount(uintptr_t physicalAddress) {
     return counters[addressToIndex(physicalAddress)];
 }
 
-size_t PageManager::addressToIndex(void *address) const {
+size_t PageManager::addressToIndex(uintptr_t address) const {
     return static_cast<size_t>(
             reinterpret_cast<uintptr_t>(address) - start
     );
 }
 
-const uint32_t &PageManager::processCount(void *physicalAddress) const {
+const uint32_t &PageManager::processCount(uintptr_t physicalAddress) const {
     return counters[addressToIndex(physicalAddress)];
 }
 
