@@ -59,4 +59,22 @@ TEST_CASE("ipc::MessageBox") {
         }
     }
 
+    SECTION("move message box") {
+        uint32_t message = 42;
+        messageBox.push(&message);
+        messageBox.push(&message);
+
+        std::vector<uint8_t> newMemory = memory;
+        for (uint8_t &x : newMemory) {
+            x = 0;
+        }
+        messageBox.moveData(newMemory.data());
+        uint32_t buffer;
+        messageBox.pop(&buffer);
+        REQUIRE(buffer == 42);
+        messageBox.pop(&buffer);
+        REQUIRE(buffer == 42);
+        REQUIRE(messageBox.isEmpty());
+    }
+
 }
