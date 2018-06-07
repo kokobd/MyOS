@@ -5,7 +5,7 @@
 
 namespace myos::kernel::ram {
 
-static_assert(sizeof(void *) == sizeof(uint32_t),
+static_assert(sizeof(uintptr_t) == sizeof(uint32_t),
               "This class only works for 32 bit x86 arch.");
 
 class Intel386PageTable : public IPageTable<Intel386PageTable> {
@@ -22,11 +22,11 @@ public:
         return 12;
     }
 
-    bool setPageAddress_impl(void *vaddr, void *paddr);
+    bool setPageAddress_impl(uintptr_t vaddr, uintptr_t paddr);
 
-    bool setPageFlags_impl(void *vaddr, Flags flags);
+    bool setPageFlags_impl(uintptr_t vaddr, Flags flags);
 
-    void *getPage_impl(void *vaddr, Flags &flags);
+    uintptr_t getPage_impl(uintptr_t vaddr, Flags &flags);
 
     void installToCPU_impl() const;
 
@@ -68,9 +68,9 @@ private:
     uintptr_t maxAddress;
 
 private:
-    PageTableEntry &getEntryByAddress(void *vaddr);
+    PageTableEntry &getEntryByAddress(uintptr_t vaddr);
 
-    bool checkVirtualAddress(void *vaddr);
+    bool checkVirtualAddress(uintptr_t vaddr);
 
     mutable bool pagingEnabled;
 

@@ -32,8 +32,8 @@ public:
     }
 
 private:
-    void *kernelBegin;
-    void *kernelEnd;
+    uintptr_t kernelBegin;
+    uintptr_t kernelEnd;
 
     PageManager pageManager;
 };

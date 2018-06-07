@@ -43,9 +43,23 @@ bool ELFImage::isValid() const {
             return false;
     }
 
-
-
     return true;
+}
+
+bool ELFImage::loadWithCheck(uintptr_t min, uintptr_t max) const {
+    for (uint16_t i = 0; i < programHeadersCount(); ++i) {
+        const ELFProgramHeader &programHeader = programHeaders()[i];
+        if (programHeader.type == ELFProgramHeader::PT_LOAD) {
+            const uintptr_t address = programHeader.vaddr;
+            if (address >= min && address + programHeader.memorySize <= max) {
+                memcpy(reinterpret_cast<void *>(address),
+                       reinterpret_cast<void *>(startAddress + programHeader.offset),
+                       programHeader.fileSize);
+            } else {
+                return false;
+            }
+        }
+    }
 }
 
 }

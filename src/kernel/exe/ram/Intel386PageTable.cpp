@@ -12,7 +12,7 @@ do {\
 
 
 bool Intel386PageTable::setPageAddress_impl(
-        void *vaddr, void *paddr) {
+        uintptr_t vaddr, uintptr_t paddr) {
     CHECK_VADDR(vaddr, false);
     uintptr_t paddr_ = reinterpret_cast<uintptr_t>(paddr);
 
@@ -23,12 +23,13 @@ bool Intel386PageTable::setPageAddress_impl(
 }
 
 bool Intel386PageTable::setPageFlags_impl(
-        void *vaddr,
+        uintptr_t vaddr,
         IPageTable<Intel386PageTable>::Flags flags) {
     CHECK_VADDR(vaddr, false);
     PageTableEntry &entry = getEntryByAddress(vaddr);
     entry.userMode = !(flags & Flags::KERNEL);
     entry.writable = flags & Flags::WRITABLE;
+    entry.present = flags & Flags::PRESENT;
     return true;
 }
 
@@ -55,7 +56,7 @@ Intel386PageTable::Intel386PageTable(uintptr_t maxAddress)
     }
     memset(pageTable, 0, 4096 * 2);
     for (uint32_t i = 0; i < 2048; ++i) {
-        pageTable[i].present = true;
+        pageTable[i].present = false;
         pageTable[i].writable = true;
         pageTable[i].userMode = false;
         pageTable[i].writeThrough = false;
@@ -65,10 +66,10 @@ Intel386PageTable::Intel386PageTable(uintptr_t maxAddress)
     }
 }
 
-void *Intel386PageTable::getPage_impl(
-        void *vaddr,
+uintptr_t Intel386PageTable::getPage_impl(
+        uintptr_t vaddr,
         IPageTable<Intel386PageTable>::Flags &flags) {
-    CHECK_VADDR(vaddr, nullptr);
+    CHECK_VADDR(vaddr, 0);
 
     PageTableEntry &entry = getEntryByAddress(vaddr);
     int flags_ = 0;
@@ -78,16 +79,14 @@ void *Intel386PageTable::getPage_impl(
         flags_ |= Flags::KERNEL;
     flags = static_cast<Flags>(flags_);
 
-    return reinterpret_cast<void *>(
-            entry.frameAddress << IPageTable<Intel386PageTable>::pageShift()
-    );
+    return entry.frameAddress << IPageTable<Intel386PageTable>::pageShift();
 }
 
-Intel386PageTable::PageTableEntry &Intel386PageTable::getEntryByAddress(void *vaddr) {
+Intel386PageTable::PageTableEntry &Intel386PageTable::getEntryByAddress(uintptr_t vaddr) {
     return pageTable[reinterpret_cast<uintptr_t>(vaddr) >> IPageTable<Intel386PageTable>::pageShift()];
 }
 
-bool Intel386PageTable::checkVirtualAddress(void *vaddr) {
+bool Intel386PageTable::checkVirtualAddress(uintptr_t vaddr) {
     return reinterpret_cast<uintptr_t>(vaddr) <= maxAddress;
 }
 

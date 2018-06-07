@@ -50,24 +50,28 @@ private:
         return *(static_cast<const Impl *>(this));
     }
 
+protected:
+    IPageTable() = default;
+
 public:
     virtual ~IPageTable() = default;
 
     enum Flags {
         NONE = 0b00,
         WRITABLE = 0b01,
-        KERNEL = 0b10 // kernel pages, not accessible by user code
+        KERNEL = 0b10, // kernel pages, not accessible by user code
+        PRESENT = 0b100
     };
 
-    bool setPageAddress(void *vaddr, void *paddr) {
+    bool setPageAddress(uintptr_t vaddr, uintptr_t paddr) {
         return subInstance().setPageAddress_impl(vaddr, paddr);
     }
 
-    bool setPageFlags(void *vaddr, Flags flags) {
+    bool setPageFlags(uintptr_t vaddr, Flags flags) {
         return subInstance().setPageFlags_impl(vaddr, flags);
     }
 
-    void *getPage(void *vaddr, Flags &flags) {
+    uintptr_t getPage(uintptr_t vaddr, Flags &flags) {
         return subInstance().getPage_impl(vaddr, flags);
     }
 

@@ -19,6 +19,13 @@ public:
     size_t sizeInMemory() const;
 
     bool isValid() const;
+
+    /**
+     * Load this ELF image with check on boundary.
+     * Only addresses within [min, max) are valid.
+     */
+    bool loadWithCheck(uintptr_t min, uintptr_t max) const;
+
 private:
     uintptr_t startAddress;
 };
